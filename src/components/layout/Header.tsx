@@ -93,17 +93,10 @@ export default function Header() {
           </nav>
 
           {/* Right Action CTAs */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Link
-              href="/register"
-              className="text-xs font-semibold text-[#4F5E57] hover:text-[#0F2E23] transition-colors"
-            >
-              Apply for Account
-            </Link>
-
+          <div className="hidden lg:flex items-center gap-5">
             <Link
               href="/login"
-              className="text-xs font-bold uppercase tracking-wider text-[#0F2E23] hover:text-[#C59B27] px-2 py-1 transition-colors flex items-center gap-1.5"
+              className="text-xs font-bold uppercase tracking-wider text-[#0F2E23] hover:text-[#C59B27] px-2 py-1.5 transition-colors flex items-center gap-1.5"
             >
               <Lock className="w-3.5 h-3.5 text-[#C59B27]" />
               B2B Login

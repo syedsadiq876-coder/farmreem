@@ -103,7 +103,7 @@ export default function Logo({
                 : "text-[#4F5E57]"
             }`}
           >
-            Foodservice Supply · Dehradun
+            Foodservice Supply · India
           </span>
         </div>
       )}

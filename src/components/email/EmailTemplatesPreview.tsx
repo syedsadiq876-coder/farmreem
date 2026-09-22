@@ -163,8 +163,8 @@ export default function EmailTemplatesPreview() {
             <span className="font-extrabold text-2xl tracking-tight text-white block">
               Farm<span className="text-[#C59B27]">Reem</span>
             </span>
-            <span className="text-[10px] uppercase tracking-widest text-[#FAF7F2]/75">
-              Foodservice Supply · Dehradun
+            <span style={{ fontSize: "10px", color: "#C59B27", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px" }}>
+              Foodservice Supply · India
             </span>
           </div>
         </div>

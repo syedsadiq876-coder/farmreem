@@ -12,7 +12,7 @@ export interface CarouselSlide {
 
 interface ImageCarouselProps {
   slides: CarouselSlide[];
-  aspectRatio?: string; // e.g. "aspect-[16/9]" or "h-[450px]"
+  aspectRatio?: string; // e.g. "h-[420px] sm:h-[480px] lg:h-[520px]"
   autoPlayInterval?: number; // ms, default 4500
   className?: string;
 }
@@ -24,94 +24,80 @@ export default function ImageCarousel({
   className = "",
 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
   const touchStartX = useRef<number | null>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Detect reduced motion setting
+  // Check prefers-reduced-motion safely on mount
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
+    if (typeof window !== "undefined") {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setIsReducedMotion(mediaQuery.matches);
+      const handler = (e: MediaQueryListEvent) => setIsReducedMotion(e.matches);
+      mediaQuery.addEventListener("change", handler);
+      return () => mediaQuery.removeEventListener("change", handler);
+    }
   }, []);
 
-  // Next Slide helper
-  const nextSlide = useCallback(() => {
+  // Stable next slide navigation
+  const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
 
-  // Previous Slide helper
-  const prevSlide = useCallback(() => {
+  const goToPrev = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
-  // Auto-play timer
+  // Autoplay Effect
   useEffect(() => {
-    if (isPaused || prefersReducedMotion || slides.length <= 1) return;
+    if (isHovered || isReducedMotion || slides.length <= 1) return;
 
-    const timer = setInterval(() => {
-      nextSlide();
+    const interval = setInterval(() => {
+      goToNext();
     }, autoPlayInterval);
 
-    return () => clearInterval(timer);
-  }, [isPaused, prefersReducedMotion, autoPlayInterval, nextSlide, slides.length]);
+    return () => clearInterval(interval);
+  }, [isHovered, isReducedMotion, autoPlayInterval, goToNext, slides.length]);
 
-  // Touch handlers for mobile swipe
+  // Touch Swipe Handling
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) {
-      if (diff > 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
+      if (diff > 0) goToNext();
+      else goToPrev();
     }
     touchStartX.current = null;
   };
 
-  // Keyboard navigation
+  // Keyboard Navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") {
-      prevSlide();
-    } else if (e.key === "ArrowRight") {
-      nextSlide();
-    }
+    if (e.key === "ArrowLeft") goToPrev();
+    if (e.key === "ArrowRight") goToNext();
   };
 
   return (
     <div
-      ref={carouselRef}
       tabIndex={0}
       role="region"
       aria-label="Image Carousel"
       className={`relative rounded-3xl overflow-hidden shadow-2xl border border-[#E8E1D3] group focus:outline-none focus:ring-2 focus:ring-[#C59B27] ${className}`}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onKeyDown={handleKeyDown}
     >
-      {/* Container for slides */}
       <div className={`relative w-full ${aspectRatio} bg-[#0F2E23]`}>
         {slides.map((slide, index) => {
           const isActive = index === currentIndex;
           return (
             <div
-              key={slide.src + index}
+              key={slide.src + "-" + index}
               className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
                 isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
               }`}
@@ -127,16 +113,15 @@ export default function ImageCarousel({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0F2E23]/80 via-transparent to-transparent" />
 
-              {/* Optional Slide Caption Overlay */}
               {(slide.captionTitle || slide.captionSub) && (
                 <div className="absolute bottom-10 left-6 right-6 text-white space-y-1 z-20">
                   {slide.captionTitle && (
-                    <span className="text-xs font-extrabold uppercase tracking-wider bg-[#C59B27] text-[#0F2E23] px-2.5 py-1 rounded inline-block">
+                    <span className="text-xs font-extrabold uppercase tracking-wider bg-[#C59B27] text-[#0F2E23] px-2.5 py-1 rounded inline-block shadow">
                       {slide.captionTitle}
                     </span>
                   )}
                   {slide.captionSub && (
-                    <p className="text-sm font-medium text-white/90 drop-shadow-md">
+                    <p className="text-sm font-medium text-white/95 drop-shadow-md">
                       {slide.captionSub}
                     </p>
                   )}
@@ -147,7 +132,7 @@ export default function ImageCarousel({
         })}
       </div>
 
-      {/* Elegant Pagination Dots */}
+      {/* Pagination Dots */}
       {slides.length > 1 && (
         <div className="absolute bottom-4 left-0 right-0 z-30 flex items-center justify-center gap-2">
           {slides.map((_, idx) => (

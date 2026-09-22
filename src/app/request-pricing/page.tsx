@@ -57,12 +57,32 @@ export default function RequestPricingPage() {
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-[#0F2E23]">Pricing Request Submitted</h2>
               <p className="text-sm text-[#4F5E57] max-w-md mx-auto">
-                Thank you, {formData.contactPerson}. Our B2B account manager will contact you within 2 hours with account pricing and credit verification details.
+                Thank you, {formData.contactPerson}. Our B2B account manager will contact you within 2 hours with account pricing details.
               </p>
             </div>
+
+            {/* Account Application Pathway */}
+            <div className="bg-[#FAF7F2] p-5 rounded-2xl border border-[#E8E1D3] space-y-2 max-w-md mx-auto text-center">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#0F2E23]">
+                Ready for an ongoing supply relationship?
+              </h3>
+              <p className="text-xs text-[#4F5E57]">
+                Formalize recurring morning delivery schedules and contract account credit.
+              </p>
+              <div className="pt-1">
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#0F2E23] hover:text-[#C59B27] bg-white px-4 py-2 rounded-xl border border-[#E8E1D3] transition-colors shadow-sm"
+                >
+                  Apply for a B2B Account
+                  <ArrowRight className="w-3.5 h-3.5 text-[#C59B27]" />
+                </Link>
+              </div>
+            </div>
+
             <button
               onClick={() => setSubmitted(false)}
-              className="text-xs font-bold text-[#0F2E23] underline"
+              className="text-xs font-bold text-[#4F5E57] hover:text-[#0F2E23] underline"
             >
               Submit another pricing request
             </button>
