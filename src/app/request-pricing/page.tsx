@@ -6,6 +6,8 @@ import { CheckCircle2, Send, Lock, ArrowRight, ShieldCheck } from "lucide-react"
 
 export default function RequestPricingPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     businessName: "",
     businessType: "Hotel",
@@ -22,7 +24,13 @@ export default function RequestPricingPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSubmitting(true);
+
+    setTimeout(() => {
+      setSubmitting(false);
+      setSubmitted(true);
+    }, 600);
   };
 
   return (
@@ -235,9 +243,11 @@ export default function RequestPricingPage() {
               </span>
               <button
                 type="submit"
-                className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-sm px-8 py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                disabled={submitting}
+                className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-sm px-8 py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
               >
-                Request B2B Pricing <Send className="w-4 h-4" />
+                {submitting ? "Submitting Request..." : "Request B2B Pricing"}{" "}
+                {!submitting && <Send className="w-4 h-4" />}
               </button>
             </div>
           </form>
