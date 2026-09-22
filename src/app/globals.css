@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --brand-forest: #0F2E23;
+  --brand-forest-dark: #0A2118;
+  --brand-forest-light: #184636;
+  --brand-cream: #FAF7F2;
+  --brand-cream-card: #F4EFE6;
+  --brand-cream-border: #E8E1D3;
+  --brand-gold: #C59B27;
+  --brand-gold-light: #F4E6BD;
+  --brand-white: #FFFFFF;
+  --brand-red-accent: #C93B2B;
+  --text-dark: #111A17;
+  --text-muted: #4F5E57;
+  --text-light: #FAF7F2;
+
+  --background: var(--brand-cream);
+  --foreground: var(--text-dark);
+}
+
+@theme inline {
+  --color-forest: var(--brand-forest);
+  --color-forest-dark: var(--brand-forest-dark);
+  --color-forest-light: var(--brand-forest-light);
+  --color-cream: var(--brand-cream);
+  --color-cream-card: var(--brand-cream-card);
+  --color-cream-border: var(--brand-cream-border);
+  --color-gold: var(--brand-gold);
+  --color-gold-light: var(--brand-gold-light);
+  --color-red-accent: var(--brand-red-accent);
+  --color-text-dark: var(--text-dark);
+  --color-text-muted: var(--text-muted);
+}
+
+body {
+  background-color: var(--brand-cream);
+  color: var(--text-dark);
+  font-family: var(--font-jakarta), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Glassmorphism restrained utilities */
+.bg-cream-card {
+  background-color: var(--brand-cream-card);
+  border: 1px solid var(--brand-cream-border);
+}
+
+.text-gold {
+  color: var(--brand-gold);
+}
+
+.bg-forest {
+  background-color: var(--brand-forest);
+}
+
+.border-cream-accent {
+  border-color: var(--brand-cream-border);
+}
+
