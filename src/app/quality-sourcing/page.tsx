@@ -27,7 +27,7 @@ export default function QualitySourcingPage() {
       num: "03",
       title: "Weight Verification",
       subtitle: "Dual Weighment Protocol",
-      description: "Calibrated weighment at dispatch point and upon receiving dock arrival. Both dispatch bird count/weight and receiving bird count/weight are recorded to eliminate billing discrepancies.",
+      description: "Dual weighment at dispatch point and upon receiving dock arrival. Both dispatch bird count/weight and receiving bird count/weight are recorded to eliminate billing discrepancies.",
     },
     {
       num: "04",
@@ -71,7 +71,7 @@ export default function QualitySourcingPage() {
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27] mb-1">
               Inspection Standard
             </span>
-            <h2 className="text-2xl font-bold">Calibrated Weighment & Condition Check</h2>
+            <h2 className="text-2xl font-bold">Weight Verification & Condition Check</h2>
             <p className="text-xs sm:text-sm text-[#FAF7F2]/80 max-w-2xl mt-1">
               Verifying weight, bird count, and flock condition at dispatch and delivery.
             </p>
