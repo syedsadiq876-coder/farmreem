@@ -14,9 +14,59 @@ import {
   ChevronRight,
   MapPin,
   CheckCircle2,
+  UserPlus,
 } from "lucide-react";
+import ImageCarousel from "@/components/ui/ImageCarousel";
 
 export default function HomePage() {
+  const sourcingSlides = [
+    {
+      src: "/images/farm_sunrise.jpg",
+      alt: "Partner Poultry Farm Sourcing",
+      captionTitle: "01 · Regional Farm Sourcing",
+      captionSub: "Vetted poultry farms with monitored flock condition.",
+    },
+    {
+      src: "/images/quality_inspect.jpg",
+      alt: "Bird Inspection & Calibrated Weighment",
+      captionTitle: "02 · Calibrated Weighment",
+      captionSub: "Dual weighment tickets recorded at dispatch.",
+    },
+    {
+      src: "/images/farm_facility.jpg",
+      alt: "FarmReem Bio-Secure Facility Infrastructure",
+      captionTitle: "03 · Controlled Infrastructure",
+      captionSub: "Biosecure handling and specialized crate transport.",
+    },
+    {
+      src: "/images/delivery_fleet.jpg",
+      alt: "Scheduled B2B Delivery Logistics",
+      captionTitle: "04 · Direct Route Logistics",
+      captionSub: "Scheduled morning dispatch straight to hotel receiving docks.",
+    },
+    {
+      src: "/images/hero_chef_kitchen.jpg",
+      alt: "Commercial Kitchen Receiving",
+      captionTitle: "05 · Kitchen Receiving",
+      captionSub: "Receiving dock verification and account reconciliation.",
+    },
+  ];
+
+  const kitchenSlides = [
+    {
+      src: "/images/hero_foodservice.jpg",
+      alt: "Commercial Kitchen Foodservice Preparation",
+    },
+    {
+      src: "/images/hero_chef_kitchen.jpg",
+      alt: "Executive Kitchen Chef Receiving",
+    },
+    {
+      src: "/images/quality_inspect.jpg",
+      alt: "Receiving Dock Verification",
+    },
+  ];
+
   return (
     <div className="bg-[#FAF7F2] text-[#111A17] space-y-0 selection:bg-[#C59B27] selection:text-[#0F2E23]">
       
@@ -46,18 +96,26 @@ export default function HomePage() {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
                 <Link
                   href="/request-pricing"
-                  className="w-full sm:w-auto bg-[#0F2E23] hover:bg-[#184636] text-[#FAF7F2] font-extrabold text-base px-8 py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group"
+                  className="w-full sm:w-auto bg-[#0F2E23] hover:bg-[#184636] text-[#FAF7F2] font-extrabold text-base px-7 py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   Request B2B Pricing
                   <ArrowRight className="w-5 h-5 text-[#C59B27] group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 <Link
+                  href="/register"
+                  className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-base px-6 py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                >
+                  <UserPlus className="w-4 h-4 text-[#0F2E23]" />
+                  Apply for Account
+                </Link>
+
+                <Link
                   href="/login"
-                  className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-7 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-5 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
                 >
                   <Lock className="w-4 h-4 text-[#C59B27]" />
                   B2B Login
@@ -98,24 +156,26 @@ export default function HomePage() {
                       <span className="font-extrabold text-[#0F2E23]">120</span>
                     </div>
                     <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Weight</span>
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Weight Spec</span>
                       <span className="font-extrabold text-[#0F2E23]">1.8–2.0 kg</span>
                     </div>
                     <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Delivery</span>
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Schedule</span>
                       <span className="font-extrabold text-[#0F2E23]">Tomorrow</span>
                     </div>
                     <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Slot</span>
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Window</span>
                       <span className="font-extrabold text-[#0F2E23]">6–8 AM</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="text-[11px] text-[#4F5E57]">Customer Contract Rate</span>
+                  <div className="pt-1 flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-[#4F5E57] font-semibold">
+                      Account #FR-8842 · Grand Heritage Hotel
+                    </span>
                     <Link
                       href="/request-pricing"
-                      className="bg-[#0F2E23] hover:bg-[#184636] text-[#C59B27] font-extrabold text-[11px] px-4 py-2 rounded-lg shadow"
+                      className="font-extrabold text-[#C59B27] hover:underline text-[11px]"
                     >
                       Request / Confirm Supply &rarr;
                     </Link>
@@ -129,7 +189,7 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 2 — ONE VISUAL BRAND STORY (Cinematic Editorial Sequence)
+          SECTION 2 — ONE VISUAL BRAND STORY (Automatic Carousel Sequence)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-white border-y border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -146,53 +206,36 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Cinematic Image & Storytelling Sequence */}
-          <div className="relative rounded-3xl overflow-hidden border border-[#E8E1D3] shadow-xl">
-            <div className="relative h-[480px]">
-              <Image
-                src="/images/farm_sunrise.jpg"
-                alt="FarmReem Regional Sourcing & Farm Network"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0F2E23]/95 via-[#0F2E23]/80 to-transparent p-8 sm:p-14 flex flex-col justify-between text-white">
-                
-                <div className="max-w-md space-y-3">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">
-                    01 · Sourcing & Verification
-                  </span>
-                  <h3 className="text-3xl font-extrabold text-white">
-                    Vetted Partner Farms & Calibrated Weighment
-                  </h3>
-                  <p className="text-sm text-[#FAF7F2]/80 leading-relaxed">
-                    Flock condition and live weight bands verified at dispatch point before entering planned morning transport routes.
-                  </p>
-                </div>
+          {/* Automatic Image Carousel */}
+          <div className="space-y-6">
+            <ImageCarousel
+              slides={sourcingSlides}
+              aspectRatio="h-[420px] sm:h-[480px] lg:h-[520px]"
+            />
 
-                {/* Horizontal Step Indicator Bar */}
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-6 border-t border-white/20 text-xs font-bold text-white">
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-[#C59B27] text-[#0F2E23] flex items-center justify-center text-xs font-extrabold">1</span>
-                    <span>Requirement</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">2</span>
-                    <span>Sourcing</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">3</span>
-                    <span>Weight Check</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">4</span>
-                    <span>Delivery</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">5</span>
-                    <span>Your Kitchen</span>
-                  </div>
+            {/* Directional Step Indicator Bar */}
+            <div className="bg-[#FAF7F2] rounded-2xl p-4 border border-[#E8E1D3] shadow-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs font-bold text-[#0F2E23]">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#C59B27] text-[#0F2E23] flex items-center justify-center text-xs font-extrabold">1</span>
+                  <span>Requirement</span>
                 </div>
-
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0F2E23] text-white flex items-center justify-center text-xs font-extrabold">2</span>
+                  <span>Sourcing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0F2E23] text-white flex items-center justify-center text-xs font-extrabold">3</span>
+                  <span>Weight Check</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0F2E23] text-white flex items-center justify-center text-xs font-extrabold">4</span>
+                  <span>Delivery</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0F2E23] text-white flex items-center justify-center text-xs font-extrabold">5</span>
+                  <span>Your Kitchen</span>
+                </div>
               </div>
             </div>
           </div>
@@ -201,28 +244,30 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 3 — SUPPLY BUILT AROUND THE BUYER (Asymmetric Layout)
+          SECTION 3 — SUPPLY BUILT AROUND THE BUYER (Clean Visual + Editorial Copy Below)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FAF7F2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left: Commercial Kitchen Imagery */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-xl border border-[#E8E1D3]">
-                <Image
-                  src="/images/hero_foodservice.jpg"
-                  alt="Commercial Kitchen Foodservice Supply"
-                  width={800}
-                  height={600}
-                  className="w-full h-[440px] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F2E23]/80 via-transparent to-transparent p-8 flex items-end">
-                  <div className="text-white space-y-1">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">Receiving Dock Reliability</span>
-                    <h4 className="text-xl font-extrabold">Specified Bird Counts & Portions</h4>
-                  </div>
-                </div>
+            {/* Left: Clean Kitchen Visual Carousel + Editorial Block Below (NO Text Overlay) */}
+            <div className="lg:col-span-6 space-y-4">
+              <ImageCarousel
+                slides={kitchenSlides}
+                aspectRatio="h-[380px] sm:h-[420px]"
+              />
+
+              {/* Text Placement Directly BELOW Photograph */}
+              <div className="p-5 rounded-2xl bg-white border border-[#E8E1D3] shadow-sm space-y-1">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
+                  Receiving Dock Reliability
+                </span>
+                <h3 className="text-xl font-extrabold text-[#0F2E23]">
+                  Specified bird counts & portions
+                </h3>
+                <p className="text-xs sm:text-sm text-[#4F5E57] leading-relaxed">
+                  Scheduled morning delivery tailored to your kitchen's daily operational prep.
+                </p>
               </div>
             </div>
 

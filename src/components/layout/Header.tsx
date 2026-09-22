@@ -95,8 +95,15 @@ export default function Header() {
           {/* Right Action CTAs */}
           <div className="hidden lg:flex items-center gap-4">
             <Link
+              href="/register"
+              className="text-xs font-semibold text-[#4F5E57] hover:text-[#0F2E23] transition-colors"
+            >
+              Apply for Account
+            </Link>
+
+            <Link
               href="/login"
-              className="text-xs font-bold uppercase tracking-wider text-[#0F2E23] hover:text-[#C59B27] px-3 py-2 transition-colors flex items-center gap-1.5"
+              className="text-xs font-bold uppercase tracking-wider text-[#0F2E23] hover:text-[#C59B27] px-2 py-1 transition-colors flex items-center gap-1.5"
             >
               <Lock className="w-3.5 h-3.5 text-[#C59B27]" />
               B2B Login
@@ -190,6 +197,13 @@ export default function Header() {
             >
               <Phone className="w-3.5 h-3.5 text-[#C59B27]" /> Call +91 8475863634
             </a>
+            <Link
+              href="/register"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full text-center py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] text-[#0F2E23] text-xs font-bold"
+            >
+              Apply for B2B Account
+            </Link>
             <Link
               href="/login"
               onClick={() => setMobileMenuOpen(false)}
