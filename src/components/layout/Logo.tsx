@@ -12,55 +12,54 @@ export default function Logo({
   className = "",
   showText = true,
 }: LogoProps) {
-  // Variant sizing configurations
   const config = {
     header: {
-      imageSize: "w-11 h-11",
-      width: 44,
-      height: 44,
-      textSize: "text-xl",
-      subtitleSize: "text-[9px]",
-      containerClass: "flex items-center gap-3",
-    },
-    "header-mobile": {
-      imageSize: "w-9 h-9",
-      width: 36,
-      height: 36,
-      textSize: "text-lg",
-      subtitleSize: "text-[8px]",
-      containerClass: "flex items-center gap-2",
-    },
-    footer: {
       imageSize: "w-12 h-12",
       width: 48,
       height: 48,
       textSize: "text-2xl",
       subtitleSize: "text-[10px]",
-      containerClass: "flex items-center gap-3",
+      containerClass: "flex items-center gap-3.5",
     },
-    auth: {
-      imageSize: "w-20 h-20",
-      width: 80,
-      height: 80,
+    "header-mobile": {
+      imageSize: "w-10 h-10",
+      width: 40,
+      height: 40,
+      textSize: "text-xl",
+      subtitleSize: "text-[9px]",
+      containerClass: "flex items-center gap-2.5",
+    },
+    footer: {
+      imageSize: "w-14 h-14",
+      width: 56,
+      height: 56,
       textSize: "text-3xl",
       subtitleSize: "text-xs",
-      containerClass: "flex flex-col items-center text-center gap-2",
+      containerClass: "flex items-center gap-4",
     },
-    hero: {
+    auth: {
       imageSize: "w-24 h-24",
       width: 96,
       height: 96,
-      textSize: "text-4xl",
-      subtitleSize: "text-sm",
+      textSize: "text-3xl",
+      subtitleSize: "text-xs",
       containerClass: "flex flex-col items-center text-center gap-3",
     },
+    hero: {
+      imageSize: "w-28 h-28",
+      width: 112,
+      height: 112,
+      textSize: "text-4xl",
+      subtitleSize: "text-sm",
+      containerClass: "flex flex-col items-center text-center gap-4",
+    },
     compact: {
-      imageSize: "w-8 h-8",
-      width: 32,
-      height: 32,
-      textSize: "text-base",
-      subtitleSize: "text-[8px]",
-      containerClass: "flex items-center gap-2",
+      imageSize: "w-9 h-9",
+      width: 36,
+      height: 36,
+      textSize: "text-lg",
+      subtitleSize: "text-[9px]",
+      containerClass: "flex items-center gap-2.5",
     },
     email: {
       imageSize: "w-16 h-16",
@@ -74,8 +73,8 @@ export default function Logo({
 
   const logoMarkup = (
     <div className={`${config.containerClass} group focus:outline-none ${className}`}>
-      {/* Official FarmReem Emblem Badge */}
-      <div className={`relative ${config.imageSize} rounded-full overflow-hidden shadow-md flex-shrink-0 bg-white ring-2 ring-[#C59B27]/40 group-hover:scale-105 transition-transform`}>
+      {/* Official FarmReem Emblem Badge - High Prominence */}
+      <div className={`relative ${config.imageSize} rounded-full overflow-hidden shadow-lg flex-shrink-0 bg-white ring-2 ring-[#C59B27] group-hover:scale-105 transition-transform duration-300`}>
         <Image
           src="/images/farmreem-logo.png"
           alt="FarmReem"
@@ -87,10 +86,10 @@ export default function Logo({
       </div>
 
       {showText && (
-        <div className="flex flex-col">
+        <div className="flex flex-col leading-none">
           <span
             className={`font-extrabold ${config.textSize} tracking-tight ${
-              variant === "footer" || variant === "header" || variant === "header-mobile"
+              variant === "footer"
                 ? "text-white group-hover:text-[#FAF7F2]"
                 : "text-[#0F2E23]"
             }`}
@@ -98,8 +97,8 @@ export default function Logo({
             Farm<span className="text-[#C59B27]">Reem</span>
           </span>
           <span
-            className={`uppercase tracking-widest ${config.subtitleSize} font-bold ${
-              variant === "footer" || variant === "header" || variant === "header-mobile"
+            className={`uppercase tracking-widest ${config.subtitleSize} font-bold mt-1 ${
+              variant === "footer"
                 ? "text-[#FAF7F2]/75"
                 : "text-[#4F5E57]"
             }`}
@@ -111,7 +110,6 @@ export default function Logo({
     </div>
   );
 
-  // Email variant returns non-link markup
   if (variant === "email") {
     return logoMarkup;
   }

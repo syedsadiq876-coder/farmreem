@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -8,54 +9,55 @@ import {
   Clock,
   ShieldCheck,
   Building2,
-  Check,
   RotateCcw,
   Calendar,
-  CheckCircle2,
   ChevronRight,
+  MapPin,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <div className="bg-[#FAF7F2] text-[#111A17] space-y-0">
+    <div className="bg-[#FAF7F2] text-[#111A17] space-y-0 selection:bg-[#C59B27] selection:text-[#0F2E23]">
       
-      {/* SECTION 1 — HERO */}
-      <section className="relative bg-[#0F2E23] text-white pt-14 pb-20 lg:pt-24 lg:pb-32 overflow-hidden">
-        {/* Ambient background glows */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C59B27]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#184636]/40 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* -------------------------------------------------------------
+          SECTION 1 — HERO: BRAND FIRST (Light Editorial Canvas)
+         ------------------------------------------------------------- */}
+      <section className="relative bg-[#FAF7F2] text-[#0F2E23] pt-10 pb-20 lg:pt-16 lg:pb-28 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Hero Left Typography */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#184636] border border-[#25634e] text-[#C59B27] text-xs font-bold uppercase tracking-wider">
-                Dehradun, Uttarakhand · Professional Foodservice Supply
+            {/* Hero Left Content */}
+            <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E1D3] text-[#0F2E23] text-xs font-bold uppercase tracking-wider shadow-sm">
+                <MapPin className="w-3.5 h-3.5 text-[#C59B27]" />
+                <span>Dehradun, Uttarakhand · Foodservice Supply</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.08]">
                 Poultry supply, <br />
-                <span className="text-[#C59B27]">simplified for professional kitchens.</span>
+                <span className="text-[#C59B27] underline decoration-[#C59B27]/30 underline-offset-8">
+                  built around your kitchen.
+                </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-[#FAF7F2]/80 font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Live broiler sourcing and scheduled B2B delivery for hotels, restaurants, caterers and institutions.
+              <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-lg mx-auto lg:mx-0">
+                Reliable live broiler sourcing and scheduled B2B delivery for hotels, restaurants, caterers and institutions.
               </p>
 
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
                 <Link
                   href="/request-pricing"
-                  className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-base px-8 py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group"
+                  className="w-full sm:w-auto bg-[#0F2E23] hover:bg-[#184636] text-[#FAF7F2] font-extrabold text-base px-8 py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group"
                 >
                   Request B2B Pricing
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 text-[#C59B27] group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 <Link
                   href="/login"
-                  className="w-full sm:w-auto bg-[#184636] hover:bg-[#205945] text-white font-semibold text-base px-7 py-4 rounded-xl border border-[#25634e] transition-colors flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-7 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm"
                 >
                   <Lock className="w-4 h-4 text-[#C59B27]" />
                   B2B Login
@@ -63,66 +65,62 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero Right Visual: Product/Order Interface Mockup */}
-            <div className="lg:col-span-5 relative">
-              <div className="bg-[#0A2118] border border-[#184636] rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6">
-                <div className="flex items-center justify-between border-b border-[#184636] pb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-                      Live B2B Ordering Interface
+            {/* Hero Right Visual: Editorial Photo + Natural Mini B2B Ordering Card */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[#E8E1D3] group">
+                <Image
+                  src="/images/hero_chef_kitchen.jpg"
+                  alt="FarmReem Foodservice Supply Kitchen Sourcing"
+                  width={900}
+                  height={675}
+                  className="w-full h-[460px] object-cover group-hover:scale-105 transition-transform duration-700"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F2E23]/90 via-[#0F2E23]/20 to-transparent" />
+
+                {/* Integrated Small B2B Order Interface Card */}
+                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-5 border border-[#E8E1D3] shadow-2xl text-[#0F2E23] space-y-3">
+                  <div className="flex items-center justify-between border-b border-[#E8E1D3] pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0F2E23]">
+                        Live Broiler Supply
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-bold bg-[#FAF7F2] text-[#0F2E23] px-2 py-0.5 rounded border border-[#E8E1D3]">
+                      Scheduled Morning Route
                     </span>
                   </div>
-                  <span className="text-[10px] font-bold bg-[#184636] px-2.5 py-1 rounded text-[#FAF7F2]/80">
-                    FR-8842
-                  </span>
-                </div>
 
-                {/* Product Box */}
-                <div className="bg-[#0F2E23] p-5 rounded-xl border border-[#25634e] space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-extrabold text-lg text-white">Live Commercial Broiler</h3>
-                      <p className="text-xs text-[#FAF7F2]/60">Specified Weight Spec · Receiving Dock Delivery</p>
+                  <div className="grid grid-cols-4 gap-2 text-center text-xs">
+                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Birds</span>
+                      <span className="font-extrabold text-[#0F2E23]">120</span>
                     </div>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950 border border-emerald-800 px-2 py-1 rounded">
-                      Available
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="bg-[#0A2118] p-3 rounded-lg border border-[#184636]">
-                      <span className="text-[#FAF7F2]/60 block mb-0.5">Preferred Weight</span>
-                      <span className="font-extrabold text-white text-sm">1.8 – 2.0 kg</span>
+                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Weight</span>
+                      <span className="font-extrabold text-[#0F2E23]">1.8–2.0 kg</span>
                     </div>
-                    <div className="bg-[#0A2118] p-3 rounded-lg border border-[#184636]">
-                      <span className="text-[#FAF7F2]/60 block mb-0.5">Bird Quantity</span>
-                      <span className="font-extrabold text-[#C59B27] text-sm">120 Birds (~228 KG)</span>
+                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Delivery</span>
+                      <span className="font-extrabold text-[#0F2E23]">Tomorrow</span>
                     </div>
-                    <div className="bg-[#0A2118] p-3 rounded-lg border border-[#184636]">
-                      <span className="text-[#FAF7F2]/60 block mb-0.5">Delivery Date</span>
-                      <span className="font-bold text-white">Tomorrow</span>
-                    </div>
-                    <div className="bg-[#0A2118] p-3 rounded-lg border border-[#184636]">
-                      <span className="text-[#FAF7F2]/60 block mb-0.5">Kitchen Slot</span>
-                      <span className="font-bold text-white">06:00 – 08:00 AM</span>
+                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                      <span className="text-[9px] text-[#4F5E57] uppercase block">Slot</span>
+                      <span className="font-extrabold text-[#0F2E23]">6–8 AM</span>
                     </div>
                   </div>
 
-                  <div className="pt-2 flex justify-between items-center text-xs">
-                    <span className="text-[#FAF7F2]/60">Account Rate: <strong className="text-white">Customer Contract</strong></span>
-                    <button
-                      type="button"
-                      className="bg-[#C59B27] text-[#0F2E23] font-extrabold text-xs px-5 py-2.5 rounded-lg shadow cursor-default"
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <span className="text-[11px] text-[#4F5E57]">Customer Contract Rate</span>
+                    <Link
+                      href="/request-pricing"
+                      className="bg-[#0F2E23] hover:bg-[#184636] text-[#C59B27] font-extrabold text-[11px] px-4 py-2 rounded-lg shadow"
                     >
-                      [ Confirm Order ]
-                    </button>
+                      Request / Confirm Supply &rarr;
+                    </Link>
                   </div>
                 </div>
-
-                <p className="text-[11px] text-center text-[#FAF7F2]/50">
-                  *Visual demonstration of the FarmReem B2B ordering experience.
-                </p>
               </div>
             </div>
 
@@ -130,281 +128,328 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 2 — COMPACT VALUE STRIP */}
-      <section className="bg-white border-y border-[#E8E1D3] py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
-            
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23] flex-shrink-0">
-                <Scale className="w-5 h-5 text-[#C59B27]" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-extrabold text-sm text-[#0F2E23]">Weight-Matched Supply</h4>
-                <p className="text-[11px] text-[#4F5E57]">Uniform bird size bands</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23] flex-shrink-0">
-                <Clock className="w-5 h-5 text-[#C59B27]" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-extrabold text-sm text-[#0F2E23]">Scheduled Delivery</h4>
-                <p className="text-[11px] text-[#4F5E57]">Planned morning routes</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23] flex-shrink-0">
-                <ShieldCheck className="w-5 h-5 text-[#C59B27]" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-extrabold text-sm text-[#0F2E23]">Transparent Weighment</h4>
-                <p className="text-[11px] text-[#4F5E57]">Verified dual tickets</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23] flex-shrink-0">
-                <Building2 className="w-5 h-5 text-[#C59B27]" />
-              </div>
-              <div className="text-left">
-                <h4 className="font-extrabold text-sm text-[#0F2E23]">Account-Specific Pricing</h4>
-                <p className="text-[11px] text-[#4F5E57]">Customer contract rates</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3 — BUILT AROUND YOUR KITCHEN */}
-      <section className="py-20 bg-[#FAF7F2]">
+      {/* -------------------------------------------------------------
+          SECTION 2 — ONE VISUAL BRAND STORY (Cinematic Editorial Sequence)
+         ------------------------------------------------------------- */}
+      <section className="py-20 bg-white border-y border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              Tailored Foodservice Logistics
+              The Sourcing Protocol
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
-              Tell us what your kitchen needs.
+              From requirement to kitchen.
             </h2>
-            <p className="text-sm text-[#4F5E57] leading-relaxed">
-              We configure your supply protocol based on requested bird count, preferred weight ranges, and kitchen dock schedules.
+            <p className="text-base text-[#4F5E57]">
+              A continuous, verified supply journey connecting regional farm production to executive receiving docks.
             </p>
           </div>
 
-          {/* Interactive UI Showcase Mockup */}
-          <div className="bg-white rounded-2xl border border-[#E8E1D3] p-6 sm:p-10 shadow-sm space-y-8 max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Cinematic Image & Storytelling Sequence */}
+          <div className="relative rounded-3xl overflow-hidden border border-[#E8E1D3] shadow-xl">
+            <div className="relative h-[480px]">
+              <Image
+                src="/images/farm_sunrise.jpg"
+                alt="FarmReem Regional Sourcing & Farm Network"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0F2E23]/95 via-[#0F2E23]/80 to-transparent p-8 sm:p-14 flex flex-col justify-between text-white">
+                
+                <div className="max-w-md space-y-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">
+                    01 · Sourcing & Verification
+                  </span>
+                  <h3 className="text-3xl font-extrabold text-white">
+                    Vetted Partner Farms & Calibrated Weighment
+                  </h3>
+                  <p className="text-sm text-[#FAF7F2]/80 leading-relaxed">
+                    Flock condition and live weight bands verified at dispatch point before entering planned morning transport routes.
+                  </p>
+                </div>
+
+                {/* Horizontal Step Indicator Bar */}
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-6 border-t border-white/20 text-xs font-bold text-white">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-[#C59B27] text-[#0F2E23] flex items-center justify-center text-xs font-extrabold">1</span>
+                    <span>Requirement</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">2</span>
+                    <span>Sourcing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">3</span>
+                    <span>Weight Check</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">4</span>
+                    <span>Delivery</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-extrabold">5</span>
+                    <span>Your Kitchen</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
+          SECTION 3 — SUPPLY BUILT AROUND THE BUYER (Asymmetric Layout)
+         ------------------------------------------------------------- */}
+      <section className="py-20 bg-[#FAF7F2]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left: Commercial Kitchen Imagery */}
+            <div className="lg:col-span-6">
+              <div className="relative rounded-3xl overflow-hidden shadow-xl border border-[#E8E1D3]">
+                <Image
+                  src="/images/hero_foodservice.jpg"
+                  alt="Commercial Kitchen Foodservice Supply"
+                  width={800}
+                  height={600}
+                  className="w-full h-[440px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F2E23]/80 via-transparent to-transparent p-8 flex items-end">
+                  <div className="text-white space-y-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">Receiving Dock Reliability</span>
+                    <h4 className="text-xl font-extrabold">Specified Bird Counts & Portions</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Tactile Specification Controls */}
+            <div className="lg:col-span-6 space-y-8">
+              <div className="space-y-3">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
+                  Commercial Account Configuration
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23] tracking-tight">
+                  Tell us what you need.
+                </h2>
+                <p className="text-sm text-[#4F5E57] leading-relaxed">
+                  Every hospitality menu relies on consistent portioning and predictable receiving schedules. Configure your kitchen account settings:
+                </p>
+              </div>
+
+              <div className="space-y-6 pt-2">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-[#0F2E23] text-[#C59B27] flex items-center justify-center font-extrabold text-sm flex-shrink-0">
+                    01
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Bird Quantity & Frequency</h3>
+                    <p className="text-xs text-[#4F5E57] mt-0.5">Specify daily or event bird counts matched to your prep timelines.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-[#0F2E23] text-[#C59B27] flex items-center justify-center font-extrabold text-sm flex-shrink-0">
+                    02
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Preferred Weight Range</h3>
+                    <p className="text-xs text-[#4F5E57] mt-0.5">Request uniform weight bands (e.g. 1.8–2.0 kg) based on availability.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-[#0F2E23] text-[#C59B27] flex items-center justify-center font-extrabold text-sm flex-shrink-0">
+                    03
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Scheduled Delivery Slot</h3>
+                    <p className="text-xs text-[#4F5E57] mt-0.5">Planned morning receiving dock windows before kitchen prep shifts begin.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-[#0F2E23] text-[#C59B27] flex items-center justify-center font-extrabold text-sm flex-shrink-0">
+                    04
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Standing Repeat Schedule</h3>
+                    <p className="text-xs text-[#4F5E57] mt-0.5">Automated standing weekly supply with single-click pause and modify options.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/request-pricing"
+                  className="inline-flex items-center gap-2 bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-xs px-7 py-3.5 rounded-xl transition-all shadow-md"
+                >
+                  Configure Account Pricing &rarr;
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
+          SECTION 4 — FARMREEM SUPPLY NETWORK (Deep Forest Green Brand Moment)
+         ------------------------------------------------------------- */}
+      <section className="py-20 bg-[#0F2E23] text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
+          
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">
+              Continuous Supply Reliability
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              A stronger supply network.
+            </h2>
+            <p className="text-base text-[#FAF7F2]/80">
+              FarmReem connects developing owned production capacity with vetted partner farms and wholesale sourcing networks.
+            </p>
+          </div>
+
+          {/* Animated Supply Flow Diagram */}
+          <div className="bg-[#0A2118] rounded-3xl p-8 sm:p-12 border border-[#184636] shadow-2xl space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               
-              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
-                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">01 · Bird Quantity</span>
-                <span className="text-base font-extrabold text-[#0F2E23] block">100 Birds (Custom)</span>
-                <span className="text-[11px] text-[#4F5E57]">Selected bird count per day</span>
+              <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
+                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">
+                  Under Active Development
+                </span>
+                <h3 className="font-extrabold text-lg text-white">Building FarmReem Farms</h3>
+                <p className="text-xs text-[#FAF7F2]/70">Owned bio-secure broiler production facilities</p>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
-                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">02 · Preferred Weight</span>
-                <span className="text-base font-extrabold text-[#0F2E23] block">1.8 kg – 2.0 kg Spec</span>
-                <span className="text-[11px] text-[#4F5E57]">Uniform portion yield</span>
+              <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block">
+                  Core Volume Partner
+                </span>
+                <h3 className="font-extrabold text-lg text-white">Partner Poultry Farms</h3>
+                <p className="text-xs text-[#FAF7F2]/70">Audited commercial poultry growers & weight sorting</p>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
-                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">03 · Delivery Slot</span>
-                <span className="text-base font-extrabold text-[#0F2E23] block">06:00 – 08:00 AM</span>
-                <span className="text-[11px] text-[#4F5E57]">Morning dock receiving</span>
-              </div>
-
-              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
-                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">04 · Repeat Schedule</span>
-                <span className="text-base font-extrabold text-emerald-800 block">Active Mon–Sat</span>
-                <span className="text-[11px] text-[#4F5E57]">Automated standing order</span>
+              <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Volume Buffer
+                </span>
+                <h3 className="font-extrabold text-lg text-white">Wholesale Sourcing</h3>
+                <p className="text-xs text-[#FAF7F2]/70">Wholesale mandi procurement for demand surges</p>
               </div>
 
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-[#E8E1D3] gap-4">
-              <p className="text-xs text-[#4F5E57]">
-                Commercial accounts receive assigned rate sheets and dual weighment tickets.
+            {/* Central Convergence Node */}
+            <div className="flex flex-col items-center justify-center gap-3 pt-2 border-t border-[#184636]">
+              <div className="inline-flex items-center gap-3 bg-[#C59B27] text-[#0F2E23] font-extrabold text-sm px-8 py-3.5 rounded-full shadow-xl">
+                <span>FARMREEM SOURCING & LOGISTICS</span>
+              </div>
+              <p className="text-xs text-[#FAF7F2]/70 font-semibold pt-2">
+                Delivering to Hotels · Restaurants · Caterers · Institutions
               </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
+          SECTION 5 — B2B EXPERIENCE + FINAL CTA (Light Premium Canvas)
+         ------------------------------------------------------------- */}
+      <section className="py-20 bg-[#FFFDF9] border-t border-[#E8E1D3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
+              Digital Procurement Experience
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
+              Ordering should be the easy part.
+            </h2>
+            <p className="text-base text-[#4F5E57]">
+              Repeat previous orders in seconds, manage standing weekly allocations, and track customer contract pricing from any device.
+            </p>
+          </div>
+
+          {/* ONE Polished Interface Composition */}
+          <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 sm:p-12 shadow-xl space-y-8 max-w-4xl mx-auto">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#E8E1D3]">
+              <div>
+                <span className="text-xs font-bold text-[#C59B27] uppercase tracking-wider">Customer Portal Experience</span>
+                <h3 className="text-xl font-extrabold text-[#0F2E23]">Grand Heritage Hotel (Account FR-8842)</h3>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold">
+                Approved Commercial Account
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
+                <span className="text-[#4F5E57] block font-semibold">Repeat Previous Order</span>
+                <p className="font-extrabold text-sm text-[#0F2E23]">120 Live Birds @ 1.8–2.0 kg Spec</p>
+                <span className="text-[10px] text-emerald-700 font-bold block pt-1">1-Click Reorder Ready</span>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
+                <span className="text-[#4F5E57] block font-semibold">Weekly Supply Schedule</span>
+                <p className="font-extrabold text-sm text-[#0F2E23]">Mon–Sat Standing Allocation</p>
+                <span className="text-[10px] text-[#C59B27] font-bold block pt-1">Active Morning Slot</span>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
+                <span className="text-[#4F5E57] block font-semibold">Contract Account Rate</span>
+                <p className="font-extrabold text-sm text-[#0F2E23]">₹ [Assigned Rate / KG]</p>
+                <span className="text-[10px] text-[#4F5E57] block pt-1">Dual Weighment Ticket Reconciled</span>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
+                <span className="text-[#4F5E57] block font-semibold">Recent Order Status</span>
+                <p className="font-extrabold text-sm text-emerald-800">Delivered & Verified</p>
+                <span className="text-[10px] text-[#4F5E57] block pt-1">Dispatch Slip Recorded</span>
+              </div>
+            </div>
+          </div>
+
+          {/* FINAL CTA BLOCK */}
+          <div className="bg-[#0F2E23] text-white rounded-3xl p-10 sm:p-14 text-center space-y-6 shadow-2xl">
+            <h3 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              Ready to simplify poultry procurement?
+            </h3>
+            <p className="text-base text-[#FAF7F2]/80 max-w-xl mx-auto">
+              Contact FarmReem in Dehradun at +91 8475863634 to configure your commercial kitchen supply account.
+            </p>
+
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/request-pricing"
-                className="bg-[#0F2E23] hover:bg-[#184636] text-white font-bold text-xs px-6 py-3 rounded-xl transition-colors shadow whitespace-nowrap"
+                className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-base px-9 py-4 rounded-xl shadow-xl transition-all"
               >
-                Configure Your Kitchen Account
+                Request B2B Pricing
               </Link>
+              
+              <a
+                href="tel:+918475863634"
+                className="w-full sm:w-auto bg-[#184636] hover:bg-[#205945] text-white font-semibold text-base px-8 py-4 rounded-xl border border-[#25634e] transition-colors flex items-center justify-center gap-2"
+              >
+                <Phone className="w-4 h-4 text-[#C59B27]" /> Call +91 8475863634
+              </a>
+
+              <a
+                href="https://wa.me/918475863634"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-base px-7 py-4 rounded-xl border border-emerald-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4 text-emerald-300" /> WhatsApp
+              </a>
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* SECTION 4 — HOW FARMREEM WORKS */}
-      <section id="how-it-works" className="py-20 bg-white border-y border-[#E8E1D3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              End-to-End Fulfillment
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23]">
-              How FarmReem Works
-            </h2>
-            <p className="text-sm text-[#4F5E57]">
-              Four simple steps from kitchen requirement to receiving dock weighment.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { num: "01", title: "Requirement", desc: "Submit your requested bird count, preferred weight spec, and delivery date." },
-              { num: "02", title: "Sourcing", desc: "Order allocated against partner farms or procurement lots." },
-              { num: "03", name: "Weight Verification", desc: "Dispatch weighment recorded with bird count and live weight slip." },
-              { num: "04", title: "Scheduled Delivery", desc: "Receiving weighment verified at hotel dock, issuing reconciled final invoice." },
-            ].map((st, i) => (
-              <div key={i} className="bg-[#FAF7F2] p-6 rounded-2xl border border-[#E8E1D3] space-y-3">
-                <span className="text-3xl font-extrabold text-[#C59B27]">{st.num}</span>
-                <h3 className="font-extrabold text-lg text-[#0F2E23]">{st.title || st.name}</h3>
-                <p className="text-xs text-[#4F5E57] leading-relaxed">{st.desc}</p>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 5 — SUPPLY NETWORK */}
-      <section className="py-20 bg-[#FAF7F2]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              Multi-Layer Sourcing Architecture
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23]">
-              Hybrid Supply Network
-            </h2>
-            <p className="text-sm text-[#4F5E57]">
-              FarmReem combines developing owned capacity with commercial partner farms and wholesale procurement networks.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-[#E8E1D3] space-y-3">
-              <span className="text-[10px] font-extrabold text-[#C59B27] uppercase tracking-wider block">
-                Under Active Development
-              </span>
-              <h3 className="font-bold text-lg text-[#0F2E23]">Building FarmReem Farms</h3>
-              <p className="text-xs text-[#4F5E57] leading-relaxed">
-                Developing owned biosecure poultry farming capacity to complement sourcing and set direct standards.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-[#E8E1D3] space-y-3">
-              <span className="text-[10px] font-extrabold text-[#0F2E23] uppercase tracking-wider block">
-                Active Sourcing Core
-              </span>
-              <h3 className="font-bold text-lg text-[#0F2E23]">Partner Poultry Farms</h3>
-              <p className="text-xs text-[#4F5E57] leading-relaxed">
-                Contracted commercial poultry farms audited for biosecurity measures, flock health, and weight sorting.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-[#E8E1D3] space-y-3">
-              <span className="text-[10px] font-extrabold text-slate-600 uppercase tracking-wider block">
-                Volume Buffer
-              </span>
-              <h3 className="font-bold text-lg text-[#0F2E23]">Wholesale Procurement</h3>
-              <p className="text-xs text-[#4F5E57] leading-relaxed">
-                Wholesale mandi procurement providing immediate volume buffering during peak demand dates.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 6 — REPEAT PROCUREMENT */}
-      <section className="py-20 bg-[#0A2118] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              Platform Ordering Mindset
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Order once. Repeat in seconds.
-            </h2>
-            <p className="text-sm text-[#FAF7F2]/80">
-              Built so purchase managers and executive chefs can manage kitchen procurement effortlessly.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-[#0F2E23] p-6 rounded-2xl border border-[#184636] space-y-3">
-              <RotateCcw className="w-6 h-6 text-[#C59B27]" />
-              <h3 className="font-bold text-base text-white">Repeat Previous Order</h3>
-              <p className="text-xs text-[#FAF7F2]/70 leading-relaxed">
-                Reorder your usual bird count and weight spec with a single click from desktop or mobile.
-              </p>
-            </div>
-
-            <div className="bg-[#0F2E23] p-6 rounded-2xl border border-[#184636] space-y-3">
-              <Calendar className="w-6 h-6 text-[#C59B27]" />
-              <h3 className="font-bold text-base text-white">Standing Weekly Schedule</h3>
-              <p className="text-xs text-[#FAF7F2]/70 leading-relaxed">
-                Set recurring daily bird allocations (e.g. Mon 80 birds, Tue 60 birds) with pause and modify controls.
-              </p>
-            </div>
-
-            <div className="bg-[#0F2E23] p-6 rounded-2xl border border-[#184636] space-y-3">
-              <Building2 className="w-6 h-6 text-[#C59B27]" />
-              <h3 className="font-bold text-base text-white">Customer-Specific Pricing</h3>
-              <p className="text-xs text-[#FAF7F2]/70 leading-relaxed">
-                Authenticated buyers view designated contract rates and net statements directly inside the portal.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 7 — FINAL CTA */}
-      <section className="py-20 bg-[#0F2E23] text-white text-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Ready to simplify poultry procurement?
-          </h2>
-          <p className="text-base text-[#FAF7F2]/80 max-w-xl mx-auto">
-            Contact FarmReem in Dehradun at +91 8475863634 to set up live broiler supply for your commercial kitchen.
-          </p>
-
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/request-pricing"
-              className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-base px-9 py-4 rounded-xl shadow-xl transition-all"
-            >
-              Request B2B Pricing
-            </Link>
-            
-            <a
-              href="tel:+918475863634"
-              className="w-full sm:w-auto bg-[#184636] hover:bg-[#205945] text-white font-semibold text-base px-8 py-4 rounded-xl border border-[#25634e] transition-colors flex items-center justify-center gap-2"
-            >
-              <Phone className="w-4 h-4 text-[#C59B27]" /> Call +91 8475863634
-            </a>
-
-            <a
-              href="https://wa.me/918475863634"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-base px-7 py-4 rounded-xl border border-emerald-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <MessageSquare className="w-4 h-4 text-emerald-300" /> WhatsApp
-            </a>
-          </div>
         </div>
       </section>
 
