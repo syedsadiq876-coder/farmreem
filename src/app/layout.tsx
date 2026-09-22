@@ -11,37 +11,44 @@ const jakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const isPreview = process.env.VERCEL_ENV === "preview" || process.env.NEXT_PUBLIC_VERCEL_ENV === "preview";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://farmreem.com"),
-  title: "FarmReem | Reliable Poultry Supply. Built for Professional Kitchens.",
-  description: "Live broiler sourcing and scheduled B2B delivery for hotels, restaurants, caterers and institutional kitchens.",
+  metadataBase: new URL("https://www.farmreem.com"),
+  title: {
+    default: "B2B Poultry Supply for Hotels & Restaurants | FarmReem",
+    template: "%s | FarmReem",
+  },
+  description: "FarmReem provides B2B live broiler sourcing and scheduled poultry supply for hotels, restaurants, caterers and institutional kitchens based in Dehradun, Uttarakhand.",
   icons: {
     icon: "/images/farmreem-logo.png",
     shortcut: "/images/farmreem-logo.png",
     apple: "/images/farmreem-logo.png",
   },
-  keywords: ["B2B poultry supply", "commercial kitchen poultry", "hotel poultry supplier", "restaurant broiler sourcing", "scheduled food delivery"],
-  authors: [{ name: "FarmReem Sourcing & Logistics" }],
+  keywords: ["B2B poultry supply", "hotel poultry supplier", "restaurant broiler supply Dehradun", "scheduled poultry delivery Uttarakhand", "foodservice supply India"],
+  authors: [{ name: "FarmReem B2B Foodservice Supply" }],
   openGraph: {
-    title: "FarmReem — B2B Poultry & Foodservice Supply",
-    description: "Reliable poultry supply with scheduled B2B delivery for hotels, restaurants, and caterers.",
-    url: "https://farmreem.com",
+    title: "B2B Poultry Supply for Hotels & Restaurants | FarmReem",
+    description: "FarmReem provides live broiler sourcing and scheduled B2B poultry supply for hotels, restaurants, caterers and institutional kitchens.",
+    url: "https://www.farmreem.com",
     siteName: "FarmReem",
     images: [
       {
         url: "/images/hero_foodservice.jpg",
         width: 1200,
         height: 630,
-        alt: "FarmReem B2B Poultry Sourcing",
+        alt: "FarmReem B2B Poultry Sourcing and Foodservice Supply",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: isPreview
+    ? { index: false, follow: false }
+    : {
+        index: true,
+        follow: true,
+      },
 };
 
 export default function RootLayout({

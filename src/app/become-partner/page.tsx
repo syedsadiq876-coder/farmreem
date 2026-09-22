@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, Send, Building, Phone, MapPin } from "lucide-react";
+import { CheckCircle2, Send } from "lucide-react";
 
 export default function BecomePartnerPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -23,7 +23,7 @@ export default function BecomePartnerPage() {
   };
 
   return (
-    <div className="bg-[#FAF7F2] py-12 lg:py-20">
+    <div className="bg-[#FAF7F2] py-12 lg:py-20 text-[#111A17]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
         <div className="text-center space-y-4 max-w-2xl mx-auto">
@@ -34,24 +34,24 @@ export default function BecomePartnerPage() {
             Become a FarmReem Supply Partner
           </h1>
           <p className="text-base text-[#4F5E57] leading-relaxed">
-            We partner with commercial poultry farms and wholesale suppliers who maintain flock biosecurity, bird health, and consistent weight sorting capability.
+            FarmReem is developing relationships with commercial poultry farms and suppliers who maintain bird health and consistent weight sorting capability.
           </p>
         </div>
 
         {submitted ? (
-          <div className="bg-white rounded-2xl border border-[#E8E1D3] p-8 lg:p-12 text-center space-y-6 shadow-sm">
+          <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 lg:p-12 text-center space-y-6 shadow-sm">
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-[#0F2E23]">Application Submitted Successfully</h2>
+              <h2 className="text-2xl font-extrabold text-[#0F2E23]">Application Submitted</h2>
               <p className="text-sm text-[#4F5E57] max-w-md mx-auto">
-                Thank you for applying to join the FarmReem supply network. Our procurement team will review your farm capacity and contact you within 24 hours.
+                Thank you for applying to join the FarmReem supply network. Our procurement team will review your details and contact you.
               </p>
             </div>
             <button
               onClick={() => setSubmitted(false)}
-              className="text-xs font-bold text-[#0F2E23] underline"
+              className="text-xs font-bold text-[#0F2E23] underline cursor-pointer"
             >
               Submit another application
             </button>
@@ -59,15 +59,15 @@ export default function BecomePartnerPage() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl border border-[#E8E1D3] p-6 sm:p-10 shadow-sm space-y-6"
+            className="bg-white rounded-3xl border border-[#E8E1D3] p-6 sm:p-10 shadow-sm space-y-6"
           >
-            <h2 className="text-xl font-bold text-[#0F2E23] pb-2 border-b border-[#E8E1D3]">
+            <h2 className="text-xl font-extrabold text-[#0F2E23] pb-2 border-b border-[#E8E1D3]">
               Supplier Application Details
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
                   Farm / Supplier Name *
                 </label>
                 <input
@@ -81,7 +81,7 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
                   Contact Person *
                 </label>
                 <input
@@ -95,7 +95,7 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
                   Mobile Number *
                 </label>
                 <input
@@ -109,13 +109,13 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
-                  Location / City *
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
+                  Location / District *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Pune Rural / North District"
+                  placeholder="e.g. Dehradun / Surrounding Region"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -123,7 +123,7 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
                   Supplier Type *
                 </label>
                 <select
@@ -132,15 +132,15 @@ export default function BecomePartnerPage() {
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
                 >
                   <option value="Commercial Poultry Farm">Commercial Poultry Farm</option>
-                  <option value="Wholesale Supplier">Wholesale Mandi Supplier</option>
-                  <option value="Contract Breeder">Contract Breeder / Hatchery</option>
+                  <option value="Wholesale Supplier">Wholesale Market Supplier</option>
+                  <option value="Contract Breeder">Breeder / Hatchery</option>
                   <option value="Other Supplier">Other Sourcing Entity</option>
                 </select>
               </div>
 
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
-                  Approx. Daily / Batch Capacity *
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
+                  Approximate Capacity *
                 </label>
                 <input
                   type="text"
@@ -153,7 +153,7 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="space-y-2 sm:col-span-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
                   Typical Bird Weight Range
                 </label>
                 <input
@@ -166,12 +166,12 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="space-y-2 sm:col-span-2">
-                <label className="block text-xs font-bold text-[#0F2E23] uppercase tracking-wider">
-                  Notes & Farm Infrastructure Overview
+                <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
+                  Notes & Overview
                 </label>
                 <textarea
-                  rows={4}
-                  placeholder="Describe your farm setup, biosecurity measures, or current off-take arrangements..."
+                  rows={3}
+                  placeholder="Describe your farm setup or supply details..."
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -182,9 +182,9 @@ export default function BecomePartnerPage() {
             <div className="pt-4 border-t border-[#E8E1D3] flex justify-end">
               <button
                 type="submit"
-                className="w-full sm:w-auto bg-[#0F2E23] hover:bg-[#184636] text-white font-bold text-sm px-8 py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                className="w-full sm:w-auto bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-sm px-8 py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
               >
-                Submit Partner Application <Send className="w-4 h-4" />
+                Submit Partner Application <Send className="w-4 h-4 text-[#C59B27]" />
               </button>
             </div>
           </form>

@@ -43,7 +43,7 @@ export default function HomePage() {
       src: "/images/farm_sunrise.jpg",
       alt: "Partner Poultry Farm Sourcing",
       captionTitle: "01 · Regional Farm Sourcing",
-      captionSub: "Vetted poultry farms with monitored flock condition.",
+      captionSub: "Partner Farm Network with monitored bird condition.",
     },
     {
       src: "/images/quality_inspect.jpg",
@@ -53,9 +53,9 @@ export default function HomePage() {
     },
     {
       src: "/images/farm_facility.jpg",
-      alt: "FarmReem Bio-Secure Facility Infrastructure",
+      alt: "FarmReem Facility Infrastructure Development",
       captionTitle: "03 · Controlled Infrastructure",
-      captionSub: "Biosecure handling and specialized crate transport.",
+      captionSub: "Bio-secure handling protocols and specialized crate transport.",
     },
     {
       src: "/images/delivery_fleet.jpg",
@@ -67,7 +67,7 @@ export default function HomePage() {
       src: "/images/hero_chef_kitchen.jpg",
       alt: "Commercial Kitchen Receiving",
       captionTitle: "05 · Kitchen Receiving",
-      captionSub: "Receiving dock verification and account reconciliation.",
+      captionSub: "Receiving dock verification and account weight check.",
     },
   ];
 
@@ -90,8 +90,38 @@ export default function HomePage() {
     },
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "FarmReem",
+    "url": "https://www.farmreem.com",
+    "logo": "https://www.farmreem.com/images/farmreem-logo.png",
+    "image": "https://www.farmreem.com/images/hero_foodservice.jpg",
+    "description": "B2B live broiler sourcing and scheduled poultry supply for hotels, restaurants, caterers and institutional kitchens.",
+    "telephone": "+918475863634",
+    "email": "contact@farmreem.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "39, Siddharth Vihar, Kandoli, Sahastradhara Road",
+      "addressLocality": "Dehradun",
+      "addressRegion": "Uttarakhand",
+      "postalCode": "248001",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 30.3165,
+      "longitude": 78.0322
+    },
+    "priceRange": "$$"
+  };
+
   return (
     <div className="bg-[#FAF7F2] text-[#111A17] space-y-0 selection:bg-[#C59B27] selection:text-[#0F2E23]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       
       {/* -------------------------------------------------------------
           SECTION 1 — HERO: BRAND FIRST (Light Editorial Canvas)
@@ -115,7 +145,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-lg mx-auto lg:mx-0">
-                Reliable live broiler sourcing and scheduled B2B delivery for hotels, restaurants, caterers and institutions.
+                Live broiler sourcing and scheduled B2B supply for hotels, restaurants, caterers and institutional kitchens based in Dehradun, Uttarakhand.
               </p>
 
               {/* CTAs */}
@@ -133,7 +163,7 @@ export default function HomePage() {
                   className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-6 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
                 >
                   <Lock className="w-4 h-4 text-[#C59B27]" />
-                  B2B Login
+                  B2B Portal
                 </Link>
               </div>
             </div>
@@ -172,7 +202,7 @@ export default function HomePage() {
                         </div>
                         <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
                           <span className="text-[9px] text-[#4F5E57] uppercase block">Schedule</span>
-                          <span className="font-extrabold text-[#0F2E23]">Tomorrow</span>
+                          <span className="font-extrabold text-[#0F2E23]">Scheduled</span>
                         </div>
                         <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
                           <span className="text-[9px] text-[#4F5E57] uppercase block">Window</span>
@@ -181,14 +211,15 @@ export default function HomePage() {
                       </div>
 
                       <div className="pt-1 flex items-center justify-between text-xs">
-                        <span className="text-[11px] text-[#4F5E57] font-semibold">
-                          Account #FR-8842 · Grand Heritage Hotel
+                        <span className="text-[10px] text-[#4F5E57] font-semibold flex items-center gap-1">
+                          <span>Sample Hotel Account</span>
+                          <span className="text-[9px] text-[#C59B27] bg-[#FAF7F2] px-1.5 py-0.5 rounded border border-[#E8E1D3]">Interface preview · demonstration data</span>
                         </span>
                         <Link
                           href="/request-pricing"
                           className="font-extrabold text-[#C59B27] hover:underline text-[11px]"
                         >
-                          Request / Confirm Supply &rarr;
+                          Request B2B Pricing &rarr;
                         </Link>
                       </div>
                     </div>
@@ -370,7 +401,7 @@ export default function HomePage() {
               A stronger supply network.
             </h2>
             <p className="text-base text-[#FAF7F2]/80">
-              FarmReem connects developing owned production capacity with vetted partner farms and wholesale sourcing networks.
+              FarmReem connects developing owned production capacity with partner farms and wholesale sourcing networks.
             </p>
           </div>
 
@@ -383,7 +414,7 @@ export default function HomePage() {
                   Under Active Development
                 </span>
                 <h3 className="font-extrabold text-lg text-white">Building FarmReem Farms</h3>
-                <p className="text-xs text-[#FAF7F2]/70">Owned bio-secure broiler production facilities</p>
+                <p className="text-xs text-[#FAF7F2]/70">Developing owned bio-secure broiler production capacity</p>
               </div>
 
               <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
@@ -391,7 +422,7 @@ export default function HomePage() {
                   Core Volume Partner
                 </span>
                 <h3 className="font-extrabold text-lg text-white">Partner Poultry Farms</h3>
-                <p className="text-xs text-[#FAF7F2]/70">Audited commercial poultry growers & weight sorting</p>
+                <p className="text-xs text-[#FAF7F2]/70">Selected commercial poultry growers & weight sorting</p>
               </div>
 
               <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
@@ -399,7 +430,7 @@ export default function HomePage() {
                   Volume Buffer
                 </span>
                 <h3 className="font-extrabold text-lg text-white">Wholesale Sourcing</h3>
-                <p className="text-xs text-[#FAF7F2]/70">Wholesale mandi procurement for demand surges</p>
+                <p className="text-xs text-[#FAF7F2]/70">Wholesale market procurement for supply continuity</p>
               </div>
 
             </div>
@@ -432,7 +463,7 @@ export default function HomePage() {
               Ordering should be the easy part.
             </h2>
             <p className="text-base text-[#4F5E57]">
-              Repeat previous orders in seconds, manage standing weekly allocations, and track customer contract pricing from any device.
+              Repeat previous orders in seconds, manage standing weekly allocations, and view account pricing from any device.
             </p>
           </div>
 
@@ -440,11 +471,12 @@ export default function HomePage() {
           <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 sm:p-12 shadow-xl space-y-8 max-w-4xl mx-auto">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#E8E1D3]">
               <div>
-                <span className="text-xs font-bold text-[#C59B27] uppercase tracking-wider">Customer Portal Experience</span>
-                <h3 className="text-xl font-extrabold text-[#0F2E23]">Grand Heritage Hotel (Account FR-8842)</h3>
+                <span className="text-xs font-bold text-[#C59B27] uppercase tracking-wider">Customer Portal Preview</span>
+                <h3 className="text-xl font-extrabold text-[#0F2E23]">Demo B2B Hotel Account</h3>
+                <p className="text-[11px] text-[#4F5E57] font-medium mt-0.5">Interface preview · demonstration data</p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold">
-                Approved Commercial Account
+              <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#0F2E23] border border-[#E8E1D3] text-xs font-extrabold">
+                Demo B2B Account
               </span>
             </div>
 
@@ -463,8 +495,8 @@ export default function HomePage() {
 
               <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">
                 <span className="text-[#4F5E57] block font-semibold">Contract Account Rate</span>
-                <p className="font-extrabold text-sm text-[#0F2E23]">₹ [Assigned Rate / KG]</p>
-                <span className="text-[10px] text-[#4F5E57] block pt-1">Dual Weighment Ticket Reconciled</span>
+                <p className="font-extrabold text-sm text-[#0F2E23]">Assigned Account Pricing</p>
+                <span className="text-[10px] text-[#4F5E57] block pt-1">Dual Weighment Ticket Basis</span>
               </div>
 
               <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] space-y-1">

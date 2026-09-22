@@ -14,7 +14,7 @@ export default function CustomerPortalDashboardPage() {
         <Logo variant="compact" />
         <div className="flex items-center gap-4 text-xs font-semibold">
           <span className="bg-[#184636] px-3 py-1.5 rounded-lg border border-[#25634e]">
-            Account: Grand Heritage Hotel (FR-8842)
+            Account: Demo B2B Account (Demonstration Data)
           </span>
           <Link href="/login" className="text-[#C59B27] hover:underline">
             Sign Out

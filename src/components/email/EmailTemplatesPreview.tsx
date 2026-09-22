@@ -15,10 +15,10 @@ export default function EmailTemplatesPreview() {
         <div className="space-y-4">
           <p className="text-sm font-semibold text-[#0F2E23]">Dear Purchasing Director,</p>
           <p className="text-xs text-[#4F5E57] leading-relaxed">
-            Thank you for applying for a commercial kitchen account with <strong>FarmReem</strong>. Your application for <strong>Grand Hotel & Suites</strong> has been received by our verification desk in Dehradun.
+            Thank you for applying for a commercial kitchen account with <strong>FarmReem</strong>. Your application for <strong>Demo B2B Hotel Account</strong> has been received by our verification desk in Dehradun.
           </p>
           <p className="text-xs text-[#4F5E57] leading-relaxed">
-            Our account managers will review your business category, requested live broiler weight specifications, and delivery route requirements. You will receive a follow-up confirmation within 2 hours.
+            Our account managers will review your business category, requested live broiler weight specifications, and delivery route requirements.
           </p>
         </div>
       ),
@@ -37,7 +37,7 @@ export default function EmailTemplatesPreview() {
           <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] text-xs space-y-2">
             <div className="flex justify-between">
               <span className="text-[#4F5E57]">Assigned Customer ID:</span>
-              <span className="font-bold text-[#0F2E23]">FR-8842-DDN</span>
+              <span className="font-bold text-[#0F2E23]">DEMO-ACCOUNT-DDN</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#4F5E57]">Live Broiler Rate Tier:</span>

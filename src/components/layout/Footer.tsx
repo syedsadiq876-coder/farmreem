@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="md:col-span-6 space-y-4">
           <Logo variant="footer" />
           <p className="text-xs text-[#FAF7F2]/75 max-w-sm leading-relaxed">
-            Reliable live broiler sourcing and scheduled B2B delivery for professional kitchens in Dehradun and surrounding regions.
+            B2B poultry sourcing and foodservice supply based in Dehradun, Uttarakhand.
           </p>
 
           <div className="pt-2 space-y-2 text-xs text-[#FAF7F2]/70">
@@ -102,9 +102,13 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between text-[11px] text-[#FAF7F2]/50 gap-2">
           <p>© {new Date().getFullYear()} FarmReem (farmreem.com). Dehradun, Uttarakhand. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <span className="text-[#FAF7F2]/40">B2B Sourcing Terms</span>
+            <Link href="/terms" className="text-[#FAF7F2]/60 hover:text-white transition-colors">
+              Terms of Service
+            </Link>
             <span>·</span>
-            <span className="text-[#FAF7F2]/40">Privacy Policy</span>
+            <Link href="/privacy" className="text-[#FAF7F2]/60 hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
           </div>
         </div>
       </div>

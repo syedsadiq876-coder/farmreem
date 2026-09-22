@@ -1,14 +1,40 @@
 import Link from "next/link";
-import { Users, Calendar, CheckCircle2, Truck } from "lucide-react";
+import { Users, Calendar, CheckCircle2, Truck, ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Bulk Poultry Sourcing for Caterers & Institutions | FarmReem",
-  description: "High-volume live broiler batch capacity, event supply fulfillment, and institutional commercial terms for caterers and dining operators.",
+  title: "Bulk Poultry Supply for Caterers & Institutions | FarmReem",
+  description: "FarmReem provides bulk live broiler supply for caterers and institutional kitchens: volume planning, event requirements, recurring supply, and account pricing.",
+  alternates: {
+    canonical: "https://www.farmreem.com/solutions/caterers-institutions",
+  },
+  openGraph: {
+    title: "Bulk Poultry Supply for Caterers & Institutions | FarmReem",
+    description: "Bulk live broiler supply for caterers and institutional kitchens: volume planning, event requirements, and recurring supply.",
+    url: "https://www.farmreem.com/solutions/caterers-institutions",
+  },
 };
 
 export default function CaterersInstitutionsPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Bulk Poultry Supply for Caterers & Institutions",
+    "provider": {
+      "@type": "Organization",
+      "name": "FarmReem",
+      "url": "https://www.farmreem.com"
+    },
+    "areaServed": "Dehradun, Uttarakhand, India",
+    "description": "Bulk live broiler supply, volume event planning, and recurring delivery for banquet caterers and institutional dining facilities."
+  };
+
   return (
-    <div className="bg-[#FAF7F2] py-12 lg:py-20">
+    <div className="bg-[#FAF7F2] py-12 lg:py-20 text-[#111A17]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Hero */}
         <div className="max-w-3xl space-y-4">
@@ -16,10 +42,10 @@ export default function CaterersInstitutionsPage() {
             Institutional & Large Volume Sourcing
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
-            High-Volume Poultry Sourcing for Caterers & Institutions
+            Bulk Poultry Supply for Caterers & Institutions
           </h1>
-          <p className="text-base text-[#4F5E57] leading-relaxed">
-            Banquet caterers, corporate dining operators, and institutional kitchens require batch volume capacity, bird-count ordering, and scheduled dispatches.
+          <p className="text-base sm:text-lg text-[#4F5E57] leading-relaxed">
+            Banquet caterers, institutional kitchens, and large dining operations require volume planning, event-specific supply capability, and predictable route logistics.
           </p>
         </div>
 
@@ -29,9 +55,9 @@ export default function CaterersInstitutionsPage() {
             <div className="w-12 h-12 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23]">
               <Users className="w-6 h-6 text-[#C59B27]" />
             </div>
-            <h3 className="text-xl font-bold text-[#0F2E23]">Bulk Event Sourcing</h3>
+            <h2 className="text-xl font-bold text-[#0F2E23]">Volume & Event Planning</h2>
             <p className="text-sm text-[#4F5E57] leading-relaxed">
-              Fulfill large bird-count requirements for weddings, conventions, and banquet events allocated across our multi-tier sourcing network.
+              Plan bird-count requirements for weddings, conventions, and institutional menus backed by our regional sourcing network.
             </p>
           </div>
 
@@ -39,9 +65,9 @@ export default function CaterersInstitutionsPage() {
             <div className="w-12 h-12 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23]">
               <Calendar className="w-6 h-6 text-[#C59B27]" />
             </div>
-            <h3 className="text-xl font-bold text-[#0F2E23]">Recurring Supply Schedules</h3>
+            <h2 className="text-xl font-bold text-[#0F2E23]">Recurring Supply Schedules</h2>
             <p className="text-sm text-[#4F5E57] leading-relaxed">
-              Configure standing daily or weekly bird allocation schedules for approved accounts with flexible modification options.
+              Establish standing weekly supply schedules for regular dining operations, with advance notice modifications for special events.
             </p>
           </div>
 
@@ -49,24 +75,30 @@ export default function CaterersInstitutionsPage() {
             <div className="w-12 h-12 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] flex items-center justify-center text-[#0F2E23]">
               <Truck className="w-6 h-6 text-[#C59B27]" />
             </div>
-            <h3 className="text-xl font-bold text-[#0F2E23]">Route-Planned Delivery</h3>
+            <h2 className="text-xl font-bold text-[#0F2E23]">Delivery Planning</h2>
             <p className="text-sm text-[#4F5E57] leading-relaxed">
-              Scheduled transport dispatches coordinated directly to central commissaries or designated delivery points.
+              Coordinated morning route transport directly to central kitchens, commissary locations, or designated event receiving points.
             </p>
           </div>
         </div>
 
-        {/* Contract Offerings */}
-        <div className="bg-white rounded-2xl border border-[#E8E1D3] p-8 lg:p-12 space-y-8">
-          <h2 className="text-2xl font-bold text-[#0F2E23]">Institutional Sourcing Options</h2>
+        {/* Sourcing Capabilities */}
+        <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 lg:p-12 space-y-8 shadow-sm">
+          <div className="space-y-2">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
+              Commercial Capability
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F2E23]">Bulk Sourcing & Operational Support</h2>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
             {[
-              "Agreed contract rate periods based on volume commitments",
-              "Multi-location delivery dispatch to multiple kitchen nodes",
-              "Sourcing support for large event and banquet volume surges",
-              "Procurement lot traceability from supplier to weighment slip",
-              "Custom weight range sorting subject to availability",
-              "Commercial terms agreed per account for verified B2B buyers",
+              "Volume planning tailored to event guest counts or daily institution meals",
+              "Preferred bird weight specifications (1.8–2.0 kg and 2.0–2.4 kg heavy spec)",
+              "Scheduled morning delivery to central commissaries or venue docks",
+              "Clear weighment documentation and delivery records",
+              "Single point of contact for account supply coordination",
+              "Commercial account pricing agreed per B2B contract",
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-[#C59B27] flex-shrink-0 mt-0.5" />
@@ -75,13 +107,17 @@ export default function CaterersInstitutionsPage() {
             ))}
           </div>
 
-          <div className="pt-4 border-t border-[#E8E1D3] flex items-center justify-between flex-wrap gap-4">
-            <p className="text-xs text-[#4F5E57]">Planning high-volume catering or institutional supply?</p>
+          <div className="pt-6 border-t border-[#E8E1D3] flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h3 className="font-extrabold text-base text-[#0F2E23]">Planning event or institutional supply?</h3>
+              <p className="text-xs text-[#4F5E57]">Contact FarmReem in Dehradun to discuss your volume requirements.</p>
+            </div>
             <Link
               href="/request-pricing"
-              className="bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-bold text-sm px-6 py-3 rounded-xl transition-all shadow"
+              className="bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-sm px-7 py-3.5 rounded-xl transition-all shadow flex items-center gap-2 group"
             >
-              Request Institutional Pricing
+              Request B2B Pricing
+              <ArrowRight className="w-4 h-4 text-[#C59B27] group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
