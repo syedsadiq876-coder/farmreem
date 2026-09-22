@@ -13,7 +13,7 @@ export interface CarouselSlide {
 interface ImageCarouselProps {
   slides: CarouselSlide[];
   aspectRatio?: string; // e.g. "h-[420px] sm:h-[480px] lg:h-[520px]"
-  autoPlayInterval?: number; // ms, default 4500
+  autoPlayInterval?: number; // ms, default 2000 (2.0s)
   className?: string;
   overlayChildren?: React.ReactNode;
   showDots?: boolean;
@@ -23,7 +23,7 @@ interface ImageCarouselProps {
 export default function ImageCarousel({
   slides,
   aspectRatio = "h-[420px] sm:h-[480px] lg:h-[520px]",
-  autoPlayInterval = 4500,
+  autoPlayInterval = 2000,
   className = "",
   overlayChildren,
   showDots = true,
@@ -54,7 +54,7 @@ export default function ImageCarousel({
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
-  // Autoplay Effect
+  // Autoplay Effect (2.0s interval)
   useEffect(() => {
     if (isHovered || isReducedMotion || slides.length <= 1) return;
 
@@ -104,7 +104,7 @@ export default function ImageCarousel({
           return (
             <div
               key={slide.src + "-" + index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
                 isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
               }`}
             >

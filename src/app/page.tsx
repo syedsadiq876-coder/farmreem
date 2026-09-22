@@ -143,7 +143,7 @@ export default function HomePage() {
               <ImageCarousel
                 slides={heroSlides}
                 aspectRatio="h-[460px]"
-                autoPlayInterval={4500}
+                autoPlayInterval={2000}
                 dotsPosition="top-4"
                 overlayChildren={
                   <div className="p-6">
@@ -224,6 +224,7 @@ export default function HomePage() {
             <ImageCarousel
               slides={sourcingSlides}
               aspectRatio="h-[420px] sm:h-[480px] lg:h-[520px]"
+              autoPlayInterval={2000}
             />
 
             {/* Directional Step Indicator Bar */}
@@ -268,6 +269,7 @@ export default function HomePage() {
               <ImageCarousel
                 slides={kitchenSlides}
                 aspectRatio="h-[380px] sm:h-[420px]"
+                autoPlayInterval={2000}
               />
 
               {/* Text Placement Directly BELOW Photograph */}
