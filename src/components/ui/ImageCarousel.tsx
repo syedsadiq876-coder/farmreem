@@ -15,6 +15,9 @@ interface ImageCarouselProps {
   aspectRatio?: string; // e.g. "h-[420px] sm:h-[480px] lg:h-[520px]"
   autoPlayInterval?: number; // ms, default 4500
   className?: string;
+  overlayChildren?: React.ReactNode;
+  showDots?: boolean;
+  dotsPosition?: "bottom-4" | "top-4";
 }
 
 export default function ImageCarousel({
@@ -22,6 +25,9 @@ export default function ImageCarousel({
   aspectRatio = "h-[420px] sm:h-[480px] lg:h-[520px]",
   autoPlayInterval = 4500,
   className = "",
+  overlayChildren,
+  showDots = true,
+  dotsPosition = "bottom-4",
 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -39,7 +45,7 @@ export default function ImageCarousel({
     }
   }, []);
 
-  // Stable next slide navigation
+  // Next slide navigation
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
@@ -98,7 +104,7 @@ export default function ImageCarousel({
           return (
             <div
               key={slide.src + "-" + index}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
                 isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
               }`}
             >
@@ -114,7 +120,7 @@ export default function ImageCarousel({
               <div className="absolute inset-0 bg-gradient-to-t from-[#0F2E23]/80 via-transparent to-transparent" />
 
               {(slide.captionTitle || slide.captionSub) && (
-                <div className="absolute bottom-10 left-6 right-6 text-white space-y-1 z-20">
+                <div className="absolute bottom-12 left-6 right-6 text-white space-y-1 z-20">
                   {slide.captionTitle && (
                     <span className="text-xs font-extrabold uppercase tracking-wider bg-[#C59B27] text-[#0F2E23] px-2.5 py-1 rounded inline-block shadow">
                       {slide.captionTitle}
@@ -130,11 +136,20 @@ export default function ImageCarousel({
             </div>
           );
         })}
+
+        {/* Stationary Overlay Elements (e.g. Order Card or Step Bar) */}
+        {overlayChildren && (
+          <div className="absolute inset-0 z-30 pointer-events-none flex flex-col justify-end">
+            <div className="pointer-events-auto">
+              {overlayChildren}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Pagination Dots */}
-      {slides.length > 1 && (
-        <div className="absolute bottom-4 left-0 right-0 z-30 flex items-center justify-center gap-2">
+      {showDots && slides.length > 1 && (
+        <div className={`absolute ${dotsPosition} left-0 right-0 z-40 flex items-center justify-center gap-2 pointer-events-auto`}>
           {slides.map((_, idx) => (
             <button
               key={idx}

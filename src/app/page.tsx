@@ -19,6 +19,25 @@ import {
 import ImageCarousel from "@/components/ui/ImageCarousel";
 
 export default function HomePage() {
+  const heroSlides = [
+    {
+      src: "/images/hero_chef_kitchen.jpg",
+      alt: "Executive Hotel Kitchen Chef",
+    },
+    {
+      src: "/images/hero_foodservice.jpg",
+      alt: "Commercial Kitchen Foodservice Preparation",
+    },
+    {
+      src: "/images/quality_inspect.jpg",
+      alt: "Hotel Foodservice Receiving Dock Verification",
+    },
+    {
+      src: "/images/farm_facility.jpg",
+      alt: "Professional Hospitality Sourcing Environment",
+    },
+  ];
+
   const sourcingSlides = [
     {
       src: "/images/farm_sunrise.jpg",
@@ -65,6 +84,10 @@ export default function HomePage() {
       src: "/images/quality_inspect.jpg",
       alt: "Receiving Dock Verification",
     },
+    {
+      src: "/images/farm_facility.jpg",
+      alt: "Hospitality Foodservice Operation",
+    },
   ];
 
   return (
@@ -81,7 +104,7 @@ export default function HomePage() {
             <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E1D3] text-[#0F2E23] text-xs font-bold uppercase tracking-wider shadow-sm">
                 <MapPin className="w-3.5 h-3.5 text-[#C59B27]" />
-                <span>Dehradun, Uttarakhand · Foodservice Supply</span>
+                <span>Foodservice Supply · India</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.08]">
@@ -106,16 +129,8 @@ export default function HomePage() {
                 </Link>
 
                 <Link
-                  href="/register"
-                  className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-base px-6 py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
-                >
-                  <UserPlus className="w-4 h-4 text-[#0F2E23]" />
-                  Apply for Account
-                </Link>
-
-                <Link
                   href="/login"
-                  className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-5 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                  className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-6 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
                 >
                   <Lock className="w-4 h-4 text-[#C59B27]" />
                   B2B Login
@@ -123,65 +138,63 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero Right Visual: Editorial Photo + Natural Mini B2B Ordering Card */}
+            {/* Hero Right Visual: Rotating Photography + Fixed Mini B2B Ordering Card */}
             <div className="lg:col-span-6 relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[#E8E1D3] group">
-                <Image
-                  src="/images/hero_chef_kitchen.jpg"
-                  alt="FarmReem Foodservice Supply Kitchen Sourcing"
-                  width={900}
-                  height={675}
-                  className="w-full h-[460px] object-cover group-hover:scale-105 transition-transform duration-700"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F2E23]/90 via-[#0F2E23]/20 to-transparent" />
+              <ImageCarousel
+                slides={heroSlides}
+                aspectRatio="h-[460px]"
+                autoPlayInterval={4500}
+                dotsPosition="top-4"
+                overlayChildren={
+                  <div className="p-6">
+                    {/* Integrated Small B2B Order Interface Card */}
+                    <div className="bg-white/95 backdrop-blur-md rounded-2xl p-5 border border-[#E8E1D3] shadow-2xl text-[#0F2E23] space-y-3">
+                      <div className="flex items-center justify-between border-b border-[#E8E1D3] pb-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+                          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0F2E23]">
+                            Live Broiler Supply
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-bold bg-[#FAF7F2] text-[#0F2E23] px-2 py-0.5 rounded border border-[#E8E1D3]">
+                          Scheduled Morning Route
+                        </span>
+                      </div>
 
-                {/* Integrated Small B2B Order Interface Card */}
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-5 border border-[#E8E1D3] shadow-2xl text-[#0F2E23] space-y-3">
-                  <div className="flex items-center justify-between border-b border-[#E8E1D3] pb-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0F2E23]">
-                        Live Broiler Supply
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-bold bg-[#FAF7F2] text-[#0F2E23] px-2 py-0.5 rounded border border-[#E8E1D3]">
-                      Scheduled Morning Route
-                    </span>
-                  </div>
+                      <div className="grid grid-cols-4 gap-2 text-center text-xs">
+                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                          <span className="text-[9px] text-[#4F5E57] uppercase block">Birds</span>
+                          <span className="font-extrabold text-[#0F2E23]">120</span>
+                        </div>
+                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                          <span className="text-[9px] text-[#4F5E57] uppercase block">Weight Spec</span>
+                          <span className="font-extrabold text-[#0F2E23]">1.8–2.0 kg</span>
+                        </div>
+                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                          <span className="text-[9px] text-[#4F5E57] uppercase block">Schedule</span>
+                          <span className="font-extrabold text-[#0F2E23]">Tomorrow</span>
+                        </div>
+                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
+                          <span className="text-[9px] text-[#4F5E57] uppercase block">Window</span>
+                          <span className="font-extrabold text-[#0F2E23]">6–8 AM</span>
+                        </div>
+                      </div>
 
-                  <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Birds</span>
-                      <span className="font-extrabold text-[#0F2E23]">120</span>
-                    </div>
-                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Weight Spec</span>
-                      <span className="font-extrabold text-[#0F2E23]">1.8–2.0 kg</span>
-                    </div>
-                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Schedule</span>
-                      <span className="font-extrabold text-[#0F2E23]">Tomorrow</span>
-                    </div>
-                    <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                      <span className="text-[9px] text-[#4F5E57] uppercase block">Window</span>
-                      <span className="font-extrabold text-[#0F2E23]">6–8 AM</span>
+                      <div className="pt-1 flex items-center justify-between text-xs">
+                        <span className="text-[11px] text-[#4F5E57] font-semibold">
+                          Account #FR-8842 · Grand Heritage Hotel
+                        </span>
+                        <Link
+                          href="/request-pricing"
+                          className="font-extrabold text-[#C59B27] hover:underline text-[11px]"
+                        >
+                          Request / Confirm Supply &rarr;
+                        </Link>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="pt-1 flex items-center justify-between text-xs">
-                    <span className="text-[11px] text-[#4F5E57] font-semibold">
-                      Account #FR-8842 · Grand Heritage Hotel
-                    </span>
-                    <Link
-                      href="/request-pricing"
-                      className="font-extrabold text-[#C59B27] hover:underline text-[11px]"
-                    >
-                      Request / Confirm Supply &rarr;
-                    </Link>
-                  </div>
-                </div>
-              </div>
+                }
+              />
             </div>
 
           </div>
