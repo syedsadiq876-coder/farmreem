@@ -5,16 +5,7 @@ import {
   Lock,
   Phone,
   MessageSquare,
-  Scale,
-  Clock,
-  ShieldCheck,
-  Building2,
-  RotateCcw,
-  Calendar,
-  ChevronRight,
   MapPin,
-  CheckCircle2,
-  UserPlus,
 } from "lucide-react";
 import ImageCarousel from "@/components/ui/ImageCarousel";
 
@@ -30,7 +21,7 @@ export default function HomePage() {
     },
     {
       src: "/images/quality_inspect.jpg",
-      alt: "Hotel Foodservice Receiving Dock Verification",
+      alt: "Foodservice Quality Inspection",
     },
     {
       src: "/images/farm_facility.jpg",
@@ -41,33 +32,33 @@ export default function HomePage() {
   const sourcingSlides = [
     {
       src: "/images/farm_sunrise.jpg",
-      alt: "Partner Poultry Farm Sourcing",
-      captionTitle: "01 · Regional Farm Sourcing",
-      captionSub: "Partner Farm Network with monitored bird condition.",
+      alt: "Tell us what you need",
+      captionTitle: "01 · Tell us what you need",
+      captionSub: "Bird count, preferred weight and delivery requirement.",
     },
     {
       src: "/images/quality_inspect.jpg",
-      alt: "Bird Inspection & Calibrated Weighment",
-      captionTitle: "02 · Calibrated Weighment",
-      captionSub: "Dual weighment tickets recorded at dispatch.",
+      alt: "We source your supply",
+      captionTitle: "02 · We source your supply",
+      captionSub: "We coordinate supply through our sourcing network based on your requirement and availability.",
     },
     {
       src: "/images/farm_facility.jpg",
-      alt: "FarmReem Facility Infrastructure Development",
-      captionTitle: "03 · Controlled Infrastructure",
-      captionSub: "Bio-secure handling protocols and specialized crate transport.",
+      alt: "Weight check",
+      captionTitle: "03 · Weight check",
+      captionSub: "Birds are checked against the requested weight range before dispatch.",
     },
     {
       src: "/images/delivery_fleet.jpg",
-      alt: "Scheduled B2B Delivery Logistics",
-      captionTitle: "04 · Direct Route Logistics",
-      captionSub: "Scheduled morning dispatch straight to hotel receiving docks.",
+      alt: "Planned delivery",
+      captionTitle: "04 · Planned delivery",
+      captionSub: "Supply is scheduled around the agreed route and delivery window.",
     },
     {
       src: "/images/hero_chef_kitchen.jpg",
-      alt: "Commercial Kitchen Receiving",
-      captionTitle: "05 · Kitchen Receiving",
-      captionSub: "Receiving dock verification and account weight check.",
+      alt: "Ready for your kitchen",
+      captionTitle: "05 · Ready for your kitchen",
+      captionSub: "Your team receives the quantity and specification agreed for the order.",
     },
   ];
 
@@ -82,7 +73,7 @@ export default function HomePage() {
     },
     {
       src: "/images/quality_inspect.jpg",
-      alt: "Receiving Dock Verification",
+      alt: "Kitchen Quality Inspection",
     },
     {
       src: "/images/farm_facility.jpg",
@@ -97,7 +88,7 @@ export default function HomePage() {
     "url": "https://www.farmreem.com",
     "logo": "https://www.farmreem.com/images/farmreem-logo.png",
     "image": "https://www.farmreem.com/images/hero_foodservice.jpg",
-    "description": "B2B live broiler sourcing and scheduled poultry supply for hotels, restaurants, caterers and institutional kitchens.",
+    "description": "B2B live broiler sourcing and scheduled poultry supply for hotels, restaurants, caterers and institutional kitchens based in Dehradun, Uttarakhand.",
     "telephone": "+918475863634",
     "email": "contact@farmreem.com",
     "address": {
@@ -134,7 +125,7 @@ export default function HomePage() {
             <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E1D3] text-[#0F2E23] text-xs font-bold uppercase tracking-wider shadow-sm">
                 <MapPin className="w-3.5 h-3.5 text-[#C59B27]" />
-                <span>Foodservice Supply · India</span>
+                <span>B2B POULTRY SUPPLY</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.08]">
@@ -145,7 +136,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-lg mx-auto lg:mx-0">
-                Live broiler sourcing and scheduled B2B supply for hotels, restaurants, caterers and institutional kitchens based in Dehradun, Uttarakhand.
+                The birds you need, in the weight you prefer, delivered around your kitchen schedule. FarmReem makes poultry sourcing simpler for hotels, restaurants, caterers and institutional kitchens.
               </p>
 
               {/* CTAs */}
@@ -158,13 +149,13 @@ export default function HomePage() {
                   <ArrowRight className="w-5 h-5 text-[#C59B27] group-hover:translate-x-1 transition-transform" />
                 </Link>
 
-                <Link
-                  href="/login"
+                <a
+                  href="tel:+918475863634"
                   className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-6 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
                 >
-                  <Lock className="w-4 h-4 text-[#C59B27]" />
-                  B2B Portal
-                </Link>
+                  <Phone className="w-4 h-4 text-[#C59B27]" />
+                  Talk to FarmReem
+                </a>
               </div>
             </div>
 
@@ -212,7 +203,7 @@ export default function HomePage() {
 
                       <div className="pt-1 flex items-center justify-between text-xs">
                         <span className="text-[10px] text-[#4F5E57] font-semibold flex items-center gap-1">
-                          <span>Sample Hotel Account</span>
+                          <span>Sample B2B Account</span>
                           <span className="text-[9px] text-[#C59B27] bg-[#FAF7F2] px-1.5 py-0.5 rounded border border-[#E8E1D3]">Interface preview · demonstration data</span>
                         </span>
                         <Link
@@ -233,20 +224,21 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 2 — ONE VISUAL BRAND STORY (Automatic Carousel Sequence)
+          SECTION 2 — HOW FARMREEM WORKS (Automatic Carousel Sequence)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-white border-y border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              The Sourcing Protocol
+              HOW FARMREEM WORKS
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
-              From requirement to kitchen.
+              You tell us what your kitchen needs. <br className="hidden sm:inline" />
+              We take care of the supply.
             </h2>
             <p className="text-base text-[#4F5E57]">
-              A continuous, verified supply journey connecting regional farm production to executive receiving docks.
+              Every kitchen works differently. Tell us your quantity, preferred bird weight and delivery requirement. We source accordingly and plan the supply around your operation.
             </p>
           </div>
 
@@ -263,7 +255,7 @@ export default function HomePage() {
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs font-bold text-[#0F2E23]">
                 <div className="flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-[#C59B27] text-[#0F2E23] flex items-center justify-center text-xs font-extrabold">1</span>
-                  <span>Requirement</span>
+                  <span>Your Requirement</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-[#0F2E23] text-white flex items-center justify-center text-xs font-extrabold">2</span>
@@ -289,13 +281,13 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 3 — SUPPLY BUILT AROUND THE BUYER (Clean Visual + Editorial Copy Below)
+          SECTION 3 — PROFESSIONAL KITCHEN / RECEIVING VISUAL
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FAF7F2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left: Clean Kitchen Visual Carousel + Editorial Block Below (NO Text Overlay) */}
+            {/* Left: Clean Kitchen Visual Carousel + Editorial Block Below */}
             <div className="lg:col-span-6 space-y-4">
               <ImageCarousel
                 slides={kitchenSlides}
@@ -304,31 +296,29 @@ export default function HomePage() {
               />
 
               {/* Text Placement Directly BELOW Photograph */}
-              <div className="p-5 rounded-2xl bg-white border border-[#E8E1D3] shadow-sm space-y-1">
+              <div className="p-6 rounded-2xl bg-white border border-[#E8E1D3] shadow-sm space-y-2">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-                  Receiving Dock Reliability
+                  BUILT FOR PROFESSIONAL KITCHENS
                 </span>
-                <h3 className="text-xl font-extrabold text-[#0F2E23]">
-                  Specified bird counts & portions
-                </h3>
-                <p className="text-xs sm:text-sm text-[#4F5E57] leading-relaxed">
-                  Scheduled morning delivery tailored to your kitchen's daily operational prep.
+                <h2 className="text-2xl font-extrabold text-[#0F2E23]">
+                  The right supply makes the whole kitchen run better.
+                </h2>
+                <p className="text-sm text-[#4F5E57] leading-relaxed">
+                  From everyday service to busy weekends and large events, FarmReem helps you plan poultry supply around the way your kitchen actually works.
                 </p>
               </div>
             </div>
 
-            {/* Right: Tactile Specification Controls */}
+            {/* Right: CUSTOMER REQUIREMENT POINTS */}
             <div className="lg:col-span-6 space-y-8">
               <div className="space-y-3">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-                  Commercial Account Configuration
+                  SUPPLY THAT FITS YOUR BUSINESS
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23] tracking-tight">
-                  Tell us what you need.
+                  Your kitchen. <br />
+                  Your requirement.
                 </h2>
-                <p className="text-sm text-[#4F5E57] leading-relaxed">
-                  Every hospitality menu relies on consistent portioning and predictable receiving schedules. Configure your kitchen account settings:
-                </p>
               </div>
 
               <div className="space-y-6 pt-2">
@@ -337,8 +327,8 @@ export default function HomePage() {
                     01
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Bird Quantity & Frequency</h3>
-                    <p className="text-xs text-[#4F5E57] mt-0.5">Specify daily or event bird counts matched to your prep timelines.</p>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Quantity that works for you</h3>
+                    <p className="text-xs sm:text-sm text-[#4F5E57] mt-0.5">From regular daily requirements to larger event and banquet demand.</p>
                   </div>
                 </div>
 
@@ -347,8 +337,8 @@ export default function HomePage() {
                     02
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Preferred Weight Range</h3>
-                    <p className="text-xs text-[#4F5E57] mt-0.5">Request uniform weight bands (e.g. 1.8–2.0 kg) based on availability.</p>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">The weight you prefer</h3>
+                    <p className="text-xs sm:text-sm text-[#4F5E57] mt-0.5">Tell us the bird-weight range that works best for your portions and menu.</p>
                   </div>
                 </div>
 
@@ -357,8 +347,8 @@ export default function HomePage() {
                     03
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Scheduled Delivery Slot</h3>
-                    <p className="text-xs text-[#4F5E57] mt-0.5">Planned morning receiving dock windows before kitchen prep shifts begin.</p>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Delivery that fits your day</h3>
+                    <p className="text-xs sm:text-sm text-[#4F5E57] mt-0.5">Plan supply around your receiving and preparation schedule.</p>
                   </div>
                 </div>
 
@@ -367,8 +357,8 @@ export default function HomePage() {
                     04
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Standing Repeat Schedule</h3>
-                    <p className="text-xs text-[#4F5E57] mt-0.5">Automated standing weekly supply with single-click pause and modify options.</p>
+                    <h3 className="font-extrabold text-lg text-[#0F2E23]">Repeat supply made simpler</h3>
+                    <p className="text-xs sm:text-sm text-[#4F5E57] mt-0.5">For recurring requirements, we can plan supply around your regular buying pattern.</p>
                   </div>
                 </div>
               </div>
@@ -376,9 +366,10 @@ export default function HomePage() {
               <div className="pt-2">
                 <Link
                   href="/request-pricing"
-                  className="inline-flex items-center gap-2 bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-xs px-7 py-3.5 rounded-xl transition-all shadow-md"
+                  className="inline-flex items-center gap-2 bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-xs px-7 py-3.5 rounded-xl transition-all shadow-md group"
                 >
-                  Configure Account Pricing &rarr;
+                  Tell Us Your Requirement
+                  <ArrowRight className="w-4 h-4 text-[#C59B27] group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
@@ -388,20 +379,21 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 4 — FARMREEM SUPPLY NETWORK (Deep Forest Green Brand Moment)
+          SECTION 5 — SUPPLY NETWORK (Deep Forest Green Brand Moment)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#0F2E23] text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
           
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">
-              Continuous Supply Reliability
+              A NETWORK BUILT FOR CONSISTENCY
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              A stronger supply network.
+              More than one source. <br />
+              One FarmReem relationship.
             </h2>
             <p className="text-base text-[#FAF7F2]/80">
-              FarmReem connects developing owned production capacity with partner farms and wholesale sourcing networks.
+              Demand changes. Availability changes. Your kitchen still needs to keep moving. FarmReem is building a flexible supply network that combines wholesale sourcing, selected farm partners and, over time, our own production.
             </p>
           </div>
 
@@ -410,27 +402,27 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               
               <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
-                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">
-                  Under Active Development
+                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider block">
+                  Active Sourcing
                 </span>
-                <h3 className="font-extrabold text-lg text-white">Building FarmReem Farms</h3>
-                <p className="text-xs text-[#FAF7F2]/70">Developing owned bio-secure broiler production capacity</p>
+                <h3 className="font-extrabold text-lg text-white">WHOLESALE SOURCING</h3>
+                <p className="text-xs text-[#FAF7F2]/70">Supporting today's supply requirements.</p>
               </div>
 
               <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
                 <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block">
-                  Core Volume Partner
+                  Developing Network
                 </span>
-                <h3 className="font-extrabold text-lg text-white">Partner Poultry Farms</h3>
-                <p className="text-xs text-[#FAF7F2]/70">Selected commercial poultry growers & weight sorting</p>
+                <h3 className="font-extrabold text-lg text-white">PARTNER FARM NETWORK</h3>
+                <p className="text-xs text-[#FAF7F2]/70">Building direct relationships with poultry producers.</p>
               </div>
 
               <div className="p-6 rounded-2xl bg-[#0F2E23] border border-[#25634e] space-y-2">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Volume Buffer
+                <span className="text-[10px] font-bold text-[#C59B27] uppercase tracking-wider block">
+                  Under Development
                 </span>
-                <h3 className="font-extrabold text-lg text-white">Wholesale Sourcing</h3>
-                <p className="text-xs text-[#FAF7F2]/70">Wholesale market procurement for supply continuity</p>
+                <h3 className="font-extrabold text-lg text-white">FARMREEM FARMS</h3>
+                <p className="text-xs text-[#FAF7F2]/70">Our own production capacity is under development.</p>
               </div>
 
             </div>
@@ -441,7 +433,7 @@ export default function HomePage() {
                 <span>FARMREEM SOURCING & LOGISTICS</span>
               </div>
               <p className="text-xs text-[#FAF7F2]/70 font-semibold pt-2">
-                Delivering to Hotels · Restaurants · Caterers · Institutions
+                Hotels · Restaurants · Caterers · Institutions
               </p>
             </div>
           </div>
@@ -450,20 +442,20 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 5 — B2B EXPERIENCE + FINAL CTA (Light Premium Canvas)
+          SECTION 6 — B2B EXPERIENCE (Light Premium Canvas)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FFFDF9] border-t border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              Digital Procurement Experience
+              FARMREEM B2B PORTAL — PREVIEW
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
               Ordering should be the easy part.
             </h2>
             <p className="text-base text-[#4F5E57]">
-              Repeat previous orders in seconds, manage standing weekly allocations, and view account pricing from any device.
+              As FarmReem grows, we're building a simpler way for B2B customers to manage repeat requirements, preferred specifications, delivery schedules and account pricing—all in one place.
             </p>
           </div>
 
@@ -471,9 +463,9 @@ export default function HomePage() {
           <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 sm:p-12 shadow-xl space-y-8 max-w-4xl mx-auto">
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[#E8E1D3]">
               <div>
-                <span className="text-xs font-bold text-[#C59B27] uppercase tracking-wider">Customer Portal Preview</span>
-                <h3 className="text-xl font-extrabold text-[#0F2E23]">Demo B2B Hotel Account</h3>
-                <p className="text-[11px] text-[#4F5E57] font-medium mt-0.5">Interface preview · demonstration data</p>
+                <span className="text-xs font-bold text-[#C59B27] uppercase tracking-wider">FarmReem B2B Portal — Preview</span>
+                <h3 className="text-xl font-extrabold text-[#0F2E23]">Sample B2B Account</h3>
+                <p className="text-[11px] text-[#4F5E57] font-medium mt-0.5">Demonstration interface · customer portal in development</p>
               </div>
               <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#0F2E23] border border-[#E8E1D3] text-xs font-extrabold">
                 Demo B2B Account
@@ -509,11 +501,11 @@ export default function HomePage() {
 
           {/* FINAL CTA BLOCK */}
           <div className="bg-[#0F2E23] text-white rounded-3xl p-10 sm:p-14 text-center space-y-6 shadow-2xl">
-            <h3 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Ready to simplify poultry procurement?
-            </h3>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+              Tell us what your kitchen needs.
+            </h2>
             <p className="text-base text-[#FAF7F2]/80 max-w-xl mx-auto">
-              Contact FarmReem in Dehradun at +91 8475863634 to configure your commercial kitchen supply account.
+              Whether it's a regular daily requirement, a busy weekend or an upcoming event, talk to FarmReem about your poultry supply.
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -523,13 +515,6 @@ export default function HomePage() {
               >
                 Request B2B Pricing
               </Link>
-              
-              <a
-                href="tel:+918475863634"
-                className="w-full sm:w-auto bg-[#184636] hover:bg-[#205945] text-white font-semibold text-base px-8 py-4 rounded-xl border border-[#25634e] transition-colors flex items-center justify-center gap-2"
-              >
-                <Phone className="w-4 h-4 text-[#C59B27]" /> Call +91 8475863634
-              </a>
 
               <a
                 href="https://wa.me/918475863634"
@@ -537,9 +522,13 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-base px-7 py-4 rounded-xl border border-emerald-700 transition-colors flex items-center justify-center gap-2"
               >
-                <MessageSquare className="w-4 h-4 text-emerald-300" /> WhatsApp
+                <MessageSquare className="w-4 h-4 text-emerald-300" /> WhatsApp FarmReem
               </a>
             </div>
+
+            <p className="text-xs text-[#FAF7F2]/60 pt-2 font-medium">
+              B2B poultry supply · Dehradun, Uttarakhand
+            </p>
           </div>
 
         </div>
