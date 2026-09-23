@@ -14,7 +14,7 @@ export default function AdminDashboardPage() {
   const superAdminCrmCreate = hasPermission("SUPER_ADMIN", "crm", "CREATE");
   const driverPricingEdit = hasPermission("DRIVER", "pricing", "EDIT");
   const salesPersonAuditDelete = hasPermission("SALESPERSON", "audit", "DELETE");
-  const accountsMgrInvoiceApprove = hasPermission("ACCOUNTS_MANAGER", "invoices", "APPROVE");
+  const financeCtrlInvoiceApprove = hasPermission("FINANCE_CONTROLLER", "invoices", "APPROVE");
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
@@ -88,7 +88,7 @@ export default function AdminDashboardPage() {
           <div className="pt-3 border-t border-[#E8E1D3] text-[11px] space-y-1 font-mono text-[#0F2E23]">
             <div>SUPER_ADMIN crm:CREATE $\rightarrow$ <span className="text-emerald-700 font-bold">{String(superAdminCrmCreate)}</span></div>
             <div>DRIVER pricing:EDIT $\rightarrow$ <span className="text-rose-700 font-bold">{String(driverPricingEdit)} (DENIED)</span></div>
-            <div>ACCOUNTS_MGR invoice:APPROVE $\rightarrow$ <span className="text-emerald-700 font-bold">{String(accountsMgrInvoiceApprove)}</span></div>
+            <div>FINANCE_CTRL invoice:APPROVE $\rightarrow$ <span className="text-emerald-700 font-bold">{String(financeCtrlInvoiceApprove)}</span></div>
           </div>
         </div>
 

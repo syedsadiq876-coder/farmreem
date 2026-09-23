@@ -6,12 +6,13 @@ export type UserStatus = 'ACTIVE' | 'SUSPENDED' | 'DEACTIVATED';
 
 export type StaffRole =
   | 'SUPER_ADMIN'
-  | 'OPERATIONS_ADMIN'
+  | 'GENERAL_MANAGER'
   | 'SALES_MANAGER'
   | 'SALESPERSON'
   | 'PROCUREMENT_MANAGER'
-  | 'ACCOUNTS_MANAGER'
-  | 'DISPATCH_MANAGER'
+  | 'OPERATIONS_DISPATCH'
+  | 'FINANCE_CONTROLLER'
+  | 'QUALITY_COMPLIANCE'
   | 'DRIVER';
 
 export type ExternalRole =

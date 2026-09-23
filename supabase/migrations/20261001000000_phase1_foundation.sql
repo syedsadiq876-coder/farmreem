@@ -25,14 +25,16 @@ CREATE TYPE org_type_enum AS ENUM (
   'PARTNER_LOGISTICS'
 );
 
+-- 9 Canonical Staff Roles (Frozen Taxonomy)
 CREATE TYPE staff_role_enum AS ENUM (
   'SUPER_ADMIN',
-  'OPERATIONS_ADMIN',
+  'GENERAL_MANAGER',
   'SALES_MANAGER',
   'SALESPERSON',
   'PROCUREMENT_MANAGER',
-  'ACCOUNTS_MANAGER',
-  'DISPATCH_MANAGER',
+  'OPERATIONS_DISPATCH',
+  'FINANCE_CONTROLLER',
+  'QUALITY_COMPLIANCE',
   'DRIVER'
 );
 
@@ -113,7 +115,48 @@ CREATE TABLE user_roles (
   PRIMARY KEY (user_id, role_id)
 );
 
--- 7. Append-Only Audit Logs Table
+-- Dynamic Live Permission Resolution Function (Enforces ACTIVE status and dynamic RBAC)
+CREATE OR REPLACE FUNCTION public.has_permission(
+  p_user_id UUID,
+  p_module TEXT,
+  p_action TEXT
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+  v_status user_status_enum;
+  v_has_perm BOOLEAN;
+BEGIN
+  -- 1. Check live user status. If SUSPENDED or DEACTIVATED -> DENIED immediately
+  SELECT status INTO v_status FROM public.users WHERE id = p_user_id;
+  IF v_status IS NULL OR v_status != 'ACTIVE' THEN
+    RETURN FALSE;
+  END IF;
+
+  -- 2. Check if user holds SUPER_ADMIN role
+  IF EXISTS (
+    SELECT 1 FROM public.user_roles ur
+    JOIN public.roles r ON ur.role_id = r.id
+    WHERE ur.user_id = p_user_id AND r.code = 'SUPER_ADMIN'
+  ) THEN
+    RETURN TRUE;
+  END IF;
+
+  -- 3. Resolve permissions dynamically via user_roles -> roles -> role_permissions -> permissions
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles ur
+    JOIN public.role_permissions rp ON ur.role_id = rp.role_id
+    JOIN public.permissions p ON rp.permission_id = p.id
+    WHERE ur.user_id = p_user_id
+      AND p.module = p_module
+      AND p.action = p_action
+  ) INTO v_has_perm;
+
+  RETURN COALESCE(v_has_perm, FALSE);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 7. Append-Only Audit Logs Table & Trusted Write Path
 CREATE TABLE audit_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   actor_user_id UUID NULL REFERENCES users(id) ON DELETE SET NULL,
@@ -132,6 +175,71 @@ CREATE TABLE audit_logs (
   timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Revoke direct raw INSERT access to prevent client audit fabrication
+REVOKE INSERT ON public.audit_logs FROM authenticated, anon;
+
+-- Trusted Audit Event Function (Server/DB executed only)
+CREATE OR REPLACE FUNCTION public.log_audit_event(
+  p_action VARCHAR(100),
+  p_entity_type VARCHAR(100),
+  p_entity_id VARCHAR(255),
+  p_before_json JSONB DEFAULT NULL,
+  p_after_json JSONB DEFAULT NULL,
+  p_reason TEXT DEFAULT NULL,
+  p_source_app VARCHAR(100) DEFAULT 'admin.farmreem.com'
+)
+RETURNS UUID AS $$
+DECLARE
+  v_actor_user_id UUID;
+  v_actor_email VARCHAR(255);
+  v_actor_role VARCHAR(50);
+  v_audit_id UUID;
+BEGIN
+  v_actor_user_id := auth.uid();
+  
+  -- Fetch authenticated user profile & primary role directly from DB
+  SELECT email INTO v_actor_email FROM public.users WHERE id = v_actor_user_id;
+  
+  SELECT r.code INTO v_actor_role
+  FROM public.user_roles ur
+  JOIN public.roles r ON ur.role_id = r.id
+  WHERE ur.user_id = v_actor_user_id
+  LIMIT 1;
+
+  IF v_actor_role IS NULL THEN
+    v_actor_role := 'ANONYMOUS';
+  END IF;
+
+  INSERT INTO public.audit_logs (
+    actor_user_id,
+    actor_email,
+    actor_role,
+    action,
+    entity_type,
+    entity_id,
+    before_json,
+    after_json,
+    reason,
+    source_app,
+    timestamp
+  ) VALUES (
+    v_actor_user_id,
+    COALESCE(v_actor_email, 'system@farmreem.com'),
+    v_actor_role,
+    p_action,
+    p_entity_type,
+    p_entity_id,
+    p_before_json,
+    p_after_json,
+    p_reason,
+    p_source_app,
+    NOW()
+  ) RETURNING id INTO v_audit_id;
+
+  RETURN v_audit_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Audit Log Immutability Trigger (Blocks UPDATE and DELETE for ALL application roles)
 CREATE OR REPLACE FUNCTION lock_audit_logs()
 RETURNS TRIGGER AS $$
@@ -144,7 +252,7 @@ CREATE TRIGGER trg_lock_audit_logs
 BEFORE UPDATE OR DELETE ON audit_logs
 FOR EACH ROW EXECUTE FUNCTION lock_audit_logs();
 
--- 8. Background Jobs Table with Stale Lock Recovery
+-- 8. Background Jobs Table with Stale Lock Recovery & Failure Handler
 CREATE TABLE background_jobs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   job_type VARCHAR(100) NOT NULL,
@@ -196,6 +304,41 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Function to Handle Background Job Failures (Transitions to RETRY or DEAD_LETTER)
+CREATE OR REPLACE FUNCTION mark_job_failed(
+  p_job_id UUID,
+  p_error TEXT
+)
+RETURNS background_jobs AS $$
+DECLARE
+  v_job background_jobs;
+BEGIN
+  SELECT * INTO v_job FROM background_jobs WHERE id = p_job_id FOR UPDATE;
+
+  IF v_job.attempt_count >= v_job.max_attempts THEN
+    UPDATE background_jobs
+    SET status = 'DEAD_LETTER',
+        last_error = p_error,
+        failed_at = NOW(),
+        locked_at = NULL,
+        locked_by = NULL
+    WHERE id = p_job_id
+    RETURNING * INTO v_job;
+  ELSE
+    UPDATE background_jobs
+    SET status = 'RETRY',
+        last_error = p_error,
+        run_after = NOW() + (INTERVAL '1 minute' * v_job.attempt_count),
+        locked_at = NULL,
+        locked_by = NULL
+    WHERE id = p_job_id
+    RETURNING * INTO v_job;
+  END IF;
+
+  RETURN v_job;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- 9. Idempotency Keys Table
 CREATE TABLE idempotency_keys (
   key VARCHAR(255) PRIMARY KEY,
@@ -217,7 +360,7 @@ ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE background_jobs ENABLE ROW LEVEL SECURITY;
 
--- User Table RLS Policies (Separates app_access from user management write authorization)
+-- User Table RLS Policies (Enforces app_access and active user status)
 CREATE POLICY users_self_read ON users
   FOR SELECT TO authenticated
   USING (id = auth.uid());
@@ -226,14 +369,12 @@ CREATE POLICY users_staff_read ON users
   FOR SELECT TO authenticated
   USING (
     ((auth.jwt() -> 'app_metadata' ->> 'app_access')::jsonb ? 'admin')
+    AND status = 'ACTIVE'
   );
 
 CREATE POLICY audit_logs_read ON audit_logs
   FOR SELECT TO authenticated
   USING (
     ((auth.jwt() -> 'app_metadata' ->> 'app_access')::jsonb ? 'admin')
+    AND public.has_permission(auth.uid(), 'audit', 'VIEW')
   );
-
-CREATE POLICY audit_logs_insert ON audit_logs
-  FOR INSERT TO authenticated
-  WITH CHECK (true);
