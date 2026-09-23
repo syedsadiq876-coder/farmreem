@@ -184,7 +184,7 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          COMPACT KITCHEN SOURCING SPECS BAR (Placed BELOW Hero Carousel)
+          SECTION 2 — COMPACT KITCHEN SOURCING SPECS BAR (Below Hero Carousel)
          ------------------------------------------------------------- */}
       <section className="bg-[#FAF7F2] py-6 border-b border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -244,33 +244,13 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 2 — HOMEPAGE PRODUCT STORY
-         ------------------------------------------------------------- */}
-      <section className="py-16 bg-white border-b border-[#E8E1D3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              BUILT AROUND YOUR REQUIREMENT
-            </span>
-            <SectionH2
-              text="Different kitchens need chicken differently."
-              className="text-3xl sm:text-4xl"
-            />
-            <p className="text-base text-[#4F5E57] leading-relaxed">
-              A tandoor kitchen may want smaller whole birds. A banquet may need consistent curry cuts. A restaurant may require breast, thighs, wings or boneless meat. FarmReem is being built to supply around the requirement—not force every buyer into one specification.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* -------------------------------------------------------------
-          SECTION 3 — LIVE BROILER SECTION (2-Column Layout matching reference)
+          SECTION 3 — LIVE BROILER SECTION (2-Column Editorial Layout)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FAF7F2] border-b border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            {/* Left Column: Eyebrow, H2, Copy, Footnote */}
+            {/* Left Column: Eyebrow, H2, Copy, Footnote & Section CTA */}
             <div className="lg:col-span-5 space-y-6">
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
                 LIVE BROILER
@@ -285,9 +265,20 @@ export default function HomePage() {
                 We offer live broilers in multiple weight ranges to suit different menu requirements, portioning and kitchen operations.
               </p>
 
-              <p className="text-xs text-[#4F5E57] pt-4">
+              <p className="text-xs text-[#4F5E57] pt-2">
                 Exact weight specifications are subject to availability and account requirements.
               </p>
+
+              {/* ONE section-level CTA underneath */}
+              <div className="pt-4">
+                <Link
+                  href="/request-pricing"
+                  className="inline-flex items-center gap-2 bg-[#E5C365] hover:bg-[#d4b255] text-[#0F2E23] font-extrabold text-sm px-7 py-3.5 rounded-full shadow-md transition-all cursor-pointer group"
+                >
+                  Tell Us Your Requirement
+                  <ArrowRight className="w-4 h-4 text-[#0F2E23] group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </div>
 
             {/* Right Column: 3 Product Cards Side-by-Side */}
@@ -304,12 +295,12 @@ export default function HomePage() {
                   <div>
                     <h3 className="text-xl font-extrabold text-[#0F2E23]">Small</h3>
                     <div className="mt-1 text-xs text-[#4F5E57]">Typical working range:</div>
-                    <div className="text-base font-black text-[#0F2E23]">800 g – 1.0 kg</div>
+                    <div className="text-base font-black text-[#0F2E23]">800 g–1.0 kg</div>
                   </div>
 
                   <div className="text-xs text-[#4F5E57] space-y-1 pt-3 border-t border-[#E8E1D3]">
                     <span className="font-bold text-[#0F2E23] block">Often used for:</span>
-                    <p>Smaller portion sizes, specific menu requirements.</p>
+                    <p>Smaller portion sizes and specific menu requirements.</p>
                   </div>
                 </div>
               </div>
@@ -325,7 +316,7 @@ export default function HomePage() {
                   <div>
                     <h3 className="text-xl font-extrabold text-[#0F2E23]">Medium</h3>
                     <div className="mt-1 text-xs text-[#4F5E57]">Typical working range:</div>
-                    <div className="text-base font-black text-[#0F2E23]">1.0 kg – 1.4 kg</div>
+                    <div className="text-base font-black text-[#0F2E23]">1.0 kg–1.4 kg</div>
                   </div>
 
                   <div className="text-xs text-[#4F5E57] space-y-1 pt-3 border-t border-[#E8E1D3]">
@@ -346,7 +337,7 @@ export default function HomePage() {
                   <div>
                     <h3 className="text-xl font-extrabold text-[#0F2E23]">Large</h3>
                     <div className="mt-1 text-xs text-[#4F5E57]">Typical working range:</div>
-                    <div className="text-base font-black text-[#0F2E23]">1.4 kg – 1.8 kg</div>
+                    <div className="text-base font-black text-[#0F2E23]">1.4 kg–1.8 kg</div>
                   </div>
 
                   <div className="text-xs text-[#4F5E57] space-y-1 pt-3 border-t border-[#E8E1D3]">
@@ -363,16 +354,7 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 4 — CUSTOMER REQUIREMENT UX (Interactive Builder)
-         ------------------------------------------------------------- */}
-      <section className="py-20 bg-[#FFFDF9] border-b border-[#E8E1D3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <RequirementBuilder />
-        </div>
-      </section>
-
-      {/* -------------------------------------------------------------
-          SECTION 5 — HOW FARMREEM WORKS
+          SECTION 4 — HOW FARMREEM WORKS (Sourcing Journey)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-white border-b border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -430,7 +412,7 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 6 — PROFESSIONAL KITCHEN EXAMPLES
+          SECTION 5 — PROFESSIONAL KITCHEN EXAMPLES
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FAF7F2] border-b border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -496,7 +478,7 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 7 — SUPPLY NETWORK (Deep Forest Green Brand Moment)
+          SECTION 6 — SUPPLY NETWORK (Deep Forest Green Brand Moment)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#0F2E23] text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
@@ -562,6 +544,15 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
+          SECTION 7 — B2B PORTAL PREVIEW (Moved lower as requested)
+         ------------------------------------------------------------- */}
+      <section className="py-20 bg-[#FFFDF9] border-b border-[#E8E1D3]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RequirementBuilder />
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
           SECTION 8 — FINAL CTA BLOCK
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FFFDF9] border-t border-[#E8E1D3]">
@@ -578,7 +569,7 @@ export default function HomePage() {
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/request-pricing"
-                className="w-full sm:w-auto bg-[#C59B27] hover:bg-[#b0881f] text-[#0F2E23] font-extrabold text-base px-9 py-4 rounded-xl shadow-xl transition-all"
+                className="w-full sm:w-auto bg-[#E5C365] hover:bg-[#d4b255] text-[#0F2E23] font-extrabold text-base px-9 py-4 rounded-full shadow-xl transition-all"
               >
                 Request B2B Pricing
               </Link>

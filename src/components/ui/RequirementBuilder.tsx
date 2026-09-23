@@ -25,10 +25,10 @@ export default function RequirementBuilder() {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF7F2] text-[#C59B27] border border-[#E8E1D3] text-xs font-extrabold uppercase tracking-wider">
             <Sliders className="w-3.5 h-3.5 text-[#C59B27]" />
-            <span>B2B Ordering Experience · Portal in Development</span>
+            <span>FarmReem B2B Portal — Preview</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-extrabold text-[#0F2E23]">
-            What does your kitchen need?
+            Demonstration interface · customer portal in development
           </h3>
           <p className="text-xs text-[#4F5E57] font-medium">
             Configure your requirement visually to preview how FarmReem plans supply around your kitchen.
@@ -36,7 +36,7 @@ export default function RequirementBuilder() {
         </div>
         <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          Interactive Demo UI
+          Sample B2B Account
         </span>
       </div>
 

@@ -63,17 +63,16 @@ export function HeroH1({ line1, line2, line3, className = "" }: HeroH1Props) {
   return (
     <h1
       ref={containerRef}
-      aria-label={fullText}
       className={`text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.05] ${className}`}
     >
-      <span className="sr-only">{fullText}</span>
-      <span aria-hidden="true" className="block space-y-1">
+      <span className="block space-y-1">
         <span className="block text-[#0F2E23]">{renderLineChars(line1, 0)}</span>
         
         <span className="relative inline-block text-[#C59B27] pb-1 block sm:inline-block">
           <span>{renderLineChars(line2, line1Len)}</span>
           {/* Animated Gold Underline for Line 2 */}
           <span
+            aria-hidden="true"
             style={{
               transitionDelay: inView ? `${underline2DelayMs}ms` : "0ms",
             }}
@@ -88,6 +87,7 @@ export function HeroH1({ line1, line2, line3, className = "" }: HeroH1Props) {
             <span>{renderLineChars(line3, line1Len + line2Len)}</span>
             {/* Animated Gold Underline for Line 3 */}
             <span
+              aria-hidden="true"
               style={{
                 transitionDelay: inView ? `${underline3DelayMs}ms` : "0ms",
               }}
@@ -175,11 +175,9 @@ export function SectionH2({ line1, line2, text, className = "" }: SectionH2Props
   return (
     <h2
       ref={ref}
-      aria-label={fullText}
       className={`font-extrabold text-[#0F2E23] tracking-tight ${className}`}
     >
-      <span className="sr-only">{fullText}</span>
-      <span aria-hidden="true" className="block">
+      <span className="block">
         {line1 && <span className="block">{renderTextChars(line1, 0, 20)}</span>}
         {line2 && <span className="block">{renderTextChars(line2, line1 ? line1.length : 0, 20)}</span>}
         {!line1 && !line2 && text && renderTextChars(text, 0, 20)}
