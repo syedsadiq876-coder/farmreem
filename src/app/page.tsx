@@ -129,14 +129,14 @@ export default function HomePage() {
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.08]">
-                Poultry supply, <br />
+                Live Broiler Supply, <br />
                 <span className="text-[#C59B27] underline decoration-[#C59B27]/30 underline-offset-8">
-                  built around your kitchen.
+                  Scheduled Around Your Kitchen.
                 </span>
               </h1>
 
               <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-lg mx-auto lg:mx-0">
-                The birds you need, in the weight you prefer, delivered around your kitchen schedule. FarmReem makes poultry sourcing simpler for hotels, restaurants, caterers and institutional kitchens.
+                FarmReem supplies commercial live broilers to hotels, restaurants, caterers, and institutional kitchens across Dehradun and surrounding regions.
               </p>
 
               {/* CTAs */}
