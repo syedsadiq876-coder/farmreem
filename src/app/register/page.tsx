@@ -7,6 +7,7 @@ import Logo from "@/components/layout/Logo";
 
 export default function RegisterPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>(["Live Broiler"]);
   const [form, setForm] = useState({
     businessName: "",
     businessType: "Hotel",
@@ -19,13 +20,34 @@ export default function RegisterPage() {
     city: "Dehradun",
     state: "Uttarakhand",
     pincode: "",
-    dailyRequirement: "",
-    preferredWeight: "1.8–2.0 kg",
-    deliveryRequirement: "Scheduled Morning Window",
+    volumeEstimate: "",
+    preferredLiveWeight: "Medium (1.0–1.4 kg)",
+    preferredCutReq: "",
+    deliveryFrequency: "Daily Morning",
+    deliveryLocation: "Hotel Receiving Dock",
     gstin: "",
     fssai: "",
     notes: "",
   });
+
+  const productChoices = [
+    "Live Broiler",
+    "Whole / Dressed Chicken",
+    "Curry Cut",
+    "Breast / Boneless Breast",
+    "Leg / Drumstick",
+    "Thigh / Boneless Thigh",
+    "Wings / Lollipop",
+    "Keema / Mince",
+  ];
+
+  const handleProductToggle = (p: string) => {
+    if (selectedProducts.includes(p)) {
+      setSelectedProducts(selectedProducts.filter((item) => item !== p));
+    } else {
+      setSelectedProducts([...selectedProducts, p]);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,8 +90,8 @@ export default function RegisterPage() {
                 <span>{form.contactPerson}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#4F5E57]">City Location:</span>
-                <span>{form.city}, {form.state}</span>
+                <span className="text-[#4F5E57]">Primary Products:</span>
+                <span>{selectedProducts.join(", ")}</span>
               </div>
             </div>
 
@@ -116,7 +138,7 @@ export default function RegisterPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Grand Hotel & Resort"
+                      placeholder="e.g. Grand Heritage Hotel & Resort"
                       value={form.businessName}
                       onChange={(e) => setForm({ ...form, businessName: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -160,7 +182,7 @@ export default function RegisterPage() {
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Executive Chef / Purchase Manager"
+                      placeholder="e.g. Executive Chef / Purchase Director"
                       value={form.designation}
                       onChange={(e) => setForm({ ...form, designation: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -169,7 +191,7 @@ export default function RegisterPage() {
 
                   <div className="space-y-1">
                     <label className="block text-xs font-extrabold text-[#0F2E23]">
-                      Mobile *
+                      Mobile Number *
                     </label>
                     <input
                       type="tel"
@@ -210,15 +232,93 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Delivery Address */}
+              {/* Primary Products Required */}
               <div className="space-y-3 pt-2">
                 <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#0F2E23] border-b border-[#E8E1D3] pb-1">
-                  2. Business Address & Location
+                  2. Primary Products & Requirement Profile
+                </h2>
+
+                <div className="space-y-2">
+                  <label className="block text-xs font-extrabold text-[#0F2E23]">
+                    Primary Products Required *
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    {productChoices.map((p, idx) => (
+                      <label
+                        key={idx}
+                        className={`flex items-center gap-2 p-2.5 rounded-xl border font-bold cursor-pointer transition-all ${
+                          selectedProducts.includes(p)
+                            ? "bg-[#0F2E23] text-white border-[#0F2E23]"
+                            : "bg-[#FAF7F2] text-[#0F2E23] border-[#E8E1D3]"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedProducts.includes(p)}
+                          onChange={() => handleProductToggle(p)}
+                          className="rounded text-[#C59B27] focus:ring-[#0F2E23]"
+                        />
+                        <span>{p}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div className="space-y-1">
+                    <label className="block text-xs font-extrabold text-[#0F2E23]">
+                      Estimated Daily / Weekly Volume *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 150 birds/day OR 300 kg/week"
+                      value={form.volumeEstimate}
+                      onChange={(e) => setForm({ ...form, volumeEstimate: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-xs font-extrabold text-[#0F2E23]">
+                      Preferred Live Bird Weight
+                    </label>
+                    <select
+                      value={form.preferredLiveWeight}
+                      onChange={(e) => setForm({ ...form, preferredLiveWeight: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
+                    >
+                      <option value="Small (800g–1.0 kg)">Small (800g – 1.0 kg)</option>
+                      <option value="Medium (1.0–1.4 kg)">Medium (1.0 kg – 1.4 kg)</option>
+                      <option value="Large (1.4–1.8 kg)">Large (1.4 kg – 1.8 kg)</option>
+                      <option value="Custom Spec">Custom Specification</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="block text-xs font-extrabold text-[#0F2E23]">
+                      Preferred Cut / Portioning Requirements
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Curry cut 16 pcs/kg, boneless thigh cubes..."
+                      value={form.preferredCutReq}
+                      onChange={(e) => setForm({ ...form, preferredCutReq: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Delivery Address & Schedule */}
+              <div className="space-y-3 pt-2">
+                <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#0F2E23] border-b border-[#E8E1D3] pb-1">
+                  3. Delivery Location & Schedule
                 </h2>
 
                 <div className="space-y-3">
                   <div className="space-y-1">
-                    <label className="block text-xs font-extrabold text-[#0F2E23]">Business Address *</label>
+                    <label className="block text-xs font-extrabold text-[#0F2E23]">Delivery Address & Dock *</label>
                     <input
                       type="text"
                       required
@@ -229,34 +329,28 @@ export default function RegisterPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="block text-xs font-extrabold text-[#0F2E23]">City *</label>
-                      <input
-                        type="text"
-                        required
-                        value={form.city}
-                        onChange={(e) => setForm({ ...form, city: e.target.value })}
+                      <label className="block text-xs font-extrabold text-[#0F2E23]">Delivery Frequency</label>
+                      <select
+                        value={form.deliveryFrequency}
+                        onChange={(e) => setForm({ ...form, deliveryFrequency: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
-                      />
+                      >
+                        <option value="Daily Morning">Daily Morning Supply</option>
+                        <option value="Alternate Days">Alternate Days</option>
+                        <option value="Bi-Weekly">Bi-Weekly Standing Order</option>
+                        <option value="Event Based">Event & Banquet Specific</option>
+                      </select>
                     </div>
+
                     <div className="space-y-1">
-                      <label className="block text-xs font-extrabold text-[#0F2E23]">State *</label>
+                      <label className="block text-xs font-extrabold text-[#0F2E23]">Receiving Location / Dock</label>
                       <input
                         type="text"
-                        required
-                        value={form.state}
-                        onChange={(e) => setForm({ ...form, state: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="block text-xs font-extrabold text-[#0F2E23]">PIN Code</label>
-                      <input
-                        type="text"
-                        placeholder="248001"
-                        value={form.pincode}
-                        onChange={(e) => setForm({ ...form, pincode: e.target.value })}
+                        placeholder="e.g. Main Kitchen Dock / Basement Receiving"
+                        value={form.deliveryLocation}
+                        onChange={(e) => setForm({ ...form, deliveryLocation: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
                       />
                     </div>
@@ -264,60 +358,10 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Requirement Specifications */}
+              {/* Tax & Licensing (Optional) */}
               <div className="space-y-3 pt-2">
                 <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#0F2E23] border-b border-[#E8E1D3] pb-1">
-                  3. Sourcing & Delivery Specifications
-                </h2>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-1">
-                    <label className="block text-xs font-extrabold text-[#0F2E23]">
-                      Approximate Requirement
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. 100 birds/day"
-                      value={form.dailyRequirement}
-                      onChange={(e) => setForm({ ...form, dailyRequirement: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="block text-xs font-extrabold text-[#0F2E23]">
-                      Preferred Weight
-                    </label>
-                    <select
-                      value={form.preferredWeight}
-                      onChange={(e) => setForm({ ...form, preferredWeight: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
-                    >
-                      <option value="1.8–2.0 kg">Standard Range: 1.8 – 2.0 kg</option>
-                      <option value="2.0–2.4 kg">Heavy Range: 2.0 – 2.4 kg</option>
-                      <option value="Flexible">Flexible Sizing</option>
-                    </select>
-                  </div>
-                  <div className="space-y-1">
-                    <label className="block text-xs font-extrabold text-[#0F2E23]">
-                      Delivery Requirement
-                    </label>
-                    <select
-                      value={form.deliveryRequirement}
-                      onChange={(e) => setForm({ ...form, deliveryRequirement: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
-                    >
-                      <option value="Scheduled Morning Window">Scheduled Morning Window (6–8 AM)</option>
-                      <option value="Mid-day Delivery">Mid-day Delivery (10 AM–12 PM)</option>
-                      <option value="Event Specific">Event Specific Schedule</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tax & Licensing */}
-              <div className="space-y-3 pt-2">
-                <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#0F2E23] border-b border-[#E8E1D3] pb-1">
-                  4. Commercial Verification (Optional)
+                  4. Licensing & Commercial Notes (Optional)
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -347,20 +391,19 @@ export default function RegisterPage() {
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Additional Notes */}
-              <div className="space-y-1 pt-2">
-                <label className="block text-xs font-extrabold text-[#0F2E23]">
-                  Notes
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Special dock access, credit requests, or existing supplier arrangements..."
-                  value={form.notes}
-                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
-                />
+                <div className="space-y-1 pt-2">
+                  <label className="block text-xs font-extrabold text-[#0F2E23]">
+                    Commercial Notes
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Credit terms requested, special weighment protocols, or existing supplier arrangements..."
+                    value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
+                  />
+                </div>
               </div>
             </div>
 
