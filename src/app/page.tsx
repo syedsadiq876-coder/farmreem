@@ -17,6 +17,13 @@ import {
 import ImageCarousel from "@/components/ui/ImageCarousel";
 import RequirementBuilder from "@/components/ui/RequirementBuilder";
 import { HeroH1, SectionH2 } from "@/components/ui/AnimatedHeading";
+import {
+  LiveBirdIcon,
+  WholeChickenIcon,
+  CutsIcon,
+  BonelessIcon,
+  ChickenIllustration,
+} from "@/components/ui/Icons";
 
 export const metadata = {
   title: "B2B Poultry & Chicken Supply for Hotels & Restaurants | FarmReem",
@@ -123,11 +130,11 @@ export default function HomePage() {
       {/* -------------------------------------------------------------
           SECTION 1 — HERO: UNBROKEN PHOTOGRAPHY & SUBTLE GOLD ACCENT
          ------------------------------------------------------------- */}
-      <section className="relative bg-[#FAF7F2] text-[#0F2E23] pt-10 pb-12 lg:pt-16 lg:pb-16 overflow-hidden border-b border-[#E8E1D3]">
-        {/* Subtle Muted Gold 4-Point Star Accent */}
-        <div aria-hidden="true" className="absolute top-8 right-8 pointer-events-none opacity-80 z-20">
+      <section className="relative bg-[#FAF7F2] text-[#0F2E23] pt-8 pb-12 lg:pt-14 lg:pb-16 overflow-hidden border-b border-[#E8E1D3]">
+        {/* Single Muted Gold 4-Point Star Accent with Gentle 2s Twinkle */}
+        <div aria-hidden="true" className="absolute top-10 right-10 pointer-events-none z-20">
           <svg
-            className="w-6 h-6 text-[#C59B27] animate-pulse motion-reduce:animate-none"
+            className="w-8 h-8 text-[#E5C365] animate-pulse motion-reduce:animate-none opacity-90 transition-all duration-1000"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -140,41 +147,29 @@ export default function HomePage() {
             
             {/* Hero Left Content */}
             <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E1D3] text-[#0F2E23] text-xs font-bold uppercase tracking-wider shadow-sm">
-                <MapPin className="w-3.5 h-3.5 text-[#C59B27]" />
-                <span>B2B POULTRY SUPPLY</span>
-              </div>
-
               <HeroH1
                 line1="Poultry supply,"
-                line2="built around your kitchen."
+                line2="built around your"
+                line3="kitchen."
               />
 
-              <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-lg mx-auto lg:mx-0">
-                From live birds to kitchen-ready poultry requirements, FarmReem helps hotels, restaurants, caterers and institutions source the size, quantity and specification their operation needs.
+              <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
+                From live birds to kitchen-ready poultry, we work with hotels, restaurants, caterers and institutions to coordinate supply based on your quantity, preferred size and product requirements.
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
                 <Link
                   href="/request-pricing"
-                  className="w-full sm:w-auto bg-[#0F2E23] hover:bg-[#184636] text-[#FAF7F2] font-extrabold text-base px-7 py-4 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                  className="w-full sm:w-auto bg-[#E5C365] hover:bg-[#d4b255] text-[#0F2E23] font-extrabold text-base px-8 py-4 rounded-full shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer group"
                 >
                   Tell Us Your Requirement
-                  <ArrowRight className="w-5 h-5 text-[#C59B27] group-hover:translate-x-1 transition-transform" />
-                </Link>
-
-                <Link
-                  href="/request-pricing"
-                  className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#0F2E23] font-bold text-base px-6 py-4 rounded-xl border border-[#E8E1D3] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-                >
-                  <Phone className="w-4 h-4 text-[#C59B27]" />
-                  Request B2B Pricing
+                  <ArrowRight className="w-5 h-5 text-[#0F2E23] group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
 
-            {/* Hero Right Visual: Unobscured Rotating Photography */}
+            {/* Hero Right Visual: Premium Rotating Photography */}
             <div className="lg:col-span-6 relative">
               <ImageCarousel
                 slides={heroSlides}
@@ -191,51 +186,55 @@ export default function HomePage() {
       {/* -------------------------------------------------------------
           COMPACT KITCHEN SOURCING SPECS BAR (Placed BELOW Hero Carousel)
          ------------------------------------------------------------- */}
-      <section className="bg-white border-b border-[#E8E1D3] py-4 shadow-sm">
+      <section className="bg-[#FAF7F2] py-6 border-b border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+          <div className="bg-white rounded-3xl border border-[#E8E1D3] p-4 sm:p-5 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-4">
             
             {/* Header / Label */}
             <div className="flex items-center gap-2 text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider flex-shrink-0">
-              <div className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-              <span>KITCHEN SOURCING SPECS:</span>
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span>KITCHEN SOURCING SPECS</span>
             </div>
 
-            {/* Compact Horizontal Category Strip */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs w-full lg:w-auto">
-              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
-                <span className="font-bold text-[#0F2E23]">Live Bird</span>
-                <span className="text-[10px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded border border-emerald-300">
-                  Available
-                </span>
+            {/* 4 Category Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs w-full lg:w-auto">
+              <div className="flex items-center gap-3 bg-[#FAF7F2] px-4 py-3 rounded-2xl border border-[#E8E1D3]">
+                <LiveBirdIcon className="w-6 h-6 text-[#C59B27]" />
+                <div>
+                  <span className="text-[10px] font-bold text-[#4F5E57] uppercase tracking-wider block">LIVE BIRD</span>
+                  <span className="font-extrabold text-emerald-800 text-sm">Available</span>
+                </div>
               </div>
 
-              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
-                <span className="font-bold text-[#0F2E23]">Whole / Dressed</span>
-                <span className="text-[10px] font-extrabold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
-                  On Request
-                </span>
+              <div className="flex items-center gap-3 bg-[#FAF7F2] px-4 py-3 rounded-2xl border border-[#E8E1D3]">
+                <WholeChickenIcon className="w-6 h-6 text-[#C59B27]" />
+                <div>
+                  <span className="text-[10px] font-bold text-[#4F5E57] uppercase tracking-wider block">WHOLE</span>
+                  <span className="font-extrabold text-[#0F2E23] text-sm">On Request</span>
+                </div>
               </div>
 
-              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
-                <span className="font-bold text-[#0F2E23]">Portion Cuts</span>
-                <span className="text-[10px] font-extrabold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
-                  On Request
-                </span>
+              <div className="flex items-center gap-3 bg-[#FAF7F2] px-4 py-3 rounded-2xl border border-[#E8E1D3]">
+                <CutsIcon className="w-6 h-6 text-[#C59B27]" />
+                <div>
+                  <span className="text-[10px] font-bold text-[#4F5E57] uppercase tracking-wider block">CUTS</span>
+                  <span className="font-extrabold text-[#0F2E23] text-sm">On Request</span>
+                </div>
               </div>
 
-              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
-                <span className="font-bold text-[#0F2E23]">Boneless</span>
-                <span className="text-[10px] font-extrabold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
-                  On Request
-                </span>
+              <div className="flex items-center gap-3 bg-[#FAF7F2] px-4 py-3 rounded-2xl border border-[#E8E1D3]">
+                <BonelessIcon className="w-6 h-6 text-[#C59B27]" />
+                <div>
+                  <span className="text-[10px] font-bold text-[#4F5E57] uppercase tracking-wider block">BONELESS</span>
+                  <span className="font-extrabold text-[#0F2E23] text-sm">On Request</span>
+                </div>
               </div>
             </div>
 
-            {/* Explore Link */}
+            {/* Explore Link Button */}
             <Link
               href="/products"
-              className="text-xs font-extrabold text-[#C59B27] hover:underline flex items-center gap-1 flex-shrink-0"
+              className="bg-[#E5C365] hover:bg-[#d4b255] text-[#0F2E23] font-extrabold text-xs px-6 py-3 rounded-full transition-all shadow-sm flex items-center justify-center gap-1.5 flex-shrink-0"
             >
               Explore Products &rarr;
             </Link>
@@ -265,128 +264,101 @@ export default function HomePage() {
       </section>
 
       {/* -------------------------------------------------------------
-          SECTION 3 — LIVE BROILER SIZE CATEGORIES
+          SECTION 3 — LIVE BROILER SECTION (2-Column Layout matching reference)
          ------------------------------------------------------------- */}
       <section className="py-20 bg-[#FAF7F2] border-b border-[#E8E1D3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-              LIVE BROILER SIZING
-            </span>
-            <SectionH2
-              text="Choose the bird size that works for your kitchen."
-              className="text-3xl sm:text-4xl"
-            />
-            <p className="text-sm text-[#4F5E57]">
-              FarmReem categorizes live broilers into typical working ranges so commercial buyers can align supply with portion costs and preparation requirements.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            {/* SMALL */}
-            <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 shadow-sm space-y-6 flex flex-col justify-between hover:shadow-md transition-shadow">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-                    Category 01
-                  </span>
-                  <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded border border-emerald-300">
-                    AVAILABLE
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-extrabold text-[#0F2E23]">SMALL BROILER</h3>
-                  <div className="mt-2 text-xl font-black text-[#C59B27]">
-                    800 g – 1.0 kg
-                  </div>
-                  <span className="text-[11px] text-[#4F5E57] font-semibold">Typical working range</span>
-                </div>
-                <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] text-xs space-y-1 text-[#0F2E23]">
-                  <span className="font-extrabold block">Suitable Positioning:</span>
-                  <p className="text-[#4F5E57]">Whole-bird / tandoor / smaller-portion requirements</p>
-                </div>
-              </div>
-              <Link
-                href="/request-pricing"
-                className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-xs py-3.5 rounded-xl transition-all text-center block shadow-sm"
-              >
-                Request Small Size Pricing
-              </Link>
+            {/* Left Column: Eyebrow, H2, Copy, Footnote */}
+            <div className="lg:col-span-5 space-y-6">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
+                LIVE BROILER
+              </span>
+              
+              <SectionH2
+                text="Choose the right bird size for your kitchen."
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F2E23] leading-tight"
+              />
+
+              <p className="text-base text-[#4F5E57] leading-relaxed">
+                We offer live broilers in multiple weight ranges to suit different menu requirements, portioning and kitchen operations.
+              </p>
+
+              <p className="text-xs text-[#4F5E57] pt-4">
+                Exact weight specifications are subject to availability and account requirements.
+              </p>
             </div>
 
-            {/* MEDIUM */}
-            <div className="bg-white rounded-3xl border-2 border-[#C59B27] p-8 shadow-md space-y-6 flex flex-col justify-between hover:shadow-lg transition-shadow relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C59B27] text-[#0F2E23] text-[10px] font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full shadow-sm">
-                Most Popular for Restaurants
-              </div>
-              <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-                    Category 02
-                  </span>
-                  <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded border border-emerald-300">
-                    AVAILABLE
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-extrabold text-[#0F2E23]">MEDIUM BROILER</h3>
-                  <div className="mt-2 text-xl font-black text-[#C59B27]">
-                    1.0 kg – 1.4 kg
+            {/* Right Column: 3 Product Cards Side-by-Side */}
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-6">
+              
+              {/* SMALL */}
+              <div className="bg-white rounded-3xl border border-[#E8E1D3] p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="space-y-4">
+                  {/* Chicken Illustration */}
+                  <div className="h-32 w-full flex items-center justify-center bg-[#FAF7F2] rounded-2xl p-2">
+                    <ChickenIllustration size="small" />
                   </div>
-                  <span className="text-[11px] text-[#4F5E57] font-semibold">Typical working range</span>
-                </div>
-                <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] text-xs space-y-1 text-[#0F2E23]">
-                  <span className="font-extrabold block">Suitable Positioning:</span>
-                  <p className="text-[#4F5E57]">General restaurant / curry / portion requirements</p>
-                </div>
-              </div>
-              <Link
-                href="/request-pricing"
-                className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-xs py-3.5 rounded-xl transition-all text-center block shadow-sm"
-              >
-                Request Medium Size Pricing
-              </Link>
-            </div>
 
-            {/* LARGE */}
-            <div className="bg-white rounded-3xl border border-[#E8E1D3] p-8 shadow-sm space-y-6 flex flex-col justify-between hover:shadow-md transition-shadow">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
-                    Category 03
-                  </span>
-                  <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded border border-emerald-300">
-                    AVAILABLE
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-extrabold text-[#0F2E23]">LARGE BROILER</h3>
-                  <div className="mt-2 text-xl font-black text-[#C59B27]">
-                    1.4 kg – 1.8 kg
+                  <div>
+                    <h3 className="text-xl font-extrabold text-[#0F2E23]">Small</h3>
+                    <div className="mt-1 text-xs text-[#4F5E57]">Typical working range:</div>
+                    <div className="text-base font-black text-[#0F2E23]">800 g – 1.0 kg</div>
                   </div>
-                  <span className="text-[11px] text-[#4F5E57] font-semibold">Typical working range</span>
-                </div>
-                <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E8E1D3] text-xs space-y-1 text-[#0F2E23]">
-                  <span className="font-extrabold block">Suitable Positioning:</span>
-                  <p className="text-[#4F5E57]">Larger portions / banquet / higher-yield requirements</p>
+
+                  <div className="text-xs text-[#4F5E57] space-y-1 pt-3 border-t border-[#E8E1D3]">
+                    <span className="font-bold text-[#0F2E23] block">Often used for:</span>
+                    <p>Smaller portion sizes, specific menu requirements.</p>
+                  </div>
                 </div>
               </div>
-              <Link
-                href="/request-pricing"
-                className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-xs py-3.5 rounded-xl transition-all text-center block shadow-sm"
-              >
-                Request Large Size Pricing
-              </Link>
+
+              {/* MEDIUM */}
+              <div className="bg-white rounded-3xl border border-[#E8E1D3] p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="space-y-4">
+                  {/* Chicken Illustration */}
+                  <div className="h-32 w-full flex items-center justify-center bg-[#FAF7F2] rounded-2xl p-2">
+                    <ChickenIllustration size="medium" />
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-extrabold text-[#0F2E23]">Medium</h3>
+                    <div className="mt-1 text-xs text-[#4F5E57]">Typical working range:</div>
+                    <div className="text-base font-black text-[#0F2E23]">1.0 kg – 1.4 kg</div>
+                  </div>
+
+                  <div className="text-xs text-[#4F5E57] space-y-1 pt-3 border-t border-[#E8E1D3]">
+                    <span className="font-bold text-[#0F2E23] block">Often used for:</span>
+                    <p>General kitchen use for restaurants, hotels and caterers.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* LARGE */}
+              <div className="bg-white rounded-3xl border border-[#E8E1D3] p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="space-y-4">
+                  {/* Chicken Illustration */}
+                  <div className="h-32 w-full flex items-center justify-center bg-[#FAF7F2] rounded-2xl p-2">
+                    <ChickenIllustration size="large" />
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-extrabold text-[#0F2E23]">Large</h3>
+                    <div className="mt-1 text-xs text-[#4F5E57]">Typical working range:</div>
+                    <div className="text-base font-black text-[#0F2E23]">1.4 kg – 1.8 kg</div>
+                  </div>
+
+                  <div className="text-xs text-[#4F5E57] space-y-1 pt-3 border-t border-[#E8E1D3]">
+                    <span className="font-bold text-[#0F2E23] block">Often used for:</span>
+                    <p>Larger portion requirements and institutional supply.</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
           </div>
-
-          <div className="text-center text-xs text-[#4F5E57] italic bg-white p-4 rounded-2xl border border-[#E8E1D3] max-w-2xl mx-auto">
-            * Typical working ranges. Exact weight specifications are subject to availability and account requirements.
-          </div>
-
         </div>
       </section>
 

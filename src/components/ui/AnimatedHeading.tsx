@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 
 interface HeroH1Props {
   line1: string; // e.g. "Poultry supply,"
-  line2: string; // e.g. "built around your kitchen."
+  line2: string; // e.g. "built around your"
+  line3?: string; // e.g. "kitchen."
   className?: string;
 }
 
-export function HeroH1({ line1, line2, className = "" }: HeroH1Props) {
+export function HeroH1({ line1, line2, line3, className = "" }: HeroH1Props) {
   const [inView, setInView] = useState(false);
   const containerRef = useRef<HTMLHeadingElement>(null);
 
@@ -17,7 +18,7 @@ export function HeroH1({ line1, line2, className = "" }: HeroH1Props) {
     setInView(true);
   }, []);
 
-  const fullText = `${line1} ${line2}`;
+  const fullText = `${line1} ${line2} ${line3 || ""}`.trim();
 
   const renderLineChars = (text: string, baseIndex: number) => {
     const words = text.split(" ");
@@ -52,31 +53,50 @@ export function HeroH1({ line1, line2, className = "" }: HeroH1Props) {
     });
   };
 
-  const line1Length = line1.length;
-  const totalChars = line1.length + line2.length;
-  const underlineDelayMs = totalChars * 35 + 150;
+  const line1Len = line1.length;
+  const line2Len = line2.length;
+  const line3Len = line3 ? line3.length : 0;
+  
+  const underline2DelayMs = (line1Len + line2Len) * 35 + 100;
+  const underline3DelayMs = (line1Len + line2Len + line3Len) * 35 + 100;
 
   return (
     <h1
       ref={containerRef}
       aria-label={fullText}
-      className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.08] ${className}`}
+      className={`text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.05] ${className}`}
     >
       <span className="sr-only">{fullText}</span>
-      <span aria-hidden="true" className="block">
-        <span className="block">{renderLineChars(line1, 0)}</span>
-        <span className="relative inline-block text-[#C59B27] mt-1 sm:mt-0">
-          <span>{renderLineChars(line2, line1Length)}</span>
-          {/* Animated Gold Underline */}
+      <span aria-hidden="true" className="block space-y-1">
+        <span className="block text-[#0F2E23]">{renderLineChars(line1, 0)}</span>
+        
+        <span className="relative inline-block text-[#C59B27] pb-1 block sm:inline-block">
+          <span>{renderLineChars(line2, line1Len)}</span>
+          {/* Animated Gold Underline for Line 2 */}
           <span
             style={{
-              transitionDelay: inView ? `${underlineDelayMs}ms` : "0ms",
+              transitionDelay: inView ? `${underline2DelayMs}ms` : "0ms",
             }}
             className={`absolute bottom-0 left-0 w-full h-[3px] bg-[#C59B27]/40 rounded-full origin-left transition-transform duration-700 ease-out motion-reduce:scale-x-100 ${
               inView ? "scale-x-100" : "scale-x-0"
             }`}
           />
         </span>
+
+        {line3 && (
+          <span className="relative inline-block text-[#C59B27] pb-1 block sm:inline-block sm:ml-2">
+            <span>{renderLineChars(line3, line1Len + line2Len)}</span>
+            {/* Animated Gold Underline for Line 3 */}
+            <span
+              style={{
+                transitionDelay: inView ? `${underline3DelayMs}ms` : "0ms",
+              }}
+              className={`absolute bottom-0 left-0 w-full h-[3px] bg-[#C59B27]/40 rounded-full origin-left transition-transform duration-700 ease-out motion-reduce:scale-x-100 ${
+                inView ? "scale-x-100" : "scale-x-0"
+              }`}
+            />
+          </span>
+        )}
       </span>
     </h1>
   );
