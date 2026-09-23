@@ -48,6 +48,7 @@ export function HeroH1({ line1, line2, line3, className = "" }: HeroH1Props) {
               </span>
             );
           })}
+          {wIdx < words.length - 1 ? " " : ""}
         </span>
       );
     });
@@ -66,10 +67,10 @@ export function HeroH1({ line1, line2, line3, className = "" }: HeroH1Props) {
       className={`text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.05] ${className}`}
     >
       <span className="block space-y-1">
-        <span className="block text-[#0F2E23]">{renderLineChars(line1, 0)}</span>
+        <span className="block text-[#0F2E23]">{renderLineChars(line1, 0)}{" "}</span>
         
         <span className="relative inline-block text-[#C59B27] pb-1 block sm:inline-block">
-          <span>{renderLineChars(line2, line1Len)}</span>
+          <span>{renderLineChars(line2, line1Len)}</span>{" "}
           {/* Animated Gold Underline for Line 2 */}
           <span
             aria-hidden="true"
@@ -167,6 +168,7 @@ export function SectionH2({ line1, line2, text, className = "" }: SectionH2Props
               </span>
             );
           })}
+          {wIdx < words.length - 1 ? " " : ""}
         </span>
       );
     });
