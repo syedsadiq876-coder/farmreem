@@ -12,6 +12,7 @@ import {
   Store,
   Users,
   Flame,
+  Sparkles,
 } from "lucide-react";
 import ImageCarousel from "@/components/ui/ImageCarousel";
 import RequirementBuilder from "@/components/ui/RequirementBuilder";
@@ -84,50 +85,31 @@ export default function HomePage() {
     },
   ];
 
-  const kitchenSlides = [
-    {
-      src: "/images/hero_foodservice.jpg",
-      alt: "Commercial Kitchen Foodservice Preparation",
-    },
-    {
-      src: "/images/hero_chef_kitchen.jpg",
-      alt: "Executive Kitchen Chef Receiving",
-    },
-    {
-      src: "/images/quality_inspect.jpg",
-      alt: "Kitchen Quality Inspection",
-    },
-    {
-      src: "/images/farm_facility.jpg",
-      alt: "Hospitality Foodservice Operation",
-    },
-  ];
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "FarmReem",
-    "url": "https://www.farmreem.com",
-    "logo": "https://www.farmreem.com/images/farmreem-logo.png",
-    "image": "https://www.farmreem.com/images/hero_foodservice.jpg",
-    "description":
+    name: "FarmReem",
+    url: "https://www.farmreem.com",
+    logo: "https://www.farmreem.com/images/farmreem-logo.png",
+    image: "https://www.farmreem.com/images/hero_foodservice.jpg",
+    description:
       "B2B poultry sourcing and scheduled supply for hotels, restaurants, caterers and institutional kitchens based in Dehradun, Uttarakhand.",
-    "telephone": "+918475863634",
-    "email": "contact@farmreem.com",
-    "address": {
+    telephone: "+918475863634",
+    email: "contact@farmreem.com",
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": "39, Siddharth Vihar, Kandoli, Sahastradhara Road",
-      "addressLocality": "Dehradun",
-      "addressRegion": "Uttarakhand",
-      "postalCode": "248001",
-      "addressCountry": "IN",
+      streetAddress: "39, Siddharth Vihar, Kandoli, Sahastradhara Road",
+      addressLocality: "Dehradun",
+      addressRegion: "Uttarakhand",
+      postalCode: "248001",
+      addressCountry: "IN",
     },
-    "geo": {
+    geo: {
       "@type": "GeoCoordinates",
-      "latitude": 30.3165,
-      "longitude": 78.0322,
+      latitude: 30.3165,
+      longitude: 78.0322,
     },
-    "priceRange": "$$",
+    priceRange: "$$",
   };
 
   return (
@@ -138,9 +120,20 @@ export default function HomePage() {
       />
 
       {/* -------------------------------------------------------------
-          SECTION 1 — HERO: SUPPLIER-FIRST POSITIONING
+          SECTION 1 — HERO: UNBROKEN PHOTOGRAPHY & SUBTLE GOLD ACCENT
          ------------------------------------------------------------- */}
-      <section className="relative bg-[#FAF7F2] text-[#0F2E23] pt-10 pb-20 lg:pt-16 lg:pb-28 overflow-hidden border-b border-[#E8E1D3]">
+      <section className="relative bg-[#FAF7F2] text-[#0F2E23] pt-10 pb-12 lg:pt-16 lg:pb-16 overflow-hidden border-b border-[#E8E1D3]">
+        {/* Subtle Muted Gold 4-Point Star Accent */}
+        <div aria-hidden="true" className="absolute top-8 right-8 pointer-events-none opacity-80 z-20">
+          <svg
+            className="w-6 h-6 text-[#C59B27] animate-pulse motion-reduce:animate-none"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+          </svg>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
@@ -182,67 +175,71 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero Right Visual: Rotating Photography + Fixed B2B Requirement Card */}
+            {/* Hero Right Visual: Unobscured Rotating Photography */}
             <div className="lg:col-span-6 relative">
               <ImageCarousel
                 slides={heroSlides}
-                aspectRatio="h-[460px]"
+                aspectRatio="h-[440px] sm:h-[480px]"
                 autoPlayInterval={2000}
-                dotsPosition="top-4"
-                overlayChildren={
-                  <div className="p-6">
-                    {/* Integrated Small B2B Order Interface Card */}
-                    <div className="bg-white/95 backdrop-blur-md rounded-2xl p-5 border border-[#E8E1D3] shadow-2xl text-[#0F2E23] space-y-3">
-                      <div className="flex items-center justify-between border-b border-[#E8E1D3] pb-2.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-                          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0F2E23]">
-                            Kitchen Sourcing Specs
-                          </span>
-                        </div>
-                        <span className="text-[10px] font-bold bg-[#FAF7F2] text-[#0F2E23] px-2 py-0.5 rounded border border-[#E8E1D3]">
-                          Multi-Category Sourcing
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                          <span className="text-[9px] text-[#4F5E57] uppercase block">Live Bird</span>
-                          <span className="font-extrabold text-[#0F2E23]">Available</span>
-                        </div>
-                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                          <span className="text-[9px] text-[#4F5E57] uppercase block">Whole</span>
-                          <span className="font-extrabold text-[#0F2E23]">On Request</span>
-                        </div>
-                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                          <span className="text-[9px] text-[#4F5E57] uppercase block">Cuts</span>
-                          <span className="font-extrabold text-[#0F2E23]">On Request</span>
-                        </div>
-                        <div className="bg-[#FAF7F2] p-2 rounded-lg border border-[#E8E1D3]">
-                          <span className="text-[9px] text-[#4F5E57] uppercase block">Boneless</span>
-                          <span className="font-extrabold text-[#0F2E23]">On Request</span>
-                        </div>
-                      </div>
-
-                      <div className="pt-1 flex items-center justify-between text-xs">
-                        <span className="text-[10px] text-[#4F5E57] font-semibold flex items-center gap-1">
-                          <span>Sample B2B Account</span>
-                          <span className="text-[9px] text-[#C59B27] bg-[#FAF7F2] px-1.5 py-0.5 rounded border border-[#E8E1D3]">
-                            Interface preview · demonstration data
-                          </span>
-                        </span>
-                        <Link
-                          href="/products"
-                          className="font-extrabold text-[#C59B27] hover:underline text-[11px]"
-                        >
-                          Explore Products &rarr;
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                }
+                dotsPosition="bottom-4"
               />
             </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------
+          COMPACT KITCHEN SOURCING SPECS BAR (Placed BELOW Hero Carousel)
+         ------------------------------------------------------------- */}
+      <section className="bg-white border-b border-[#E8E1D3] py-4 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+            
+            {/* Header / Label */}
+            <div className="flex items-center gap-2 text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider flex-shrink-0">
+              <div className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+              <span>KITCHEN SOURCING SPECS:</span>
+            </div>
+
+            {/* Compact Horizontal Category Strip */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs w-full lg:w-auto">
+              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
+                <span className="font-bold text-[#0F2E23]">Live Bird</span>
+                <span className="text-[10px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded border border-emerald-300">
+                  Available
+                </span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
+                <span className="font-bold text-[#0F2E23]">Whole / Dressed</span>
+                <span className="text-[10px] font-extrabold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
+                  On Request
+                </span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
+                <span className="font-bold text-[#0F2E23]">Portion Cuts</span>
+                <span className="text-[10px] font-extrabold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
+                  On Request
+                </span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 bg-[#FAF7F2] px-3.5 py-2 rounded-xl border border-[#E8E1D3]">
+                <span className="font-bold text-[#0F2E23]">Boneless</span>
+                <span className="text-[10px] font-extrabold bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
+                  On Request
+                </span>
+              </div>
+            </div>
+
+            {/* Explore Link */}
+            <Link
+              href="/products"
+              className="text-xs font-extrabold text-[#C59B27] hover:underline flex items-center gap-1 flex-shrink-0"
+            >
+              Explore Products &rarr;
+            </Link>
 
           </div>
         </div>

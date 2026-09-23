@@ -22,7 +22,7 @@ export default function RequestPricingPage() {
 
   const productOptions = [
     "Live Broiler",
-    "Whole / Dressed Chicken",
+    "Whole / Dressed",
     "Curry Cut",
     "Breast",
     "Leg / Drumstick",
@@ -31,7 +31,7 @@ export default function RequestPricingPage() {
     "Boneless Breast",
     "Boneless Thigh",
     "Keema / Mince",
-    "Other Poultry Requirement",
+    "Other",
   ];
 
   const handleProductToggle = (product: string) => {
@@ -58,13 +58,13 @@ export default function RequestPricingPage() {
         {/* Header */}
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0F2E23]/10 text-[#0F2E23] text-xs font-bold uppercase tracking-wider">
-            Fast B2B Sourcing Enquiry
+            B2B Sourcing Enquiry
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
-            Tell Us Your Kitchen Requirement
+            Tell us what your kitchen needs.
           </h1>
           <p className="text-base text-[#4F5E57] leading-relaxed">
-            Tell us about your poultry requirements and our commercial sales desk will provide pricing structure and supply options.
+            Share your poultry requirement and FarmReem will review the specification, quantity and delivery need with you.
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export default function RequestPricingPage() {
             <div className="space-y-2">
               <h2 className="text-2xl font-extrabold text-[#0F2E23]">Requirement Received</h2>
               <p className="text-sm text-[#4F5E57] max-w-md mx-auto">
-                Thank you. The FarmReem commercial desk will review your selected requirements and contact you within 2 business hours.
+                Thank you. The FarmReem team will review your requirement and contact you shortly.
               </p>
             </div>
 
@@ -112,9 +112,9 @@ export default function RequestPricingPage() {
             className="bg-white rounded-3xl border border-[#E8E1D3] p-6 sm:p-10 shadow-sm space-y-6"
           >
             <div className="flex items-center justify-between pb-4 border-b border-[#E8E1D3]">
-              <h2 className="text-xl font-extrabold text-[#0F2E23]">B2B Requirement & Pricing Form</h2>
+              <h2 className="text-xl font-extrabold text-[#0F2E23]">Kitchen Requirement Form</h2>
               <span className="text-xs font-semibold text-[#C59B27] flex items-center gap-1">
-                <Lock className="w-3.5 h-3.5" /> Direct Sales Desk
+                <Lock className="w-3.5 h-3.5" /> Commercial Sales Desk
               </span>
             </div>
 
@@ -126,7 +126,7 @@ export default function RequestPricingPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Royal Palace Hotel & Restaurant"
+                  placeholder="e.g. Hotel / Restaurant / Catering Business"
                   value={formData.businessName}
                   onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -140,7 +140,7 @@ export default function RequestPricingPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Executive Chef / Purchase Director"
+                  placeholder="Full Name"
                   value={formData.contactPerson}
                   onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -195,13 +195,13 @@ export default function RequestPricingPage() {
               {/* Multi-Select Products Required */}
               <div className="space-y-2 sm:col-span-2 pt-2 border-t border-[#E8E1D3]">
                 <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
-                  What products do you require? (Select all that apply) *
+                  What do you require? *
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
                   {productOptions.map((opt, idx) => (
                     <label
                       key={idx}
-                      className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs font-bold cursor-pointer transition-all ${
+                      className={`flex items-center gap-2 p-3 rounded-xl border text-xs font-bold cursor-pointer transition-all ${
                         selectedProducts.includes(opt)
                           ? "bg-[#0F2E23] text-white border-[#0F2E23] shadow-sm"
                           : "bg-[#FAF7F2] text-[#0F2E23] border-[#E8E1D3] hover:bg-white"
@@ -221,12 +221,12 @@ export default function RequestPricingPage() {
 
               <div className="space-y-2">
                 <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
-                  Approximate Requirement (Birds or KG) *
+                  Approximate Requirement *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 100 birds/day OR 50 kg/day"
+                  placeholder="Birds per day/week OR KG per day/week"
                   value={formData.approxRequirement}
                   onChange={(e) => setFormData({ ...formData, approxRequirement: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -235,11 +235,11 @@ export default function RequestPricingPage() {
 
               <div className="space-y-2">
                 <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
-                  Preferred Specification / Weight Range
+                  Preferred Specification
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Small 800g-1kg OR Boneless skinless"
+                  placeholder="e.g. Small bird 800g-1kg OR Boneless thigh"
                   value={formData.preferredSpec}
                   onChange={(e) => setFormData({ ...formData, preferredSpec: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -261,11 +261,11 @@ export default function RequestPricingPage() {
 
               <div className="space-y-2 sm:col-span-2">
                 <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider">
-                  Additional Notes
+                  Notes
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Tell us about your receiving schedule, piece size requirement, or current supplier preferences..."
+                  placeholder="Delivery timing window or specific kitchen preferences..."
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"
@@ -275,7 +275,7 @@ export default function RequestPricingPage() {
 
             <div className="pt-4 border-t border-[#E8E1D3] flex items-center justify-between flex-wrap gap-4">
               <span className="text-xs text-[#4F5E57]">
-                Enquiry desk · Response within 2 hours
+                Commercial sales desk
               </span>
               <button
                 type="submit"
