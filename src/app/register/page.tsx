@@ -138,7 +138,7 @@ export default function RegisterPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Grand Heritage Hotel & Resort"
+                      placeholder="e.g. Royal Palace Hotel & Resort"
                       value={form.businessName}
                       onChange={(e) => setForm({ ...form, businessName: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-[#E8E1D3] bg-[#FAF7F2] text-sm text-[#0F2E23] focus:outline-none focus:ring-2 focus:ring-[#0F2E23]"

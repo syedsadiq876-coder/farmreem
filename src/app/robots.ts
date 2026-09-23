@@ -18,7 +18,14 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/portal/", "/admin/", "/register/", "/reset-password/", "/forgot-password/"],
+      disallow: [
+        "/login/",
+        "/portal/",
+        "/admin/",
+        "/register/",
+        "/reset-password/",
+        "/forgot-password/",
+      ],
     },
     sitemap: "https://www.farmreem.com/sitemap.xml",
   };
