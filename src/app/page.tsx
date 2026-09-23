@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import ImageCarousel from "@/components/ui/ImageCarousel";
 import RequirementBuilder from "@/components/ui/RequirementBuilder";
+import { HeroH1, SectionH2 } from "@/components/ui/AnimatedHeading";
 
 export const metadata = {
   title: "B2B Poultry & Chicken Supply for Hotels & Restaurants | FarmReem",
@@ -144,12 +145,10 @@ export default function HomePage() {
                 <span>B2B POULTRY SUPPLY</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F2E23] leading-[1.08]">
-                Poultry supply, <br />
-                <span className="text-[#C59B27] underline decoration-[#C59B27]/30 underline-offset-8">
-                  built around your kitchen.
-                </span>
-              </h1>
+              <HeroH1
+                line1="Poultry supply,"
+                line2="built around your kitchen."
+              />
 
               <p className="text-base sm:text-lg text-[#4F5E57] font-normal leading-relaxed max-w-lg mx-auto lg:mx-0">
                 From live birds to kitchen-ready poultry requirements, FarmReem helps hotels, restaurants, caterers and institutions source the size, quantity and specification their operation needs.
@@ -254,9 +253,10 @@ export default function HomePage() {
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
               BUILT AROUND YOUR REQUIREMENT
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23] tracking-tight">
-              Different kitchens need chicken differently.
-            </h2>
+            <SectionH2
+              text="Different kitchens need chicken differently."
+              className="text-3xl sm:text-4xl"
+            />
             <p className="text-base text-[#4F5E57] leading-relaxed">
               A tandoor kitchen may want smaller whole birds. A banquet may need consistent curry cuts. A restaurant may require breast, thighs, wings or boneless meat. FarmReem is being built to supply around the requirement—not force every buyer into one specification.
             </p>
@@ -274,9 +274,10 @@ export default function HomePage() {
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
               LIVE BROILER SIZING
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23] tracking-tight">
-              Choose the bird size that works for your kitchen.
-            </h2>
+            <SectionH2
+              text="Choose the bird size that works for your kitchen."
+              className="text-3xl sm:text-4xl"
+            />
             <p className="text-sm text-[#4F5E57]">
               FarmReem categorizes live broilers into typical working ranges so commercial buyers can align supply with portion costs and preparation requirements.
             </p>
@@ -408,10 +409,11 @@ export default function HomePage() {
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
               HOW FARMREEM WORKS
             </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0F2E23] tracking-tight">
-              Tell us what you need. <br className="hidden sm:inline" />
-              We source around your requirement.
-            </h2>
+            <SectionH2
+              line1="Tell us what you need."
+              line2="We source around your requirement."
+              className="text-3xl sm:text-5xl"
+            />
             <p className="text-base text-[#4F5E57]">
               Every kitchen buys differently. Tell us the product, quantity, preferred size or cut and delivery requirement. FarmReem coordinates the supply around what works for your operation.
             </p>
@@ -465,9 +467,10 @@ export default function HomePage() {
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#C59B27]">
               ONE SUPPLIER. MORE FLEXIBILITY.
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F2E23] tracking-tight">
-              The chicken you need depends on what you're cooking.
-            </h2>
+            <SectionH2
+              text="The chicken you need depends on what you're cooking."
+              className="text-3xl sm:text-4xl"
+            />
             <p className="text-base text-[#4F5E57] leading-relaxed">
               Small whole birds for tandoor. Consistent cuts for banquets. Breast, thighs, legs or wings for specific menu requirements. FarmReem is building a supply model around professional kitchen demand.
             </p>
@@ -530,10 +533,11 @@ export default function HomePage() {
             <span className="text-xs font-bold uppercase tracking-wider text-[#C59B27]">
               A NETWORK BUILT FOR CONSISTENCY
             </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              More than one source. <br />
-              One FarmReem relationship.
-            </h2>
+            <SectionH2
+              line1="More than one source."
+              line2="One FarmReem relationship."
+              className="text-3xl sm:text-5xl !text-white"
+            />
             <p className="text-base text-[#FAF7F2]/80">
               Different requirements need different sourcing. FarmReem is building a flexible supply network across wholesale sourcing, poultry producers and future owned production so professional kitchens can work with one supply relationship.
             </p>
@@ -591,9 +595,10 @@ export default function HomePage() {
       <section className="py-20 bg-[#FFFDF9] border-t border-[#E8E1D3]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-[#0F2E23] text-white rounded-3xl p-10 sm:p-14 text-center space-y-6 shadow-2xl">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Tell us what your kitchen needs.
-            </h2>
+            <SectionH2
+              text="Tell us what your kitchen needs."
+              className="text-3xl sm:text-5xl !text-white"
+            />
             <p className="text-base text-[#FAF7F2]/80 max-w-xl mx-auto">
               Whether it's a regular daily requirement, a busy weekend or an upcoming event, talk to FarmReem about your poultry supply.
             </p>
