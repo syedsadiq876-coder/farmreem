@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@farmreem/auth": "workspace:*",
-    "@farmreem/database": "workspace:*",
-    "@farmreem/types": "workspace:*",
-    "@farmreem/ui": "workspace:*",
+    "@farmreem/auth": "*",
+    "@farmreem/database": "*",
+    "@farmreem/types": "*",
+    "@farmreem/ui": "*",
     "lucide-react": "^1.47.0",
     "next": "16.3.5",
     "react": "19.2.8",
