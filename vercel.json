@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm run --prefix apps/admin build",
-  "outputDirectory": "apps/admin/.next",
-  "framework": "nextjs"
+  "buildCommand": "npx next build apps/admin",
+  "outputDirectory": "apps/admin/.next"
 }
