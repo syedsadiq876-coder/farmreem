@@ -32,15 +32,20 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[#FAF7F2]">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-3">
-        <div className="mx-auto w-14 h-14 rounded-full bg-[#0F2E23] flex items-center justify-center text-[#C59B27] shadow-xl ring-4 ring-[#C59B27]/20">
-          <Lock className="w-7 h-7" />
+        <div className="mx-auto w-16 h-16 rounded-2xl bg-[#0F2E23] p-1.5 shadow-xl ring-4 ring-[#C59B27]/20 flex items-center justify-center overflow-hidden">
+          {/* Official FarmReem Brand Emblem */}
+          <img
+            src="/icon.jpg"
+            alt="FarmReem Brand Emblem"
+            className="w-full h-full object-cover rounded-xl"
+          />
         </div>
 
         <h1 className="text-3xl font-extrabold text-[#0F2E23] tracking-tight">
-          Farm<span className="text-[#C59B27]">Reem</span> OS
+          Farm<span className="text-[#C59B27]">Reem</span> Admin
         </h1>
         <p className="text-xs font-bold text-[#4F5E57] uppercase tracking-widest">
-          {ADMIN_BRAND.tagline}
+          Internal Operations Portal · admin.farmreem.com
         </p>
       </div>
 

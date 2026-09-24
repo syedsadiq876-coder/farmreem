@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import "@/app/globals.css"; // Uses root CSS tokens
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "FarmReem OS | Internal Operations Portal",
-  description: "Internal operating portal for FarmReem B2B foodservice supply.",
+  title: "FarmReem Admin",
+  description: "FarmReem Internal Operations Portal",
   robots: {
     index: false,
     follow: false,
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.jpg", type: "image/jpeg" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.jpg",
   },
 };
 
@@ -17,6 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full bg-[#FAF7F2]">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-icon.jpg" />
+      </head>
       <body className="h-full antialiased font-sans text-[#111A17] bg-[#FAF7F2]">
         {children}
       </body>
