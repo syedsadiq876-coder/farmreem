@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,11 +23,21 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@farmreem/types": ["./packages/types/src/index.ts"],
-      "@farmreem/database": ["./packages/database/src/index.ts"],
-      "@farmreem/auth": ["./packages/auth/src/index.ts"],
-      "@farmreem/ui": ["./packages/ui/src/index.ts"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@farmreem/types": [
+        "../../packages/types/src/index.ts"
+      ],
+      "@farmreem/database": [
+        "../../packages/database/src/index.ts"
+      ],
+      "@farmreem/auth": [
+        "../../packages/auth/src/index.ts"
+      ],
+      "@farmreem/ui": [
+        "../../packages/ui/src/index.ts"
+      ]
     }
   },
   "include": [
@@ -31,8 +45,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
