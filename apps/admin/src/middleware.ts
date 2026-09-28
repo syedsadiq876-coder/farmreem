@@ -9,10 +9,19 @@ export function middleware(request: NextRequest) {
       pathname.startsWith("/forgot-password") ||
       pathname.startsWith("/reset-password");
 
+    const isApiRoute = pathname.startsWith("/api/");
+
     // Read mock session or cookie token for dev/staging preview
     const sessionToken =
       request.cookies.get("__Host-farmreem-admin-session")?.value ||
       request.cookies.get("farmreem_admin_dev_session")?.value;
+
+    // Allow API routes to pass through unhindered
+    if (isApiRoute) {
+      const response = NextResponse.next();
+      response.headers.set("X-Robots-Tag", "noindex, nofollow");
+      return response;
+    }
 
     // Handle root / route explicitly
     if (pathname === "/") {
