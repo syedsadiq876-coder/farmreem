@@ -16,17 +16,32 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError(null);
 
-    // Operational Authentication Logic simulation/placeholder
     if (!email || !password) {
       setError("Please enter your staff email and password.");
       setLoading(false);
       return;
     }
 
-    // Direct redirect to /dashboard for dev/demo testing
-    setTimeout(() => {
-      window.location.href = "/dashboard";
-    }, 600);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Authentication failed. Invalid staff credentials.");
+        setLoading(false);
+        return;
+      }
+
+      window.location.href = data.redirectUrl || "/dashboard";
+    } catch (err) {
+      setError("Unable to connect to authentication service.");
+      setLoading(false);
+    }
   };
 
   return (

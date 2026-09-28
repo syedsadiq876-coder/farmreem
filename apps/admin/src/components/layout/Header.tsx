@@ -3,7 +3,12 @@
 import { LogOut, User, Shield } from "lucide-react";
 
 export default function AdminHeader() {
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {
+      // Ignore network errors on logout
+    }
     // Clear session cookies & redirect to login
     document.cookie = "__Host-farmreem-admin-session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     document.cookie = "farmreem_admin_dev_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
