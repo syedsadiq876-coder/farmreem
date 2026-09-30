@@ -1,15 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Lock, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
-import { ADMIN_BRAND } from "@farmreem/ui";
+import { ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hashParams = new URLSearchParams(window.location.hash.replace("#", "?"));
+      const queryParams = new URLSearchParams(window.location.search);
+
+      const errorParam = hashParams.get("error") || queryParams.get("error");
+      const errorCode = hashParams.get("error_code") || queryParams.get("error_code");
+
+      if (errorParam || errorCode) {
+        setError(
+          "This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation."
+        );
+        // Clean up URL to hide raw query parameters
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,8 +89,8 @@ export default function AdminLoginPage() {
           </div>
 
           {error && (
-            <div className="bg-rose-50 text-rose-800 p-3.5 rounded-2xl border border-rose-200 flex items-center gap-2 text-xs font-semibold">
-              <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+            <div className="bg-rose-50 text-rose-800 p-3.5 rounded-2xl border border-rose-200 flex items-center gap-2 text-xs font-semibold leading-relaxed">
+              <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
