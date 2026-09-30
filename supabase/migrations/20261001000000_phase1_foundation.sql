@@ -139,6 +139,10 @@ DECLARE
   v_status user_status_enum;
   v_has_perm BOOLEAN;
 BEGIN
+  IF p_user_id IS NULL THEN
+    RETURN FALSE;
+  END IF;
+
   -- 1. Check live user status. If SUSPENDED or DEACTIVATED -> DENIED immediately
   SELECT status INTO v_status FROM public.users WHERE id = p_user_id;
   IF v_status IS NULL OR v_status != 'ACTIVE' THEN
@@ -376,21 +380,51 @@ ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE background_jobs ENABLE ROW LEVEL SECURITY;
 
--- User Table RLS Policies (Enforces app_access and active user status)
+-- User Table RLS Policies (Live Requester-Status & Permission Enforced)
 CREATE POLICY users_self_read ON users
   FOR SELECT TO authenticated
   USING (id = auth.uid());
 
 CREATE POLICY users_staff_read ON users
   FOR SELECT TO authenticated
-  USING (
-    ((auth.jwt() -> 'app_metadata' ->> 'app_access')::jsonb ? 'admin')
-    AND status = 'ACTIVE'
-  );
+  USING (public.has_permission(auth.uid(), 'users', 'VIEW'));
 
+-- Audit Logs Table RLS Policy
 CREATE POLICY audit_logs_read ON audit_logs
   FOR SELECT TO authenticated
-  USING (
-    ((auth.jwt() -> 'app_metadata' ->> 'app_access')::jsonb ? 'admin')
-    AND public.has_permission(auth.uid(), 'audit', 'VIEW')
-  );
+  USING (public.has_permission(auth.uid(), 'audit', 'VIEW'));
+
+-- Roles & Permissions RLS Policies
+CREATE POLICY roles_read ON roles
+  FOR SELECT TO authenticated
+  USING (public.has_permission(auth.uid(), 'users', 'VIEW'));
+
+CREATE POLICY permissions_read ON permissions
+  FOR SELECT TO authenticated
+  USING (public.has_permission(auth.uid(), 'users', 'VIEW'));
+
+CREATE POLICY role_permissions_read ON role_permissions
+  FOR SELECT TO authenticated
+  USING (public.has_permission(auth.uid(), 'users', 'VIEW'));
+
+CREATE POLICY user_roles_self_read ON user_roles
+  FOR SELECT TO authenticated
+  USING (user_id = auth.uid());
+
+CREATE POLICY user_roles_staff_read ON user_roles
+  FOR SELECT TO authenticated
+  USING (public.has_permission(auth.uid(), 'users', 'VIEW'));
+
+-- Organizations RLS Policies
+CREATE POLICY organizations_read ON organizations
+  FOR SELECT TO authenticated
+  USING (public.has_permission(auth.uid(), 'customers', 'VIEW') OR public.has_permission(auth.uid(), 'suppliers_farms', 'VIEW'));
+
+CREATE POLICY organization_members_read ON organization_members
+  FOR SELECT TO authenticated
+  USING (user_id = auth.uid() OR public.has_permission(auth.uid(), 'customers', 'VIEW'));
+
+-- Background Jobs RLS Policy
+CREATE POLICY background_jobs_read ON background_jobs
+  FOR SELECT TO authenticated
+  USING (public.has_permission(auth.uid(), 'audit', 'VIEW'));
