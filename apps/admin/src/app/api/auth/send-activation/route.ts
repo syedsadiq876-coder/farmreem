@@ -15,8 +15,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Trigger Supabase Auth activation email with redirectTo set to /set-password
-    const authRes = await fetch(`${supabaseUrl}/auth/v1/recover`, {
+    const redirectTo = "https://admin.farmreem.com/set-password";
+
+    // 1. Attempt /auth/v1/recover first
+    const recoverRes = await fetch(`${supabaseUrl}/auth/v1/recover`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,28 +27,74 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         email,
         options: {
-          redirectTo: "https://admin.farmreem.com/set-password",
+          redirectTo,
         },
       }),
     });
 
-    const authData = await authRes.json();
+    const recoverBodyText = await recoverRes.text();
+    let recoverData: any = {};
+    try {
+      recoverData = JSON.parse(recoverBodyText);
+    } catch (e) {
+      recoverData = { raw: recoverBodyText };
+    }
 
-    if (!authRes.ok) {
+    console.log(`[Supabase Auth /recover] Status: ${recoverRes.status}`, recoverData);
+
+    // If recover failed with explicit HTTP error (e.g. 429 rate limit or 400 validation)
+    if (!recoverRes.ok) {
+      const errorMsg = recoverData.msg || recoverData.error_description || recoverData.message || "Supabase Auth rejected recovery request.";
       return NextResponse.json(
-        { error: authData.msg || authData.error_description || "Unable to send activation email." },
-        { status: authRes.status }
+        {
+          success: false,
+          supabaseStatus: recoverRes.status,
+          error: errorMsg,
+          details: recoverData,
+        },
+        { status: recoverRes.status }
       );
     }
 
+    // 2. Also test /auth/v1/resend (type: signup/invite) if user needs re-confirmation
+    const resendRes = await fetch(`${supabaseUrl}/auth/v1/resend`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: supabaseAnonKey,
+      },
+      body: JSON.stringify({
+        type: "signup",
+        email,
+        options: {
+          redirectTo,
+        },
+      }),
+    });
+
+    const resendBodyText = await resendRes.text();
+    let resendData: any = {};
+    try {
+      resendData = JSON.parse(resendBodyText);
+    } catch (e) {
+      resendData = { raw: resendBodyText };
+    }
+
+    console.log(`[Supabase Auth /resend] Status: ${resendRes.status}`, resendData);
+
     return NextResponse.json({
       success: true,
-      message: `Account activation email sent to ${email}`,
-      redirectTo: "https://admin.farmreem.com/set-password",
+      email,
+      supabaseStatus: recoverRes.status,
+      redirectTo,
+      recoverResponse: recoverData,
+      resendResponse: resendData,
+      message: `Account activation email dispatched to ${email}`,
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("[send-activation] Exception:", error);
     return NextResponse.json(
-      { error: "Authentication service unavailable." },
+      { error: error?.message || "Authentication service unavailable." },
       { status: 500 }
     );
   }
