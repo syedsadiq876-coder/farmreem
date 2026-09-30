@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Authenticate directly against Supabase Auth API
+    // 1. Authenticate credentials directly against Supabase Auth API
     const authRes = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
       method: "POST",
       headers: {
@@ -36,14 +36,54 @@ export async function POST(request: Request) {
 
     const authData = await authRes.json();
 
-    if (!authRes.ok || !authData.access_token) {
+    if (!authRes.ok || !authData.access_token || !authData.user) {
       return NextResponse.json(
         { error: authData.error_description || "Invalid staff email or password." },
         { status: 401 }
       );
     }
 
-    // Set secure HTTP-only Supabase session cookie
+    // 2. Perform live DB authorization check against public.users (Verifies status=ACTIVE & app_access)
+    try {
+      const profileRes = await fetch(
+        `${supabaseUrl}/rest/v1/users?id=eq.${authData.user.id}&select=id,email,status,staff_role,metadata`,
+        {
+          headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${authData.access_token}`,
+          },
+        }
+      );
+
+      if (profileRes.ok) {
+        const profiles = await profileRes.json();
+        const userProfile = profiles[0];
+
+        // DENY ACCESS if user profile is SUSPENDED, DEACTIVATED, or not yet provisioned
+        if (!userProfile || userProfile.status !== "ACTIVE") {
+          return NextResponse.json(
+            { error: "Account pending administrator activation. Access denied." },
+            { status: 403 }
+          );
+        }
+
+        const appAccess = userProfile.metadata?.app_access || [];
+        if (!userProfile.staff_role && !appAccess.includes("admin")) {
+          return NextResponse.json(
+            { error: "Insufficient permissions. Admin app access required." },
+            { status: 403 }
+          );
+        }
+      }
+    } catch (dbErr) {
+      // If DB profile check fails, fail closed for security
+      return NextResponse.json(
+        { error: "Unable to verify staff authorization status." },
+        { status: 500 }
+      );
+    }
+
+    // 3. Issue secure HTTP-only Supabase session cookie upon successful live DB verification
     const response = NextResponse.json({
       success: true,
       redirectUrl: "/dashboard",
