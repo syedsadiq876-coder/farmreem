@@ -67,10 +67,13 @@ export async function POST(request: Request) {
           );
         }
 
-        const appAccess = userProfile.metadata?.app_access || [];
-        if (!userProfile.staff_role && !appAccess.includes("admin")) {
+        const appAccess = Array.isArray(userProfile.metadata?.app_access)
+          ? userProfile.metadata.app_access
+          : [];
+
+        if (!appAccess.includes("admin")) {
           return NextResponse.json(
-            { error: "Insufficient permissions. Admin app access required." },
+            { error: "Insufficient permissions. Explicit Admin app access required." },
             { status: 403 }
           );
         }

@@ -22,7 +22,10 @@ ON CONFLICT (code) DO UPDATE SET
 --   - staff_role = NULL (No assigned role)
 --   - user_roles = 0 records (No permissions in user_roles)
 CREATE OR REPLACE FUNCTION public.handle_new_auth_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp AS $$
 BEGIN
   INSERT INTO public.users (
     id,
@@ -37,7 +40,7 @@ BEGIN
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', 'Unprovisioned Staff User'),
     'STAFF',
-    NULL,           -- NO ROLE ASSIGNED
+    NULL,           -- NO ROLE ASSIGNED BY DEFAULT
     'SUSPENDED',    -- UNPROVISIONED / PENDING STATE
     '{}'::jsonb     -- NO APP ACCESS CLAIMS BY DEFAULT
   )
@@ -45,7 +48,10 @@ BEGIN
 
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
+-- Revoke direct execution privileges from unprivileged roles
+REVOKE EXECUTE ON FUNCTION public.handle_new_auth_user() FROM PUBLIC, anon, authenticated;
 
 -- 3. Attach Unprivileged Trigger to auth.users Table
 DROP TRIGGER IF EXISTS trg_on_auth_user_created ON auth.users;

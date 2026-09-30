@@ -167,7 +167,7 @@ BEGIN
 
   RETURN COALESCE(v_has_perm, FALSE);
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 
 -- 7. Append-Only Audit Logs Table & Trusted Write Path
 CREATE TABLE audit_logs (
@@ -251,15 +251,18 @@ BEGIN
 
   RETURN v_audit_id;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 
 -- Audit Log Immutability Trigger (Blocks UPDATE and DELETE for ALL application roles)
 CREATE OR REPLACE FUNCTION lock_audit_logs()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp AS $$
 BEGIN
   RAISE EXCEPTION 'Audit log entries are immutable and cannot be updated or deleted by any application role.';
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 CREATE TRIGGER trg_lock_audit_logs
 BEFORE UPDATE OR DELETE ON audit_logs
@@ -315,7 +318,7 @@ BEGIN
   )
   RETURNING *;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 
 -- Function to Handle Background Job Failures (Transitions to RETRY or DEAD_LETTER)
 CREATE OR REPLACE FUNCTION mark_job_failed(
@@ -350,7 +353,7 @@ BEGIN
 
   RETURN v_job;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 
 -- 9. Idempotency Keys Table
 CREATE TABLE idempotency_keys (
