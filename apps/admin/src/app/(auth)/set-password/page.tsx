@@ -32,7 +32,7 @@ export default function SetPasswordPage() {
 
       if (errorParam || errorCode) {
         setIsExpiredOrInvalid(true);
-        setError("This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation.");
+        setError("This activation link has expired or has already been used. Please contact your FarmReem administrator for a new activation link.");
         return;
       }
 
@@ -59,7 +59,7 @@ export default function SetPasswordPage() {
         setCode(authCode);
       } else {
         setIsExpiredOrInvalid(true);
-        setError("This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation.");
+        setError("This activation link has expired or has already been used. Please contact your FarmReem administrator for a new activation link.");
       }
     }
   }, []);
@@ -79,7 +79,7 @@ export default function SetPasswordPage() {
 
     if (!accessToken && !tokenHash && !code) {
       setIsExpiredOrInvalid(true);
-      setError("This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation.");
+      setError("This activation link has expired or has already been used. Please contact your FarmReem administrator for a new activation link.");
       return;
     }
 
@@ -162,13 +162,13 @@ export default function SetPasswordPage() {
               </div>
               <div className="space-y-2">
                 <h2 className="text-lg font-extrabold text-[#0F2E23]">
-                  Invitation Link Expired or Invalid
+                  Activation link expired or invalid
                 </h2>
                 <p className="text-xs font-semibold text-rose-800 bg-rose-50 p-3.5 rounded-2xl border border-rose-200 leading-relaxed">
-                  This invitation link has expired or has already been used.
+                  This activation link has expired or has already been used.
                 </p>
                 <p className="text-xs text-[#4F5E57]">
-                  Please contact your FarmReem administrator for a new invitation.
+                  Please contact your FarmReem administrator for a new activation link.
                 </p>
               </div>
               <Link

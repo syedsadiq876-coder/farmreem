@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
 
       if (errorParam || errorCode) {
         setError(
-          "This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation."
+          "This activation link has expired or has already been used. Please contact your FarmReem administrator for a new activation link."
         );
         // Clean up URL to hide raw query parameters
         window.history.replaceState({}, document.title, window.location.pathname);

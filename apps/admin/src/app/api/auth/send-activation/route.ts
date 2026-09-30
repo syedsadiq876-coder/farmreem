@@ -23,14 +23,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const redirectTo = "https://admin.farmreem.com/set-password";
+    const setPasswordRedirect = "https://admin.farmreem.com/set-password";
     const serviceKey = supabaseServiceKey || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
     const resendApiKey = process.env.RESEND_API_KEY;
 
     let actionLink: string | null = null;
-    let linkTypeUsed = "magiclink";
 
-    // 1. Server-side generateLink using Supabase Admin Auth API if Service Role Key is available
+    // 1. Server-side generateLink using Supabase Admin Auth API
     if (serviceKey) {
       const generateRes = await fetch(`${supabaseUrl}/auth/v1/admin/generate_link`, {
         method: "POST",
@@ -43,7 +42,7 @@ export async function POST(request: Request) {
           type: "magiclink",
           email: email,
           options: {
-            redirectTo: redirectTo,
+            redirectTo: setPasswordRedirect,
           },
         }),
       });
@@ -52,14 +51,19 @@ export async function POST(request: Request) {
 
       if (generateRes.ok && generateData.action_link) {
         actionLink = generateData.action_link;
-        linkTypeUsed = "admin_generate_magiclink";
       } else {
         console.error("[send-activation] Admin generate_link status:", generateRes.status);
       }
     }
 
-    // 2. Dispatch custom branded email via Resend if custom mailer API key is present and action_link generated
-    if (actionLink && resendApiKey) {
+    // 2. Wrap actionLink in scanner-safe intermediate /activate URL to prevent mail scanner token pre-consumption
+    let activationTargetUrl = setPasswordRedirect;
+    if (actionLink) {
+      activationTargetUrl = `https://admin.farmreem.com/activate?target=${encodeURIComponent(actionLink)}`;
+    }
+
+    // 3. Dispatch custom branded email via Resend if custom mailer API key is present
+    if (resendApiKey) {
       const resendRes = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -81,7 +85,7 @@ export async function POST(request: Request) {
                   Your FarmReem staff account has been created. Use the secure link below to create your password and activate your account.
                 </p>
                 <div style="margin: 32px 0; text-align: center;">
-                  <a href="${actionLink}" style="background-color: #0F2E23; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(15,46,35,0.2);">
+                  <a href="${activationTargetUrl}" style="background-color: #0F2E23; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(15,46,35,0.2);">
                     Create Password & Activate Account
                   </a>
                 </div>
@@ -108,13 +112,14 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         email,
-        linkTypeUsed: "resend_custom_magiclink",
-        redirectTo,
-        message: `Custom activation email dispatched to ${email} via Resend`,
+        linkTypeUsed: "scanner_safe_resend_magiclink",
+        intermediateRoute: "https://admin.farmreem.com/activate",
+        redirectTo: setPasswordRedirect,
+        message: `Scanner-safe activation email dispatched to ${email} via Resend`,
       });
     }
 
-    // 3. Fallback: Call Supabase Auth magiclink endpoint directly if Resend API key is not in environment
+    // 4. Fallback: Direct Supabase magiclink endpoint
     const magiclinkRes = await fetch(`${supabaseUrl}/auth/v1/magiclink`, {
       method: "POST",
       headers: {
@@ -124,7 +129,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         email,
         options: {
-          redirectTo,
+          redirectTo: setPasswordRedirect,
         },
       }),
     });
@@ -148,7 +153,7 @@ export async function POST(request: Request) {
       email,
       supabaseStatus: magiclinkRes.status,
       linkTypeUsed: "supabase_magiclink",
-      redirectTo,
+      redirectTo: setPasswordRedirect,
       message: `First-time activation magiclink dispatched to ${email}`,
     });
   } catch (error: any) {

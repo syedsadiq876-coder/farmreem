@@ -8,7 +8,8 @@ export function middleware(request: NextRequest) {
       pathname.startsWith("/login") ||
       pathname.startsWith("/forgot-password") ||
       pathname.startsWith("/reset-password") ||
-      pathname.startsWith("/set-password");
+      pathname.startsWith("/set-password") ||
+      pathname.startsWith("/activate");
 
     const isApiRoute = pathname.startsWith("/api/");
 
