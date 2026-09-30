@@ -8,6 +8,9 @@ export default function SetPasswordPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [tokenHash, setTokenHash] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
+  const [inviteType, setInviteType] = useState<string>("invite");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [isExpiredOrInvalid, setIsExpiredOrInvalid] = useState(false);
@@ -27,26 +30,34 @@ export default function SetPasswordPage() {
 
       if (errorParam || errorCode) {
         setIsExpiredOrInvalid(true);
-        setError("This invitation link has expired or has already been used.");
+        setError("This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation.");
         return;
       }
 
       // Check for type recovery vs invite
-      const type = hashParams.get("type") || queryParams.get("type");
+      const type = hashParams.get("type") || queryParams.get("type") || "invite";
+      setInviteType(type);
+
       if (type === "recovery") {
         // Redirect existing users doing password reset to /reset-password
         window.location.href = `/reset-password${window.location.search}${window.location.hash}`;
         return;
       }
 
-      // Extract access_token
+      // Extract credentials from standard redirect (access_token), token_hash parameter, or PKCE (code)
       const token = hashParams.get("access_token") || queryParams.get("access_token");
+      const th = queryParams.get("token_hash") || queryParams.get("token") || hashParams.get("token_hash");
+      const authCode = queryParams.get("code") || hashParams.get("code");
 
       if (token) {
         setAccessToken(token);
+      } else if (th) {
+        setTokenHash(th);
+      } else if (authCode) {
+        setCode(authCode);
       } else {
         setIsExpiredOrInvalid(true);
-        setError("This invitation link has expired or has already been used.");
+        setError("This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation.");
       }
     }
   }, []);
@@ -64,9 +75,9 @@ export default function SetPasswordPage() {
       return;
     }
 
-    if (!accessToken) {
+    if (!accessToken && !tokenHash && !code) {
       setIsExpiredOrInvalid(true);
-      setError("Missing invitation session token. Please use a valid email link.");
+      setError("This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation.");
       return;
     }
 
@@ -77,7 +88,13 @@ export default function SetPasswordPage() {
       const res = await fetch("/api/auth/set-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, accessToken }),
+        body: JSON.stringify({
+          password,
+          accessToken,
+          tokenHash,
+          code,
+          type: inviteType,
+        }),
       });
 
       const data = await res.json();
@@ -203,7 +220,7 @@ export default function SetPasswordPage() {
 
               <button
                 type="submit"
-                disabled={loading || !accessToken}
+                disabled={loading || (!accessToken && !tokenHash && !code)}
                 className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-md transition-all cursor-pointer disabled:opacity-50"
               >
                 {loading ? "Establishing Password..." : "Create Password & Activate Account"}

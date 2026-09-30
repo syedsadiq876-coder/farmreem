@@ -3,7 +3,7 @@ import { getDatabaseConfig } from "@farmreem/database";
 
 export async function POST(request: Request) {
   try {
-    const { password, accessToken } = await request.json();
+    const { password, accessToken, tokenHash, code, type = "invite" } = await request.json();
 
     if (!password || password.length < 8) {
       return NextResponse.json(
@@ -12,9 +12,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!accessToken) {
+    if (!accessToken && !tokenHash && !code) {
       return NextResponse.json(
-        { error: "Missing invitation session token. Please open the invitation link from your email." },
+        { error: "This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation." },
         { status: 401 }
       );
     }
@@ -28,13 +28,73 @@ export async function POST(request: Request) {
       );
     }
 
-    // Call Supabase Auth user update API to update password for newly invited staff member
+    let activeAccessToken = accessToken;
+
+    // 1. If tokenHash is provided, exchange token_hash for session via Supabase Auth /verify API
+    if (!activeAccessToken && tokenHash) {
+      const verifyRes = await fetch(`${supabaseUrl}/auth/v1/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: supabaseAnonKey,
+        },
+        body: JSON.stringify({
+          type: type || "invite",
+          token_hash: tokenHash,
+        }),
+      });
+
+      const verifyData = await verifyRes.json();
+
+      if (!verifyRes.ok) {
+        return NextResponse.json(
+          { error: "This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation." },
+          { status: 401 }
+        );
+      }
+
+      activeAccessToken = verifyData.access_token;
+    }
+
+    // 2. If PKCE code is provided, exchange auth_code for session via Supabase Auth /token API
+    if (!activeAccessToken && code) {
+      const tokenRes = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=pkce`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: supabaseAnonKey,
+        },
+        body: JSON.stringify({
+          auth_code: code,
+        }),
+      });
+
+      const tokenData = await tokenRes.json();
+
+      if (!tokenRes.ok) {
+        return NextResponse.json(
+          { error: "This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation." },
+          { status: 401 }
+        );
+      }
+
+      activeAccessToken = tokenData.access_token;
+    }
+
+    if (!activeAccessToken) {
+      return NextResponse.json(
+        { error: "This invitation link has expired or has already been used. Please contact your FarmReem administrator for a new invitation." },
+        { status: 401 }
+      );
+    }
+
+    // 3. Update password in Supabase Auth using the validated access token
     const authRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         apikey: supabaseAnonKey,
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${activeAccessToken}`,
       },
       body: JSON.stringify({ password }),
     });
