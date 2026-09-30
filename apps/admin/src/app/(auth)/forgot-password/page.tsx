@@ -2,16 +2,41 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Lock, ArrowLeft, Send, CheckCircle2 } from "lucide-react";
+import { Lock, ArrowLeft, Send, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Unable to send password reset email.");
+        setLoading(false);
+        return;
+      }
+
       setSubmitted(true);
+      setLoading(false);
+    } catch (err) {
+      setError("Unable to connect to authentication service.");
+      setLoading(false);
     }
   };
 
@@ -36,7 +61,7 @@ export default function ForgotPasswordPage() {
               <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
               <h2 className="text-lg font-bold text-[#0F2E23]">Reset Link Sent</h2>
               <p className="text-xs text-[#4F5E57]">
-                If an active staff account exists for <span className="font-semibold text-[#0F2E23]">{email}</span>, password reset instructions have been dispatched.
+                If an active staff account exists for <span className="font-semibold text-[#0F2E23]">{email}</span>, password reset instructions have been dispatched by Supabase Auth.
               </p>
               <Link
                 href="/login"
@@ -47,6 +72,13 @@ export default function ForgotPasswordPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <div className="bg-rose-50 text-rose-800 p-3 rounded-xl border border-rose-200 flex items-center gap-2 text-xs font-semibold">
+                  <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs font-extrabold text-[#0F2E23] uppercase tracking-wider mb-2">
                   Staff Email Address
@@ -63,9 +95,10 @@ export default function ForgotPasswordPage() {
 
               <button
                 type="submit"
-                className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                disabled={loading}
+                className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                Send Reset Link <Send className="w-4 h-4 text-[#C59B27]" />
+                {loading ? "Sending Link..." : "Send Reset Link"} <Send className="w-4 h-4 text-[#C59B27]" />
               </button>
 
               <div className="text-center pt-2">
