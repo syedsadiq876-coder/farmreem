@@ -115,6 +115,19 @@ CREATE TABLE user_roles (
   PRIMARY KEY (user_id, role_id)
 );
 
+-- Seed 9 Canonical Staff Roles
+INSERT INTO roles (code, name, description, is_internal) VALUES
+  ('SUPER_ADMIN', 'Super Administrator', 'Full operational and administrative authority', true),
+  ('GENERAL_MANAGER', 'General Manager', 'Overall management and operational supervision', true),
+  ('SALES_MANAGER', 'Sales Manager', 'Sales management, quotations, customer approvals', true),
+  ('SALESPERSON', 'Salesperson', 'Lead tracking, quotes, order placement', true),
+  ('PROCUREMENT_MANAGER', 'Procurement Manager', 'Farm supply management, purchase orders', true),
+  ('OPERATIONS_DISPATCH', 'Operations & Dispatch', 'Order fulfillment, dispatch, logistics', true),
+  ('FINANCE_CONTROLLER', 'Finance Controller', 'Invoices, payments, financial compliance', true),
+  ('QUALITY_COMPLIANCE', 'Quality & Compliance', 'Product inspection, safety compliance', true),
+  ('DRIVER', 'Driver', 'Delivery proof, logistics execution', true)
+ON CONFLICT (code) DO NOTHING;
+
 -- Dynamic Live Permission Resolution Function (Enforces ACTIVE status and dynamic RBAC)
 CREATE OR REPLACE FUNCTION public.has_permission(
   p_user_id UUID,

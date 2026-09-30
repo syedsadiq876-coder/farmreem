@@ -11,10 +11,8 @@ export function middleware(request: NextRequest) {
 
     const isApiRoute = pathname.startsWith("/api/");
 
-    // Read mock session or cookie token for dev/staging preview
-    const sessionToken =
-      request.cookies.get("__Host-farmreem-admin-session")?.value ||
-      request.cookies.get("farmreem_admin_dev_session")?.value;
+    // Read authenticated Supabase session token
+    const sessionToken = request.cookies.get("__Host-farmreem-admin-session")?.value;
 
     // Allow API routes to pass through unhindered
     if (isApiRoute) {
