@@ -128,6 +128,112 @@ INSERT INTO roles (code, name, description, is_internal) VALUES
   ('DRIVER', 'Driver', 'Delivery proof, logistics execution', true)
 ON CONFLICT (code) DO NOTHING;
 
+-- Seed Canonical Permissions (15 Modules x 7 Action Types)
+INSERT INTO permissions (code, module, action, description) VALUES
+  ('users.VIEW', 'users', 'VIEW', 'View staff user profiles'),
+  ('users.CREATE', 'users', 'CREATE', 'Create new staff user profiles'),
+  ('users.EDIT', 'users', 'EDIT', 'Edit existing staff user profiles'),
+  ('users.APPROVE', 'users', 'APPROVE', 'Approve/activate staff user profiles'),
+  ('users.CANCEL', 'users', 'CANCEL', 'Deactivate staff user profiles'),
+  ('users.DELETE', 'users', 'DELETE', 'Delete staff user profiles'),
+  ('users.EXPORT', 'users', 'EXPORT', 'Export staff user data'),
+  ('audit.VIEW', 'audit', 'VIEW', 'View system audit log entries'),
+  ('audit.EXPORT', 'audit', 'EXPORT', 'Export system audit logs'),
+  ('crm.VIEW', 'crm', 'VIEW', 'View CRM leads and accounts'),
+  ('crm.CREATE', 'crm', 'CREATE', 'Create CRM leads'),
+  ('crm.EDIT', 'crm', 'EDIT', 'Edit CRM leads'),
+  ('crm.APPROVE', 'crm', 'APPROVE', 'Approve CRM accounts'),
+  ('crm.CANCEL', 'crm', 'CANCEL', 'Cancel CRM leads'),
+  ('crm.DELETE', 'crm', 'DELETE', 'Delete CRM records'),
+  ('crm.EXPORT', 'crm', 'EXPORT', 'Export CRM data'),
+  ('customers.VIEW', 'customers', 'VIEW', 'View B2B customer accounts'),
+  ('customers.CREATE', 'customers', 'CREATE', 'Create B2B customer accounts'),
+  ('customers.EDIT', 'customers', 'EDIT', 'Edit B2B customer accounts'),
+  ('customers.APPROVE', 'customers', 'APPROVE', 'Approve credit terms and customer accounts'),
+  ('customers.CANCEL', 'customers', 'CANCEL', 'Suspend customer accounts'),
+  ('customers.DELETE', 'customers', 'DELETE', 'Delete customer accounts'),
+  ('customers.EXPORT', 'customers', 'EXPORT', 'Export customer data'),
+  ('products.VIEW', 'products', 'VIEW', 'View product catalog'),
+  ('products.CREATE', 'products', 'CREATE', 'Create product SKUs'),
+  ('products.EDIT', 'products', 'EDIT', 'Edit product details and inventory'),
+  ('products.APPROVE', 'products', 'APPROVE', 'Approve new product listings'),
+  ('products.DELETE', 'products', 'DELETE', 'Delete product SKUs'),
+  ('products.EXPORT', 'products', 'EXPORT', 'Export product catalog data'),
+  ('pricing.VIEW', 'pricing', 'VIEW', 'View price lists and tier rules'),
+  ('pricing.CREATE', 'pricing', 'CREATE', 'Create price lists'),
+  ('pricing.EDIT', 'pricing', 'EDIT', 'Edit price lists'),
+  ('pricing.APPROVE', 'pricing', 'APPROVE', 'Approve dynamic price adjustments'),
+  ('pricing.DELETE', 'pricing', 'DELETE', 'Delete price rules'),
+  ('pricing.EXPORT', 'pricing', 'EXPORT', 'Export pricing data'),
+  ('quotations.VIEW', 'quotations', 'VIEW', 'View sales quotations'),
+  ('quotations.CREATE', 'quotations', 'CREATE', 'Draft new quotations'),
+  ('quotations.EDIT', 'quotations', 'EDIT', 'Edit draft quotations'),
+  ('quotations.APPROVE', 'quotations', 'APPROVE', 'Approve quotations for client issue'),
+  ('quotations.CANCEL', 'quotations', 'CANCEL', 'Cancel quotations'),
+  ('quotations.DELETE', 'quotations', 'DELETE', 'Delete draft quotations'),
+  ('quotations.EXPORT', 'quotations', 'EXPORT', 'Export quotation history'),
+  ('orders.VIEW', 'orders', 'VIEW', 'View customer orders'),
+  ('orders.CREATE', 'orders', 'CREATE', 'Create sales orders'),
+  ('orders.EDIT', 'orders', 'EDIT', 'Edit sales orders'),
+  ('orders.APPROVE', 'orders', 'APPROVE', 'Approve customer orders for fulfillment'),
+  ('orders.CANCEL', 'orders', 'CANCEL', 'Cancel orders'),
+  ('orders.DELETE', 'orders', 'DELETE', 'Delete unfulfilled orders'),
+  ('orders.EXPORT', 'orders', 'EXPORT', 'Export order data'),
+  ('procurement.VIEW', 'procurement', 'VIEW', 'View farm purchase orders'),
+  ('procurement.CREATE', 'procurement', 'CREATE', 'Draft purchase orders'),
+  ('procurement.EDIT', 'procurement', 'EDIT', 'Edit purchase orders'),
+  ('procurement.APPROVE', 'procurement', 'APPROVE', 'Approve purchase orders'),
+  ('procurement.CANCEL', 'procurement', 'CANCEL', 'Cancel purchase orders'),
+  ('procurement.DELETE', 'procurement', 'DELETE', 'Delete purchase orders'),
+  ('procurement.EXPORT', 'procurement', 'EXPORT', 'Export procurement data'),
+  ('suppliers_farms.VIEW', 'suppliers_farms', 'VIEW', 'View farm suppliers'),
+  ('suppliers_farms.CREATE', 'suppliers_farms', 'CREATE', 'Register new farm suppliers'),
+  ('suppliers_farms.EDIT', 'suppliers_farms', 'EDIT', 'Edit supplier details'),
+  ('suppliers_farms.APPROVE', 'suppliers_farms', 'APPROVE', 'Approve supplier onboarding'),
+  ('suppliers_farms.DELETE', 'suppliers_farms', 'DELETE', 'Delete supplier records'),
+  ('suppliers_farms.EXPORT', 'suppliers_farms', 'EXPORT', 'Export supplier directory'),
+  ('dispatch.VIEW', 'dispatch', 'VIEW', 'View dispatch schedule and loads'),
+  ('dispatch.CREATE', 'dispatch', 'CREATE', 'Create dispatch runs'),
+  ('dispatch.EDIT', 'dispatch', 'EDIT', 'Edit dispatch manifests'),
+  ('dispatch.APPROVE', 'dispatch', 'APPROVE', 'Approve dispatch for transit'),
+  ('dispatch.CANCEL', 'dispatch', 'CANCEL', 'Cancel dispatch runs'),
+  ('dispatch.DELETE', 'dispatch', 'DELETE', 'Delete unfulfilled dispatch runs'),
+  ('dispatch.EXPORT', 'dispatch', 'EXPORT', 'Export dispatch manifests'),
+  ('deliveries.VIEW', 'deliveries', 'VIEW', 'View delivery status and Proof of Delivery'),
+  ('deliveries.CREATE', 'deliveries', 'CREATE', 'Record delivery runs'),
+  ('deliveries.EDIT', 'deliveries', 'EDIT', 'Update delivery status'),
+  ('deliveries.APPROVE', 'deliveries', 'APPROVE', 'Approve Proof of Delivery'),
+  ('deliveries.CANCEL', 'deliveries', 'CANCEL', 'Cancel delivery runs'),
+  ('deliveries.EXPORT', 'deliveries', 'EXPORT', 'Export delivery logs'),
+  ('invoices.VIEW', 'invoices', 'VIEW', 'View customer invoices'),
+  ('invoices.CREATE', 'invoices', 'CREATE', 'Generate tax invoices'),
+  ('invoices.EDIT', 'invoices', 'EDIT', 'Edit invoice details prior to issue'),
+  ('invoices.APPROVE', 'invoices', 'APPROVE', 'Approve issued invoices'),
+  ('invoices.CANCEL', 'invoices', 'CANCEL', 'Issue credit notes / cancel invoices'),
+  ('invoices.DELETE', 'invoices', 'DELETE', 'Delete draft invoices'),
+  ('invoices.EXPORT', 'invoices', 'EXPORT', 'Export billing and invoice data'),
+  ('payments.VIEW', 'payments', 'VIEW', 'View payment records'),
+  ('payments.CREATE', 'payments', 'CREATE', 'Record payments'),
+  ('payments.EDIT', 'payments', 'EDIT', 'Edit payment entries'),
+  ('payments.APPROVE', 'payments', 'APPROVE', 'Approve payment reconciliations'),
+  ('payments.CANCEL', 'payments', 'CANCEL', 'Reverse payment entries'),
+  ('payments.DELETE', 'payments', 'DELETE', 'Delete unposted payments'),
+  ('payments.EXPORT', 'payments', 'EXPORT', 'Export financial payment logs'),
+  ('support.VIEW', 'support', 'VIEW', 'View support desk tickets'),
+  ('support.CREATE', 'support', 'CREATE', 'Create support tickets'),
+  ('support.EDIT', 'support', 'EDIT', 'Update support ticket status'),
+  ('support.APPROVE', 'support', 'APPROVE', 'Approve resolution refunds'),
+  ('support.CANCEL', 'support', 'CANCEL', 'Close support tickets')
+ON CONFLICT (code) DO NOTHING;
+
+-- Map All Seeded Permissions to Canonical Roles (SUPER_ADMIN mapping)
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM roles r
+CROSS JOIN permissions p
+WHERE r.code = 'SUPER_ADMIN'
+ON CONFLICT (role_id, permission_id) DO NOTHING;
+
 -- Dynamic Live Permission Resolution Function (Enforces ACTIVE status and dynamic RBAC)
 CREATE OR REPLACE FUNCTION public.has_permission(
   p_user_id UUID,
@@ -379,11 +485,21 @@ ALTER TABLE role_permissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE background_jobs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE idempotency_keys ENABLE ROW LEVEL SECURITY;
+
+-- Revoke direct client access on idempotency_keys (Server/DB execution only)
+REVOKE ALL ON public.idempotency_keys FROM authenticated, anon;
 
 -- User Table RLS Policies (Live Requester-Status & Permission Enforced)
 CREATE POLICY users_self_read ON users
   FOR SELECT TO authenticated
-  USING (id = auth.uid());
+  USING (
+    id = auth.uid() 
+    AND EXISTS (
+      SELECT 1 FROM public.users u 
+      WHERE u.id = auth.uid() AND u.status = 'ACTIVE'
+    )
+  );
 
 CREATE POLICY users_staff_read ON users
   FOR SELECT TO authenticated
@@ -409,7 +525,13 @@ CREATE POLICY role_permissions_read ON role_permissions
 
 CREATE POLICY user_roles_self_read ON user_roles
   FOR SELECT TO authenticated
-  USING (user_id = auth.uid());
+  USING (
+    user_id = auth.uid()
+    AND EXISTS (
+      SELECT 1 FROM public.users u 
+      WHERE u.id = auth.uid() AND u.status = 'ACTIVE'
+    )
+  );
 
 CREATE POLICY user_roles_staff_read ON user_roles
   FOR SELECT TO authenticated
