@@ -6,6 +6,14 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const email = (body.email || "ceo@farmreem.com").trim().toLowerCase();
 
+    // Endpoint Security Hardening: Restrict bootstrap activation endpoint to ceo@farmreem.com
+    if (email !== "ceo@farmreem.com") {
+      return NextResponse.json(
+        { error: "Unauthorized email target. Activation endpoint is restricted during bootstrap phase." },
+        { status: 403 }
+      );
+    }
+
     const { supabaseUrl, supabaseAnonKey, supabaseServiceKey } = getDatabaseConfig();
 
     if (!supabaseUrl || supabaseUrl.includes("placeholder") || !supabaseAnonKey || supabaseAnonKey.includes("placeholder")) {
@@ -46,7 +54,7 @@ export async function POST(request: Request) {
         actionLink = generateData.action_link;
         linkTypeUsed = "admin_generate_magiclink";
       } else {
-        console.error("[send-activation] Admin generate_link error:", generateRes.status);
+        console.error("[send-activation] Admin generate_link status:", generateRes.status);
       }
     }
 
@@ -90,7 +98,7 @@ export async function POST(request: Request) {
       const resendData = await resendRes.json();
 
       if (!resendRes.ok) {
-        console.error("[send-activation] Resend API error:", resendRes.status);
+        console.error("[send-activation] Resend API status:", resendRes.status);
         return NextResponse.json(
           { error: resendData.message || "Resend email dispatch failed." },
           { status: resendRes.status }
