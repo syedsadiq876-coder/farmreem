@@ -81,10 +81,12 @@ export default function ActivatePage() {
         }
 
         // 6. Strict allowed final FarmReem destination
+        const normalizedPath = redirectParsed.pathname.replace(/\/$/, "");
+
         const isAllowedDestination =
           redirectParsed.protocol === "https:" &&
           redirectParsed.hostname === "admin.farmreem.com" &&
-          redirectParsed.pathname === "/set-password";
+          normalizedPath === "/set-password";
 
         if (!isAllowedDestination) {
           setError("Unauthorized redirect destination.");

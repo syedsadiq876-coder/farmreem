@@ -44,6 +44,7 @@ export async function POST(request: Request) {
     const setPasswordRedirect = "https://admin.farmreem.com/set-password";
 
     // 1. Generate single-use magiclink action_link via Supabase Admin Auth API
+    // Explicitly pass top-level redirect_to and options.redirect_to to support all GoTrue REST API versions
     const generateRes = await fetch(`${supabaseUrl}/auth/v1/admin/generate_link`, {
       method: "POST",
       headers: {
@@ -54,8 +55,10 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         type: "magiclink",
         email: email,
+        redirect_to: setPasswordRedirect,
         options: {
           redirectTo: setPasswordRedirect,
+          redirect_to: setPasswordRedirect,
         },
       }),
     });
