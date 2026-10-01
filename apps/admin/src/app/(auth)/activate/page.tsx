@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, ArrowRight, AlertCircle, ShieldAlert } from "lucide-react";
+import { ShieldCheck, ArrowRight, ShieldAlert } from "lucide-react";
 
 export default function ActivatePage() {
   const [targetUrl, setTargetUrl] = useState<string | null>(null);
@@ -22,14 +22,72 @@ export default function ActivatePage() {
       try {
         const parsed = new URL(rawTarget);
 
-        // Open-Redirect Protection: Strict domain, path, and redirect_to validation
-        const isAllowedDomain = parsed.hostname.endsWith(".supabase.co") || parsed.hostname === "supabase.co";
-        const isAllowedPath = parsed.pathname === "/auth/v1/verify";
-        const redirectToParam = parsed.searchParams.get("redirect_to") || "";
-        const isAllowedRedirect = redirectToParam.includes("/set-password");
+        // 1. Must use HTTPS protocol
+        if (parsed.protocol !== "https:") {
+          setError("Unauthorized protocol. Activation links must use HTTPS.");
+          return;
+        }
 
-        if (!isAllowedDomain || !isAllowedPath || !isAllowedRedirect) {
-          setError("Unauthorized or malformed activation link destination.");
+        // 2. Exact trusted Supabase project hostname (No arbitrary wildcard subdomains allowed)
+        const trustedSupabaseHost = "ndbgjfztnbvetecthyzl.supabase.co";
+        if (parsed.hostname !== trustedSupabaseHost) {
+          setError("Unauthorized activation link destination host.");
+          return;
+        }
+
+        // 3. Exact Supabase verification path
+        if (parsed.pathname !== "/auth/v1/verify") {
+          setError("Unauthorized activation link path.");
+          return;
+        }
+
+        // 4. Must contain token or verification parameter
+        const hasToken =
+          parsed.searchParams.has("token") ||
+          parsed.searchParams.has("token_hash") ||
+          parsed.searchParams.has("hashed_token") ||
+          parsed.searchParams.has("code");
+
+        if (!hasToken) {
+          setError("Malformed activation link. Verification token is missing.");
+          return;
+        }
+
+        // 5. Extract and validate redirect destination parameter (redirect_to, redirectTo, or redirect_url)
+        const rawRedirectParam =
+          parsed.searchParams.get("redirect_to") ||
+          parsed.searchParams.get("redirectTo") ||
+          parsed.searchParams.get("redirect_url") ||
+          "";
+
+        if (!rawRedirectParam) {
+          setError("Malformed activation link. Redirect destination is missing.");
+          return;
+        }
+
+        let redirectParsed: URL;
+        try {
+          const decodedRedirect = decodeURIComponent(rawRedirectParam);
+          if (decodedRedirect.startsWith("https://")) {
+            redirectParsed = new URL(decodedRedirect);
+          } else if (decodedRedirect.startsWith("/")) {
+            redirectParsed = new URL(decodedRedirect, "https://admin.farmreem.com");
+          } else {
+            redirectParsed = new URL(`https://${decodedRedirect}`);
+          }
+        } catch (e) {
+          setError("Invalid redirect parameter syntax.");
+          return;
+        }
+
+        // 6. Strict allowed final FarmReem destination
+        const isAllowedDestination =
+          redirectParsed.protocol === "https:" &&
+          redirectParsed.hostname === "admin.farmreem.com" &&
+          redirectParsed.pathname === "/set-password";
+
+        if (!isAllowedDestination) {
+          setError("Unauthorized redirect destination.");
           return;
         }
 
