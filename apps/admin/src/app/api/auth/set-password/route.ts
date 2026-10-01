@@ -3,7 +3,7 @@ import { getDatabaseConfig } from "@farmreem/database";
 
 export async function POST(request: Request) {
   try {
-    const { password, accessToken, tokenHash, code, type = "invite" } = await request.json();
+    const { password, accessToken, tokenHash, code, type = "recovery" } = await request.json();
 
     if (!password || password.length < 8) {
       return NextResponse.json(
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
           apikey: supabaseAnonKey,
         },
         body: JSON.stringify({
-          type: type || "invite",
+          type: type || "recovery",
           token_hash: tokenHash,
         }),
       });

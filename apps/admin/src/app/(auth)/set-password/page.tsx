@@ -37,14 +37,8 @@ export default function SetPasswordPage() {
       }
 
       // Check for type recovery vs invite
-      const type = hashParams.get("type") || queryParams.get("type") || "invite";
+      const type = hashParams.get("type") || queryParams.get("type") || "recovery";
       setInviteType(type);
-
-      if (type === "recovery") {
-        // Redirect existing users doing password reset to /reset-password
-        window.location.href = `/reset-password${window.location.search}${window.location.hash}`;
-        return;
-      }
 
       // Extract credentials from standard redirect (access_token), token_hash parameter, or PKCE (code)
       const token = hashParams.get("access_token") || queryParams.get("access_token");

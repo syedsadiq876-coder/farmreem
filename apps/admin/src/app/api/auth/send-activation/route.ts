@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${serviceKey}`,
       },
       body: JSON.stringify({
-        type: "magiclink",
+        type: "recovery",
         email: email,
         redirect_to: setPasswordRedirect,
         options: {
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       email,
-      linkTypeUsed: "scanner_safe_resend_magiclink",
+      linkTypeUsed: "scanner_safe_resend_recovery",
       intermediateRoute: "https://admin.farmreem.com/activate",
       redirectTo: setPasswordRedirect,
       message: `Scanner-safe activation email dispatched to ${email} via Resend`,
