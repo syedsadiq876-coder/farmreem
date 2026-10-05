@@ -5,108 +5,36 @@ import Link from "next/link";
 import { ShieldCheck, ArrowRight, ShieldAlert } from "lucide-react";
 
 export default function ActivatePage() {
-  const [targetUrl, setTargetUrl] = useState<string | null>(null);
+  const [opaqueId, setOpaqueId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const queryParams = new URLSearchParams(window.location.search);
-      const rawTarget = queryParams.get("target") || queryParams.get("url");
+      const errParam = queryParams.get("error");
+      const rawId = queryParams.get("id") || queryParams.get("nonce") || queryParams.get("token");
 
-      if (!rawTarget) {
+      if (errParam) {
+        if (errParam === "expired_or_invalid") {
+          setError("This activation link has expired or has already been used. Please contact your FarmReem administrator for a new link.");
+        } else if (errParam === "missing_id") {
+          setError("Activation link is missing required parameters. Please request a new activation link.");
+        } else {
+          setError("Unable to process account activation request. Please request a new activation link.");
+        }
+        return;
+      }
+
+      if (!rawId) {
         setError("Activation link is missing required parameters. Please request a new activation link.");
         return;
       }
 
-      try {
-        const parsed = new URL(rawTarget);
-
-        // 1. Must use HTTPS protocol
-        if (parsed.protocol !== "https:") {
-          setError("Unauthorized protocol. Activation links must use HTTPS.");
-          return;
-        }
-
-        // 2. Exact trusted Supabase project hostname (No arbitrary wildcard subdomains allowed)
-        const trustedSupabaseHost = "ndbgjfztnbvetecthyzl.supabase.co";
-        if (parsed.hostname !== trustedSupabaseHost) {
-          setError("Unauthorized activation link destination host.");
-          return;
-        }
-
-        // 3. Exact Supabase verification path
-        if (parsed.pathname !== "/auth/v1/verify") {
-          setError("Unauthorized activation link path.");
-          return;
-        }
-
-        // 4. Must contain token or verification parameter
-        const hasToken =
-          parsed.searchParams.has("token") ||
-          parsed.searchParams.has("token_hash") ||
-          parsed.searchParams.has("hashed_token") ||
-          parsed.searchParams.has("code");
-
-        if (!hasToken) {
-          setError("Malformed activation link. Verification token is missing.");
-          return;
-        }
-
-        // 5. Extract and validate redirect destination parameter (redirect_to, redirectTo, or redirect_url)
-        const rawRedirectParam =
-          parsed.searchParams.get("redirect_to") ||
-          parsed.searchParams.get("redirectTo") ||
-          parsed.searchParams.get("redirect_url") ||
-          "";
-
-        if (!rawRedirectParam) {
-          setError("Malformed activation link. Redirect destination is missing.");
-          return;
-        }
-
-        let redirectParsed: URL;
-        try {
-          const decodedRedirect = decodeURIComponent(rawRedirectParam);
-          if (decodedRedirect.startsWith("https://")) {
-            redirectParsed = new URL(decodedRedirect);
-          } else if (decodedRedirect.startsWith("/")) {
-            redirectParsed = new URL(decodedRedirect, "https://admin.farmreem.com");
-          } else {
-            redirectParsed = new URL(`https://${decodedRedirect}`);
-          }
-        } catch (e) {
-          setError("Invalid redirect parameter syntax.");
-          return;
-        }
-
-        // 6. Strict allowed final FarmReem destination
-        const normalizedPath = redirectParsed.pathname.replace(/\/$/, "");
-
-        const isAllowedDestination =
-          redirectParsed.protocol === "https:" &&
-          redirectParsed.hostname === "admin.farmreem.com" &&
-          normalizedPath === "/set-password";
-
-        if (!isAllowedDestination) {
-          setError("Unauthorized redirect destination.");
-          return;
-        }
-
-        // Store validated target URL (DO NOT redirect automatically)
-        setTargetUrl(parsed.toString());
-      } catch (err) {
-        setError("Invalid activation URL format.");
-      }
+      // Store opaque activation ID (DO NOT perform network fetch or token generation on page load)
+      setOpaqueId(rawId.trim());
     }
   }, []);
-
-  const handleContinue = () => {
-    if (!targetUrl) return;
-    setIsRedirecting(true);
-    // Explicit human interaction trigger: navigate to Supabase single-use verification URL
-    window.location.href = targetUrl;
-  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[#FAF7F2]">
@@ -153,25 +81,31 @@ export default function ActivatePage() {
               </Link>
             </div>
           ) : (
-            <div className="space-y-6 text-center">
+            <form
+              method="POST"
+              action="/api/auth/activate"
+              onSubmit={() => setIsSubmitting(true)}
+              className="space-y-6 text-center"
+            >
+              <input type="hidden" name="id" value={opaqueId || ""} />
+
               <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E8E1D3] text-left flex items-start gap-3">
                 <ShieldCheck className="w-5 h-5 text-[#C59B27] flex-shrink-0 mt-0.5" />
                 <div className="text-xs text-[#4F5E57] space-y-1">
                   <p className="font-bold text-[#0F2E23]">Human Verification Protection Active</p>
-                  <p>Click the button below to verify your activation token and proceed to create your FarmReem password.</p>
+                  <p>Click the button below to verify your activation request and proceed to create your FarmReem password.</p>
                 </div>
               </div>
 
               <button
-                type="button"
-                onClick={handleContinue}
-                disabled={isRedirecting || !targetUrl}
+                type="submit"
+                disabled={isSubmitting || !opaqueId}
                 className="w-full bg-[#0F2E23] hover:bg-[#184636] text-white font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                {isRedirecting ? "Verifying Activation Token..." : "Continue to Activate Account"}
+                {isSubmitting ? "Initiating Password Setup..." : "Continue to Activate Account"}
                 <ArrowRight className="w-4 h-4 text-[#C59B27]" />
               </button>
-            </div>
+            </form>
           )}
         </div>
       </div>

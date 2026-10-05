@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDatabaseConfig } from "@farmreem/database";
+import crypto from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -41,44 +42,46 @@ export async function POST(request: Request) {
       );
     }
 
-    const setPasswordRedirect = "https://admin.farmreem.com/set-password";
+    // 1. Generate a cryptographically random opaque activation token (64 hex characters)
+    const rawOpaqueToken = crypto.randomBytes(32).toString("hex");
 
-    // 1. Generate single-use magiclink action_link via Supabase Admin Auth API
-    // Explicitly pass top-level redirect_to and options.redirect_to to support all GoTrue REST API versions
-    const generateRes = await fetch(`${supabaseUrl}/auth/v1/admin/generate_link`, {
+    // 2. Compute SHA-256 hash for secure server-side storage
+    const tokenHash = crypto.createHash("sha256").update(rawOpaqueToken).digest("hex");
+
+    // 15-minute token lifespan
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+    // 3. Persist activation request in database (Status: PENDING)
+    const dbRes = await fetch(`${supabaseUrl}/rest/v1/activation_requests`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         apikey: serviceKey,
         Authorization: `Bearer ${serviceKey}`,
+        Prefer: "return=representation",
       },
       body: JSON.stringify({
-        type: "recovery",
+        token_hash: tokenHash,
         email: email,
-        redirect_to: setPasswordRedirect,
-        options: {
-          redirectTo: setPasswordRedirect,
-          redirect_to: setPasswordRedirect,
-        },
+        purpose: "FIRST_PASSWORD_SETUP",
+        status: "PENDING",
+        expires_at: expiresAt,
       }),
     });
 
-    const generateData = await generateRes.json();
-
-    if (!generateRes.ok || !generateData.action_link) {
-      console.error("[send-activation] Admin generate_link status:", generateRes.status);
+    if (!dbRes.ok) {
+      console.error("[send-activation] Database insert error status:", dbRes.status);
       return NextResponse.json(
-        { error: "Failed to generate single-use activation link from Supabase Auth." },
-        { status: generateRes.status || 500 }
+        { error: "Failed to initialize server-side activation request record." },
+        { status: 500 }
       );
     }
 
-    const actionLink = generateData.action_link;
+    // 4. Construct tokenless activation URL (Contains ONLY FarmReem domain + opaque ID)
+    // ABSOLUTELY NO Supabase action link, token, token_hash, or redirect_to is in the email!
+    const tokenlessActivationUrl = `https://admin.farmreem.com/activate?id=${rawOpaqueToken}`;
 
-    // 2. Wrap actionLink in scanner-safe intermediate /activate URL to prevent mail scanner token pre-consumption
-    const activationTargetUrl = `https://admin.farmreem.com/activate?target=${encodeURIComponent(actionLink)}`;
-
-    // 3. Dispatch custom branded email strictly via Resend API
+    // 5. Dispatch custom branded email strictly via Resend API
     const resendRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -100,13 +103,13 @@ export async function POST(request: Request) {
                 Your FarmReem staff account has been created. Use the secure link below to create your password and activate your account.
               </p>
               <div style="margin: 32px 0; text-align: center;">
-                <a href="${activationTargetUrl}" style="background-color: #0F2E23; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(15,46,35,0.2);">
+                <a href="${tokenlessActivationUrl}" style="background-color: #0F2E23; color: #ffffff; padding: 14px 28px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(15,46,35,0.2);">
                   Create Password & Activate Account
                 </a>
               </div>
               <hr style="border: none; border-top: 1px solid #E8E1D3; margin: 28px 0;" />
               <p style="color: #8C9A94; font-size: 11px; line-height: 1.5; margin: 0; text-align: center;">
-                This link is single-use and expires automatically. If you did not request account activation, please contact your FarmReem administrator.
+                This link is single-use and expires automatically in 15 minutes. If you did not request account activation, please contact your FarmReem administrator.
               </p>
             </div>
           </div>
@@ -127,10 +130,9 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       email,
-      linkTypeUsed: "scanner_safe_resend_recovery",
+      linkTypeUsed: "tokenless_opaque_nonce",
       intermediateRoute: "https://admin.farmreem.com/activate",
-      redirectTo: setPasswordRedirect,
-      message: `Scanner-safe activation email dispatched to ${email} via Resend`,
+      message: `Tokenless activation email dispatched to ${email} via Resend`,
     });
   } catch (error: any) {
     return NextResponse.json(
