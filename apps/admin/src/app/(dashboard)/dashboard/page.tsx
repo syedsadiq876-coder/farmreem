@@ -1,19 +1,24 @@
+"use client";
+
 import {
   ShieldCheck,
   Lock,
   Database,
   Layers,
   CheckCircle2,
-  AlertTriangle,
   Server,
   FileCheck,
 } from "lucide-react";
-import { PERMISSIONS_MATRIX, hasPermission } from "@farmreem/auth";
+import { hasPermission } from "@farmreem/auth";
+import { useUser } from "@/components/auth/UserContext";
 
 export default function AdminDashboardPage() {
+  const { user } = useUser();
+  const userName = user?.fullName || "Syed Sadiq";
+  const userRole = user?.role || "SUPER_ADMIN";
+
   const superAdminCrmCreate = hasPermission("SUPER_ADMIN", "crm", "CREATE");
   const driverPricingEdit = hasPermission("DRIVER", "pricing", "EDIT");
-  const salesPersonAuditDelete = hasPermission("SALESPERSON", "audit", "DELETE");
   const financeCtrlInvoiceApprove = hasPermission("FINANCE_CONTROLLER", "invoices", "APPROVE");
 
   return (
@@ -27,15 +32,15 @@ export default function AdminDashboardPage() {
               <span>Phase 1 Platform Foundation Active</span>
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight mt-1 text-white">
-              FarmReem OS — Operational Dashboard
+              Welcome, {userName}
             </h1>
             <p className="text-xs text-[#FAF7F2]/80 mt-1 max-w-2xl">
-              Internal staff administration portal operating on <code className="text-[#C59B27] font-semibold">admin.farmreem.com</code>. Public marketing surface (<code className="text-emerald-300">www.farmreem.com</code>) remains 100% frozen & isolated.
+              Here’s your FarmReem operations overview. Internal staff administration portal operating on <code className="text-[#C59B27] font-semibold">admin.farmreem.com</code>. Public marketing surface (<code className="text-emerald-300">www.farmreem.com</code>) remains 100% frozen & isolated.
             </p>
           </div>
           <div className="bg-[#184636] px-4 py-2 rounded-2xl border border-emerald-600/30 text-right">
             <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider block">Security Protocol</span>
-            <span className="text-xs font-extrabold text-emerald-400">NOINDEX · RBAC Active</span>
+            <span className="text-xs font-extrabold text-emerald-400">NOINDEX · {userRole} Active</span>
           </div>
         </div>
       </div>
@@ -54,9 +59,9 @@ export default function AdminDashboardPage() {
             </span>
           </div>
           <div>
-            <h3 className="font-extrabold text-base text-[#0F2E23]">Auth & Trust Domain</h3>
+            <h3 className="font-extrabold text-base text-[#0F2E23]">Auth & Identity Domain</h3>
             <p className="text-xs text-[#4F5E57] mt-1">
-              Cookies scoped to <code className="bg-[#FAF7F2] px-1 py-0.5 rounded text-[11px]">__Host-farmreem-admin-session</code>. Zero wildcard cookie leakage across subdomains.
+              Cookies scoped to <code className="bg-[#FAF7F2] px-1 py-0.5 rounded text-[11px]">__Host-farmreem-admin-session</code>. Dynamic identity resolved for <strong className="text-[#0F2E23]">{userName}</strong>.
             </p>
           </div>
           <div className="pt-3 border-t border-[#E8E1D3] text-xs space-y-1.5 font-medium text-[#0F2E23]">
@@ -198,7 +203,7 @@ export default function AdminDashboardPage() {
 
       </div>
 
-      {/* Phase 1 Verification Technical Summary */}
+      {/* System Parameters Summary */}
       <div className="bg-white rounded-3xl border border-[#E8E1D3] p-6 shadow-sm space-y-4">
         <h3 className="font-extrabold text-lg text-[#0F2E23]">Phase 1 System Verification Parameters</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
@@ -212,7 +217,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E8E1D3]">
             <span className="font-bold text-[#4F5E57] block uppercase text-[10px]">Deployment Target</span>
-            <span className="font-extrabold text-[#0F2E23] text-sm">Vercel Staging / Preview</span>
+            <span className="font-extrabold text-[#0F2E23] text-sm">Vercel Production</span>
           </div>
           <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E8E1D3]">
             <span className="font-bold text-[#4F5E57] block uppercase text-[10px]">Public Site Status</span>

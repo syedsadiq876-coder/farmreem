@@ -44,7 +44,7 @@ const navItems: NavItem[] = [
   { name: "Invoices", href: "/invoices", icon: Receipt },
   { name: "Payments", href: "/payments", icon: CreditCard },
   { name: "Support Desk", href: "/support", icon: LifeBuoy },
-  { name: "Staff Users", href: "/users", icon: UserCheck },
+  { name: "Staff Users", href: "/staff", icon: UserCheck },
   { name: "Audit Log", href: "/audit", icon: ShieldCheck },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
@@ -72,7 +72,7 @@ export default function AdminSidebar() {
       {/* Nav List */}
       <nav className="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(`${item.href}`));
           const Icon = item.icon;
 
           return (
@@ -81,7 +81,7 @@ export default function AdminSidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                 isActive
-                  ? "bg-[#C59B27] text-[#0F2E23] shadow-md"
+                  ? "bg-[#C59B27] text-[#0F2E23] shadow-md font-extrabold"
                   : "text-[#FAF7F2]/70 hover:bg-[#184636] hover:text-white"
               }`}
             >
