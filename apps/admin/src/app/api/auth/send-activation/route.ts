@@ -70,9 +70,10 @@ export async function POST(request: Request) {
     });
 
     if (!dbRes.ok) {
-      console.error("[send-activation] Database insert error status:", dbRes.status);
+      const dbData = await dbRes.json().catch(() => ({}));
+      console.error("[send-activation] Database insert error status:", dbRes.status, dbData);
       return NextResponse.json(
-        { error: "Failed to initialize server-side activation request record." },
+        { error: dbData.message || dbData.details || "Failed to initialize server-side activation request record." },
         { status: 500 }
       );
     }
