@@ -1,44 +1,35 @@
 import { NextResponse } from "next/server";
 import { getDatabaseConfig } from "@farmreem/database";
-
+import { Client } from "pg";
 
 export async function GET() {
   try {
     const { supabaseUrl, supabaseAnonKey, supabaseServiceKey } = getDatabaseConfig();
 
-    const envKeys = Object.keys(process.env).filter(
-      (k) =>
-        k.includes("SUPABASE") ||
-        k.includes("POSTGRES") ||
-        k.includes("DATABASE") ||
-        k.includes("VERCEL") ||
-        k.includes("DB")
-    );
+    const dbUrl =
+      process.env.DATABASE_URL ||
+      process.env.POSTGRES_URL ||
+      process.env.SUPABASE_DB_URL ||
+      process.env.POSTGRES_URL_NON_POOLING;
 
-    const hasServiceKey = Boolean(supabaseServiceKey && !supabaseServiceKey.includes("placeholder"));
-    const hasDbUrl = Boolean(process.env.DATABASE_URL || process.env.POSTGRES_URL);
-
-    // Try executing SQL via Supabase REST RPC or pg if possible
-    let migrationStatus = "NOT_EXECUTED";
-    let migrationError = null;
-
-    if (hasServiceKey) {
-      // 1. Try querying if suppliers table already exists
-      const tableCheck = await fetch(`${supabaseUrl}/rest/v1/suppliers?select=id&limit=1`, {
-        headers: {
-          apikey: supabaseAnonKey,
-          Authorization: `Bearer ${supabaseServiceKey}`,
-        },
+    if (!dbUrl) {
+      return NextResponse.json({
+        status: "NO_DB_URL",
+        message: "No DATABASE_URL or POSTGRES_URL found in process.env",
+        availableKeys: Object.keys(process.env).filter(
+          (k) => k.includes("POSTGRES") || k.includes("DATABASE") || k.includes("SUPABASE")
+        ),
       });
+    }
 
-      if (tableCheck.ok) {
-        migrationStatus = "ALREADY_EXISTS";
-      } else {
-        const errText = await tableCheck.text();
-        migrationError = errText;
+    const client = new Client({
+      connectionString: dbUrl,
+      ssl: { rejectUnauthorized: false },
+    });
 
-        // Try postgres SQL API if Management/SQL key is present
-        const sqlPayload = `
+    await client.connect();
+
+    const migrationSql = `
 CREATE SEQUENCE IF NOT EXISTS public.supplier_code_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO CYCLE;
 
 CREATE OR REPLACE FUNCTION public.generate_supplier_code()
@@ -314,36 +305,16 @@ DO $$ BEGIN
 EXCEPTION WHEN OTHERS THEN NULL; END $$;
 `;
 
-        // Try posting to Supabase SQL endpoint if available
-        const sqlRes = await fetch(`${supabaseUrl}/rest/v1/rpc/exec_sql`, {
-          method: "POST",
-          headers: {
-            apikey: supabaseAnonKey,
-            Authorization: `Bearer ${supabaseServiceKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query: sqlPayload }),
-        });
-
-        if (sqlRes.ok) {
-          migrationStatus = "SUCCESS_RPC";
-        } else {
-          migrationError = `RPC exec_sql status: ${sqlRes.status} ${await sqlRes.text()}`;
-        }
-      }
-    }
+    await client.query(migrationSql);
+    await client.end();
 
     return NextResponse.json({
-      status: "COMPLETED",
-      hasServiceKey,
-      hasDbUrl,
-      envKeys,
-      migrationStatus,
-      migrationError,
+      status: "SUCCESS_PG_MIGRATION",
+      message: "Suppliers module tables, sequence, triggers, functions, partial indexes, and RLS policies created via PG client.",
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Failed migration route." },
+      { error: error.message || "Failed PG migration execution." },
       { status: 500 }
     );
   }
