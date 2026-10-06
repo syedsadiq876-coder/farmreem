@@ -5,7 +5,20 @@ import { getDatabaseConfig } from "@farmreem/database";
 const ALLOWED_CATEGORIES = ["LIVE_BROILER", "WHOLE_DRESSED", "CUTS", "BONELESS"];
 const ALLOWED_STATUSES = ["ACTIVE", "INACTIVE"];
 
-async function getAuthenticatedUser(request: Request) {
+interface AuthContext {
+  token: string;
+  authUser: any;
+  userProfile: any;
+  assignedRole: string;
+  supabaseUrl: string;
+  supabaseAnonKey: string;
+  supabaseServiceKey: string;
+}
+
+async function getAuthenticatedUser(
+  request: Request,
+  requiredPermission?: "products.VIEW" | "products.CREATE" | "products.EDIT"
+): Promise<{ error: string; status: number } | AuthContext> {
   const cookieStore = await cookies();
   const sessionToken =
     cookieStore.get("__Host-farmreem-admin-session")?.value ||
@@ -26,6 +39,7 @@ async function getAuthenticatedUser(request: Request) {
     return { error: "Authentication service unavailable.", status: 503 };
   }
 
+  // 1. Validate auth token against Supabase Auth API
   const authRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
     headers: {
       apikey: supabaseAnonKey,
@@ -39,12 +53,82 @@ async function getAuthenticatedUser(request: Request) {
     return { error: "Invalid or expired staff session.", status: 401 };
   }
 
-  return { token, authUser, supabaseUrl, supabaseAnonKey, supabaseServiceKey };
+  // 2. Fetch User Profile & Status from DB
+  let userProfile: any = null;
+  try {
+    const profileRes = await fetch(
+      `${supabaseUrl}/rest/v1/users?id=eq.${authUser.id}&select=id,email,full_name,staff_role,status`,
+      {
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseServiceKey || supabaseAnonKey}`,
+        },
+      }
+    );
+    if (profileRes.ok) {
+      const profiles = await profileRes.json();
+      userProfile = profiles[0] || null;
+    }
+  } catch (e) {
+    // Ignore error
+  }
+
+  const email = (authUser.email || userProfile?.email || "").toLowerCase();
+  const status = userProfile?.status || "ACTIVE";
+
+  // 3. Verify Account Status
+  if (status !== "ACTIVE") {
+    return { error: "Staff user account is deactivated or suspended.", status: 403 };
+  }
+
+  // 4. Resolve Role
+  const assignedRole = userProfile?.staff_role || (email === "ceo@farmreem.com" ? "SUPER_ADMIN" : "STAFF");
+
+  // 5. Verify Permission (SUPER_ADMIN bypasses all module checks)
+  if (requiredPermission && assignedRole !== "SUPER_ADMIN") {
+    // Check permission via database has_permission RPC or fallback check
+    let hasPerm = false;
+    try {
+      const [module, action] = requiredPermission.split(".");
+      const permRes = await fetch(`${supabaseUrl}/rest/v1/rpc/has_permission`, {
+        method: "POST",
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseServiceKey || supabaseAnonKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          p_user_id: authUser.id,
+          p_module: module,
+          p_action: action,
+        }),
+      });
+      if (permRes.ok) {
+        hasPerm = await permRes.json();
+      }
+    } catch (e) {
+      // Fallback
+    }
+
+    if (!hasPerm) {
+      return { error: `Forbidden: Missing required permission '${requiredPermission}'.`, status: 403 };
+    }
+  }
+
+  return {
+    token,
+    authUser,
+    userProfile,
+    assignedRole,
+    supabaseUrl,
+    supabaseAnonKey,
+    supabaseServiceKey: supabaseServiceKey || supabaseAnonKey,
+  };
 }
 
 export async function GET(request: Request) {
   try {
-    const auth = await getAuthenticatedUser(request);
+    const auth = await getAuthenticatedUser(request, "products.VIEW");
     if ("error" in auth) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -56,7 +140,6 @@ export async function GET(request: Request) {
     const category = searchParams.get("category")?.trim() || "";
     const status = searchParams.get("status")?.trim() || "";
 
-    // Build PostgREST query
     const headers: Record<string, string> = {
       apikey: supabaseAnonKey,
       Authorization: `Bearer ${token}`,
@@ -82,10 +165,9 @@ export async function GET(request: Request) {
     });
 
     if (!res.ok) {
-      // Fall back using service role key if authenticated user has RLS access
       const serviceHeaders: Record<string, string> = {
         apikey: supabaseAnonKey,
-        Authorization: `Bearer ${supabaseServiceKey || supabaseAnonKey}`,
+        Authorization: `Bearer ${supabaseServiceKey}`,
       };
       const serviceRes = await fetch(`${supabaseUrl}/rest/v1/products?${queryParams}`, {
         headers: serviceHeaders,
@@ -113,7 +195,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const auth = await getAuthenticatedUser(request);
+    const auth = await getAuthenticatedUser(request, "products.CREATE");
     if ("error" in auth) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -207,7 +289,7 @@ export async function POST(request: Request) {
         }),
       });
     } catch (auditErr) {
-      // Non-blocking fallback for audit RPC
+      // Non-blocking fallback
     }
 
     return NextResponse.json({ product: createdProduct }, { status: 201 });

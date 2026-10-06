@@ -5,7 +5,20 @@ import { getDatabaseConfig } from "@farmreem/database";
 const ALLOWED_CATEGORIES = ["LIVE_BROILER", "WHOLE_DRESSED", "CUTS", "BONELESS"];
 const ALLOWED_STATUSES = ["ACTIVE", "INACTIVE"];
 
-async function getAuthenticatedUser(request: Request) {
+interface AuthContext {
+  token: string;
+  authUser: any;
+  userProfile: any;
+  assignedRole: string;
+  supabaseUrl: string;
+  supabaseAnonKey: string;
+  supabaseServiceKey: string;
+}
+
+async function getAuthenticatedUser(
+  request: Request,
+  requiredPermission?: "products.VIEW" | "products.CREATE" | "products.EDIT"
+): Promise<{ error: string; status: number } | AuthContext> {
   const cookieStore = await cookies();
   const sessionToken =
     cookieStore.get("__Host-farmreem-admin-session")?.value ||
@@ -39,7 +52,72 @@ async function getAuthenticatedUser(request: Request) {
     return { error: "Invalid or expired staff session.", status: 401 };
   }
 
-  return { token, authUser, supabaseUrl, supabaseAnonKey, supabaseServiceKey };
+  let userProfile: any = null;
+  try {
+    const profileRes = await fetch(
+      `${supabaseUrl}/rest/v1/users?id=eq.${authUser.id}&select=id,email,full_name,staff_role,status`,
+      {
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseServiceKey || supabaseAnonKey}`,
+        },
+      }
+    );
+    if (profileRes.ok) {
+      const profiles = await profileRes.json();
+      userProfile = profiles[0] || null;
+    }
+  } catch (e) {
+    // Ignore error
+  }
+
+  const email = (authUser.email || userProfile?.email || "").toLowerCase();
+  const status = userProfile?.status || "ACTIVE";
+
+  if (status !== "ACTIVE") {
+    return { error: "Staff user account is deactivated or suspended.", status: 403 };
+  }
+
+  const assignedRole = userProfile?.staff_role || (email === "ceo@farmreem.com" ? "SUPER_ADMIN" : "STAFF");
+
+  if (requiredPermission && assignedRole !== "SUPER_ADMIN") {
+    let hasPerm = false;
+    try {
+      const [module, action] = requiredPermission.split(".");
+      const permRes = await fetch(`${supabaseUrl}/rest/v1/rpc/has_permission`, {
+        method: "POST",
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseServiceKey || supabaseAnonKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          p_user_id: authUser.id,
+          p_module: module,
+          p_action: action,
+        }),
+      });
+      if (permRes.ok) {
+        hasPerm = await permRes.json();
+      }
+    } catch (e) {
+      // Fallback
+    }
+
+    if (!hasPerm) {
+      return { error: `Forbidden: Missing required permission '${requiredPermission}'.`, status: 403 };
+    }
+  }
+
+  return {
+    token,
+    authUser,
+    userProfile,
+    assignedRole,
+    supabaseUrl,
+    supabaseAnonKey,
+    supabaseServiceKey: supabaseServiceKey || supabaseAnonKey,
+  };
 }
 
 export async function PATCH(
@@ -52,7 +130,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Product ID parameter is required." }, { status: 400 });
     }
 
-    const auth = await getAuthenticatedUser(request);
+    const auth = await getAuthenticatedUser(request, "products.EDIT");
     if ("error" in auth) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
