@@ -25,15 +25,19 @@ export async function GET() {
 
     const qData = qRes.ok ? await qRes.json() : await qRes.text();
     const itemsData = itemsRes.ok ? await itemsRes.json() : await itemsRes.text();
-    const tablesExist = qRes.ok && itemsRes.ok;
+
+    // Check env keys available
+    const hasDbUrl = !!(process.env.DATABASE_URL || process.env.POSTGRES_URL);
 
     return NextResponse.json({
       status: "SUCCESS",
-      tablesExist,
+      tablesExist: qRes.ok && itemsRes.ok,
       qStatus: qRes.status,
       qData,
       itemsStatus: itemsRes.status,
       itemsData,
+      hasDbUrl,
+      envKeys: Object.keys(process.env).filter((k) => k.includes("SUPABASE") || k.includes("POSTGRES") || k.includes("DATABASE")),
     });
   } catch (error: any) {
     return NextResponse.json(
