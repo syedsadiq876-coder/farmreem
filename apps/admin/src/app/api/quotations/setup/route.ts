@@ -23,15 +23,17 @@ export async function GET() {
       headers: serviceHeaders,
     });
 
+    const qData = qRes.ok ? await qRes.json() : await qRes.text();
+    const itemsData = itemsRes.ok ? await itemsRes.json() : await itemsRes.text();
     const tablesExist = qRes.ok && itemsRes.ok;
-    const quotations = qRes.ok ? await qRes.json() : [];
-    const items = itemsRes.ok ? await itemsRes.json() : [];
 
     return NextResponse.json({
       status: "SUCCESS",
       tablesExist,
-      quotationsCount: quotations.length,
-      itemsCount: items.length,
+      qStatus: qRes.status,
+      qData,
+      itemsStatus: itemsRes.status,
+      itemsData,
     });
   } catch (error: any) {
     return NextResponse.json(
