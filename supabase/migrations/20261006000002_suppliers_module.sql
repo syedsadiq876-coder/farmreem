@@ -65,6 +65,7 @@ END $$;
 
 -- 2. Concurrency-Safe Supplier Code Sequence & Helper Function
 CREATE SEQUENCE IF NOT EXISTS public.supplier_code_seq START WITH 1 INCREMENT BY 1;
+REVOKE ALL ON SEQUENCE public.supplier_code_seq FROM PUBLIC, anon, authenticated;
 
 CREATE OR REPLACE FUNCTION public.generate_supplier_code()
 RETURNS TEXT AS $$
@@ -72,6 +73,8 @@ BEGIN
   RETURN 'FR-SUPP-' || LPAD(nextval('public.supplier_code_seq')::text, 6, '0');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.generate_supplier_code() FROM PUBLIC, anon, authenticated;
 
 -- 3. Core Tables Creation
 
@@ -94,6 +97,24 @@ CREATE TABLE IF NOT EXISTS public.suppliers (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- BEFORE INSERT Trigger to Auto-Generate Supplier Code
+CREATE OR REPLACE FUNCTION public.suppliers_set_supplier_code()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.supplier_code IS NULL OR TRIM(NEW.supplier_code) = '' THEN
+    NEW.supplier_code := public.generate_supplier_code();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.suppliers_set_supplier_code() FROM PUBLIC, anon, authenticated;
+
+DROP TRIGGER IF EXISTS trg_suppliers_set_supplier_code ON public.suppliers;
+CREATE TRIGGER trg_suppliers_set_supplier_code
+BEFORE INSERT ON public.suppliers
+FOR EACH ROW EXECUTE FUNCTION public.suppliers_set_supplier_code();
 
 -- Supplier Contacts Table (Child Entity - ON DELETE RESTRICT)
 CREATE TABLE IF NOT EXISTS public.supplier_contacts (
@@ -146,7 +167,9 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+$$ LANGUAGE plpgsql SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.prevent_supplier_code_update() FROM PUBLIC, anon, authenticated;
 
 DROP TRIGGER IF EXISTS trg_prevent_supplier_code_update ON public.suppliers;
 CREATE TRIGGER trg_prevent_supplier_code_update
@@ -154,14 +177,24 @@ BEFORE UPDATE ON public.suppliers
 FOR EACH ROW EXECUTE FUNCTION public.prevent_supplier_code_update();
 
 -- 5. Automatic Updated_At Triggers
+CREATE OR REPLACE FUNCTION public.set_suppliers_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.set_suppliers_updated_at() FROM PUBLIC, anon, authenticated;
+
 DROP TRIGGER IF EXISTS trg_suppliers_updated_at ON public.suppliers;
-CREATE TRIGGER trg_suppliers_updated_at BEFORE UPDATE ON public.suppliers FOR EACH ROW EXECUTE FUNCTION public.set_customers_updated_at();
+CREATE TRIGGER trg_suppliers_updated_at BEFORE UPDATE ON public.suppliers FOR EACH ROW EXECUTE FUNCTION public.set_suppliers_updated_at();
 
 DROP TRIGGER IF EXISTS trg_supplier_contacts_updated_at ON public.supplier_contacts;
-CREATE TRIGGER trg_supplier_contacts_updated_at BEFORE UPDATE ON public.supplier_contacts FOR EACH ROW EXECUTE FUNCTION public.set_customers_updated_at();
+CREATE TRIGGER trg_supplier_contacts_updated_at BEFORE UPDATE ON public.supplier_contacts FOR EACH ROW EXECUTE FUNCTION public.set_suppliers_updated_at();
 
 DROP TRIGGER IF EXISTS trg_supplier_addresses_updated_at ON public.supplier_addresses;
-CREATE TRIGGER trg_supplier_addresses_updated_at BEFORE UPDATE ON public.supplier_addresses FOR EACH ROW EXECUTE FUNCTION public.set_customers_updated_at();
+CREATE TRIGGER trg_supplier_addresses_updated_at BEFORE UPDATE ON public.supplier_addresses FOR EACH ROW EXECUTE FUNCTION public.set_suppliers_updated_at();
 
 -- 6. Partial & Performance Indexes
 CREATE UNIQUE INDEX IF NOT EXISTS idx_suppliers_unique_gstin ON public.suppliers (UPPER(TRIM(gstin))) WHERE gstin IS NOT NULL AND status != 'INACTIVE';
@@ -183,16 +216,37 @@ CREATE OR REPLACE FUNCTION public.set_primary_supplier_contact(
   p_contact_id UUID
 )
 RETURNS VOID AS $$
+DECLARE
+  v_belongs BOOLEAN;
 BEGIN
+  -- 1. Inside-Function RBAC Permission Check
+  IF NOT (public.has_permission(auth.uid(), 'suppliers_farms', 'EDIT') OR public.has_permission(auth.uid(), 'suppliers', 'EDIT')) THEN
+    RAISE EXCEPTION 'Forbidden: User does not have permission to edit supplier contacts.';
+  END IF;
+
+  -- 2. Verify Child Contact Belongs to Supplier
+  SELECT EXISTS (
+    SELECT 1 FROM public.supplier_contacts 
+    WHERE id = p_contact_id AND supplier_id = p_supplier_id
+  ) INTO v_belongs;
+
+  IF NOT v_belongs THEN
+    RAISE EXCEPTION 'Contact ID % does not belong to Supplier ID %.', p_contact_id, p_supplier_id;
+  END IF;
+
+  -- 3. Atomic Primary Swap
   UPDATE public.supplier_contacts
-  SET is_primary = false
+  SET is_primary = false, updated_at = NOW()
   WHERE supplier_id = p_supplier_id AND is_primary = true;
 
   UPDATE public.supplier_contacts
-  SET is_primary = true
+  SET is_primary = true, status = 'ACTIVE', updated_at = NOW()
   WHERE id = p_contact_id AND supplier_id = p_supplier_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.set_primary_supplier_contact(UUID, UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.set_primary_supplier_contact(UUID, UUID) TO authenticated, service_role;
 
 -- Transactional Primary Location/Address Function
 CREATE OR REPLACE FUNCTION public.set_primary_supplier_address(
@@ -202,28 +256,53 @@ CREATE OR REPLACE FUNCTION public.set_primary_supplier_address(
   p_is_billing BOOLEAN
 )
 RETURNS VOID AS $$
+DECLARE
+  v_address_type supplier_address_type_enum;
 BEGIN
+  -- 1. Inside-Function RBAC Permission Check
+  IF NOT (public.has_permission(auth.uid(), 'suppliers_farms', 'EDIT') OR public.has_permission(auth.uid(), 'suppliers', 'EDIT')) THEN
+    RAISE EXCEPTION 'Forbidden: User does not have permission to edit supplier locations.';
+  END IF;
+
+  -- 2. Verify Child Address Belongs to Supplier & Fetch Type
+  SELECT address_type INTO v_address_type
+  FROM public.supplier_addresses
+  WHERE id = p_address_id AND supplier_id = p_supplier_id;
+
+  IF v_address_type IS NULL THEN
+    RAISE EXCEPTION 'Address ID % does not belong to Supplier ID %.', p_address_id, p_supplier_id;
+  END IF;
+
+  -- 3. Address Type Consistency Check
+  IF p_is_pickup AND v_address_type = 'BILLING' THEN
+    RAISE EXCEPTION 'A BILLING-only address cannot be set as primary pickup source.';
+  END IF;
+
+  -- 4. Atomic Swaps
   IF p_is_pickup THEN
     UPDATE public.supplier_addresses
-    SET is_primary_pickup = false
+    SET is_primary_pickup = false, updated_at = NOW()
     WHERE supplier_id = p_supplier_id AND is_primary_pickup = true;
 
     UPDATE public.supplier_addresses
-    SET is_primary_pickup = true
+    SET is_primary_pickup = true, status = 'ACTIVE', updated_at = NOW()
     WHERE id = p_address_id AND supplier_id = p_supplier_id;
   END IF;
 
   IF p_is_billing THEN
     UPDATE public.supplier_addresses
-    SET is_primary_billing = false
+    SET is_primary_billing = false, updated_at = NOW()
     WHERE supplier_id = p_supplier_id AND is_primary_billing = true;
 
     UPDATE public.supplier_addresses
-    SET is_primary_billing = true
+    SET is_primary_billing = true, status = 'ACTIVE', updated_at = NOW()
     WHERE id = p_address_id AND supplier_id = p_supplier_id;
   END IF;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
+
+REVOKE EXECUTE ON FUNCTION public.set_primary_supplier_address(UUID, UUID, BOOLEAN, BOOLEAN) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.set_primary_supplier_address(UUID, UUID, BOOLEAN, BOOLEAN) TO authenticated, service_role;
 
 -- 8. Row-Level Security (RLS) Configuration
 ALTER TABLE public.suppliers ENABLE ROW LEVEL SECURITY;
@@ -264,3 +343,4 @@ CREATE POLICY supplier_addresses_update ON public.supplier_addresses FOR UPDATE 
 REVOKE DELETE ON public.suppliers FROM authenticated, anon;
 REVOKE DELETE ON public.supplier_contacts FROM authenticated, anon;
 REVOKE DELETE ON public.supplier_addresses FROM authenticated, anon;
+
