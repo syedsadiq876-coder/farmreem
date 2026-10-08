@@ -1,5 +1,5 @@
 -- =============================================================================
--- FARMREEM PLATFORM MIGRATION — PROCUREMENT MODULE V1
+-- FARMREEM PLATFORM MIGRATION — PROCUREMENT MODULE V1 (HOTFIXED REVISION)
 -- Version: 20261008000001_procurement_module.sql
 -- =============================================================================
 
@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS public.procurement_requirements (
   uom_snapshot VARCHAR(50) NOT NULL,
   target_fulfillment_date TIMESTAMPTZ NOT NULL,
   status procurement_requirement_status_enum NOT NULL DEFAULT 'PENDING',
-  created_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
-  updated_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+  created_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL, -- Intentionally SET NULL for staff user metadata
+  updated_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL, -- Intentionally SET NULL for staff user metadata
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -104,8 +104,8 @@ CREATE TABLE IF NOT EXISTS public.supplier_allocations (
   negotiated_unit_cost NUMERIC(12, 4) NOT NULL CHECK (negotiated_unit_cost >= 0),
   expected_pickup_date TIMESTAMPTZ NOT NULL,
   status allocation_status_enum NOT NULL DEFAULT 'ALLOCATED',
-  created_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
-  updated_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+  created_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL, -- Intentionally SET NULL for staff user metadata
+  updated_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL, -- Intentionally SET NULL for staff user metadata
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -126,16 +126,16 @@ CREATE TABLE IF NOT EXISTS public.purchase_orders (
   currency VARCHAR(3) NOT NULL DEFAULT 'INR',
   subtotal_amount NUMERIC(14, 4) NOT NULL DEFAULT 0.0000 CHECK (subtotal_amount >= 0),
   status purchase_order_status_enum NOT NULL DEFAULT 'DRAFT',
-  approved_by UUID NULL REFERENCES public.users(id) ON DELETE RESTRICT,
+  approved_by UUID NULL REFERENCES public.users(id) ON DELETE RESTRICT, -- RESTRICT to preserve accountability
   approved_at TIMESTAMPTZ NULL,
   self_approval_override_reason TEXT NULL,
   issued_at TIMESTAMPTZ NULL,
-  cancelled_by UUID NULL REFERENCES public.users(id) ON DELETE RESTRICT,
+  cancelled_by UUID NULL REFERENCES public.users(id) ON DELETE RESTRICT, -- RESTRICT to preserve accountability
   cancellation_reason TEXT NULL,
   cancelled_at TIMESTAMPTZ NULL,
   notes TEXT NULL,
-  created_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
-  updated_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL,
+  created_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL, -- Intentionally SET NULL for staff user metadata
+  updated_by UUID NULL REFERENCES public.users(id) ON DELETE SET NULL, -- Intentionally SET NULL for staff user metadata
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -168,24 +168,26 @@ CREATE TABLE IF NOT EXISTS public.po_status_history (
   from_status purchase_order_status_enum NULL,
   to_status purchase_order_status_enum NOT NULL,
   change_reason TEXT NULL,
-  performed_by UUID NOT NULL REFERENCES public.users(id) ON DELETE RESTRICT,
+  performed_by UUID NOT NULL REFERENCES public.users(id) ON DELETE RESTRICT, -- RESTRICT to preserve accountability
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- 5. Hardened Row Level Security (RLS) & Delete Privilege Revocation
+-- 5. Hardened Row Level Security (RLS) & Direct Table Write Revocation
 ALTER TABLE public.procurement_requirements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.supplier_allocations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.purchase_orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.purchase_order_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.po_status_history ENABLE ROW LEVEL SECURITY;
 
-REVOKE DELETE ON public.procurement_requirements FROM PUBLIC, anon, authenticated;
-REVOKE DELETE ON public.supplier_allocations FROM PUBLIC, anon, authenticated;
-REVOKE DELETE ON public.purchase_orders FROM PUBLIC, anon, authenticated;
-REVOKE DELETE ON public.purchase_order_items FROM PUBLIC, anon, authenticated;
-REVOKE DELETE ON public.po_status_history FROM PUBLIC, anon, authenticated;
+-- Revoke all direct write privileges (INSERT, UPDATE, DELETE) for non-superusers.
+-- Mutations must execute through hardened SECURITY DEFINER RPC functions.
+REVOKE INSERT, UPDATE, DELETE ON public.procurement_requirements FROM PUBLIC, anon, authenticated;
+REVOKE INSERT, UPDATE, DELETE ON public.supplier_allocations FROM PUBLIC, anon, authenticated;
+REVOKE INSERT, UPDATE, DELETE ON public.purchase_orders FROM PUBLIC, anon, authenticated;
+REVOKE INSERT, UPDATE, DELETE ON public.purchase_order_items FROM PUBLIC, anon, authenticated;
+REVOKE INSERT, UPDATE, DELETE ON public.po_status_history FROM PUBLIC, anon, authenticated;
 
--- RLS Policies
+-- RLS SELECT Policies
 DROP POLICY IF EXISTS p_procurement_req_view ON public.procurement_requirements;
 CREATE POLICY p_procurement_req_view ON public.procurement_requirements
   FOR SELECT TO authenticated
@@ -428,7 +430,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 REVOKE EXECUTE ON FUNCTION public.create_supplier_allocation(UUID, UUID, UUID, NUMERIC, NUMERIC, TIMESTAMPTZ) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.create_supplier_allocation(UUID, UUID, UUID, NUMERIC, NUMERIC, TIMESTAMPTZ) TO authenticated;
 
--- C. Allocation Release/Cancellation Function
+-- C. Allocation Release/Cancellation Function (Fail-Closed Negative Balance Protection)
 CREATE OR REPLACE FUNCTION public.cancel_supplier_allocation(
   p_allocation_id UUID,
   p_reason TEXT
@@ -454,6 +456,7 @@ BEGIN
     RAISE EXCEPTION 'Cancellation reason is mandatory.';
   END IF;
 
+  -- Lock Allocation Record FOR UPDATE
   SELECT id, procurement_requirement_id, allocated_quantity, status
   INTO v_alloc
   FROM public.supplier_allocations
@@ -468,6 +471,7 @@ BEGIN
     RAISE EXCEPTION 'Cannot release allocation attached to an active Purchase Order. Cancel the Purchase Order first.';
   END IF;
 
+  -- Lock Parent Requirement FOR UPDATE
   SELECT id, required_quantity, allocated_quantity, status
   INTO v_req
   FROM public.procurement_requirements
@@ -475,10 +479,15 @@ BEGIN
   FOR UPDATE;
 
   v_new_allocated_qty := v_req.allocated_quantity - v_alloc.allocated_quantity;
-  IF v_new_allocated_qty < 0 THEN v_new_allocated_qty := 0; END IF;
+
+  -- Fail-Closed Guard against Negative Allocation Balance
+  IF v_new_allocated_qty < 0 THEN
+    RAISE EXCEPTION 'Negative allocation balance detected for requirement %: current %, releasing %. Transaction aborted.', 
+      v_req.id, v_req.allocated_quantity, v_alloc.allocated_quantity;
+  END IF;
 
   v_new_req_status := CASE 
-    WHEN v_new_allocated_qty <= 0 THEN 'PENDING'::procurement_requirement_status_enum
+    WHEN v_new_allocated_qty = 0 THEN 'PENDING'::procurement_requirement_status_enum
     WHEN v_new_allocated_qty < v_req.required_quantity THEN 'PARTIALLY_ALLOCATED'::procurement_requirement_status_enum
     ELSE 'FULLY_ALLOCATED'::procurement_requirement_status_enum
   END;
@@ -510,7 +519,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 REVOKE EXECUTE ON FUNCTION public.cancel_supplier_allocation(UUID, TEXT) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.cancel_supplier_allocation(UUID, TEXT) TO authenticated;
 
--- D. Purchase Order Creation Function
+-- D. Purchase Order Creation Function (With Initialized v_requested_ids Variable)
 CREATE OR REPLACE FUNCTION public.create_purchase_order_from_allocations(
   p_allocation_ids UUID[],
   p_buyer_tax_profile_id UUID,
@@ -527,6 +536,7 @@ DECLARE
   v_org_count INT;
   v_po_id UUID;
   v_po_number TEXT;
+  v_requested_ids UUID[]; -- Explicitly declared allocation IDs array
   v_original_count INT;
   v_null_count INT;
   v_distinct_count INT;
@@ -569,12 +579,16 @@ BEGIN
       v_original_count, v_distinct_count;
   END IF;
 
+  -- Initialize v_requested_ids array
+  SELECT ARRAY_AGG(DISTINCT elem) INTO v_requested_ids
+  FROM UNNEST(p_allocation_ids) AS elem;
+
   FOR v_alloc IN (
     SELECT id, procurement_requirement_id, order_id, order_item_id, product_id,
            supplier_id, sourcing_address_id, allocated_quantity, uom_snapshot,
            negotiated_unit_cost, status
     FROM public.supplier_allocations
-    WHERE id = ANY(p_allocation_ids)
+    WHERE id = ANY(v_requested_ids)
     FOR UPDATE
   ) LOOP
     v_locked_count := v_locked_count + 1;
@@ -698,7 +712,7 @@ BEGIN
     FROM public.supplier_allocations a
     JOIN public.procurement_requirements p ON a.procurement_requirement_id = p.id
     JOIN public.supplier_addresses addr ON a.sourcing_address_id = addr.id
-    WHERE a.id = ANY(p_allocation_ids)
+    WHERE a.id = ANY(v_requested_ids)
   ) LOOP
     IF v_alloc.addr_supplier_id IS NULL OR v_alloc.addr_supplier_id != v_supplier_id THEN
       RAISE EXCEPTION 'Sourcing address % does not belong to supplier %.', v_alloc.sourcing_address_id, v_supplier_id;
@@ -875,9 +889,7 @@ BEGIN
     RAISE EXCEPTION 'Purchase Order % is in status %, expected PENDING_APPROVAL.', v_po.po_number, v_po.status;
   END IF;
 
-  -- Check if approver is Maker (created_by)
   IF v_po.created_by = v_actor_id THEN
-    -- Check if SUPER_ADMIN
     SELECT EXISTS (
       SELECT 1 FROM public.user_roles ur
       JOIN public.roles r ON ur.role_id = r.id
@@ -989,7 +1001,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp;
 REVOKE EXECUTE ON FUNCTION public.issue_purchase_order(UUID) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.issue_purchase_order(UUID) TO authenticated;
 
--- H. Cancel PO Function
+-- H. Cancel PO Function (With Ordered Requirement Lock & Fail-Closed Negative Balance Protection)
 CREATE OR REPLACE FUNCTION public.cancel_purchase_order(
   p_po_id UUID,
   p_cancellation_reason TEXT
@@ -1016,6 +1028,7 @@ BEGIN
     RAISE EXCEPTION 'Cancellation reason is mandatory.';
   END IF;
 
+  -- 1. Lock PO Header FOR UPDATE
   SELECT id, po_number, status
   INTO v_po
   FROM public.purchase_orders
@@ -1030,6 +1043,7 @@ BEGIN
     RAISE EXCEPTION 'Purchase Order % is already cancelled.', v_po.po_number;
   END IF;
 
+  -- 2. Transition PO Header Status to CANCELLED
   UPDATE public.purchase_orders
   SET status = 'CANCELLED',
       cancelled_by = v_actor_id,
@@ -1039,17 +1053,21 @@ BEGIN
       updated_at = NOW()
   WHERE id = v_po.id;
 
+  -- 3. Lock & Process Requirements in Deterministic Order (ORDER BY procurement_requirement_id) to Prevent Deadlocks
   FOR v_item IN (
-    SELECT allocation_id, procurement_requirement_id, ordered_quantity
-    FROM public.purchase_order_items
-    WHERE purchase_order_id = v_po.id
+    SELECT poi.allocation_id, poi.procurement_requirement_id, poi.ordered_quantity
+    FROM public.purchase_order_items poi
+    WHERE poi.purchase_order_id = v_po.id
+    ORDER BY poi.procurement_requirement_id ASC
   ) LOOP
+    -- Mark allocation CANCELLED
     UPDATE public.supplier_allocations
     SET status = 'CANCELLED',
         updated_by = v_actor_id,
         updated_at = NOW()
     WHERE id = v_item.allocation_id;
 
+    -- Lock parent requirement FOR UPDATE
     SELECT id, required_quantity, allocated_quantity
     INTO v_req
     FROM public.procurement_requirements
@@ -1057,10 +1075,15 @@ BEGIN
     FOR UPDATE;
 
     v_new_allocated_qty := v_req.allocated_quantity - v_item.ordered_quantity;
-    IF v_new_allocated_qty < 0 THEN v_new_allocated_qty := 0; END IF;
+
+    -- Strict Fail-Closed Guard against Negative Balance
+    IF v_new_allocated_qty < 0 THEN
+      RAISE EXCEPTION 'Negative allocation balance detected for requirement %: current %, releasing %. Transaction aborted.', 
+        v_req.id, v_req.allocated_quantity, v_item.ordered_quantity;
+    END IF;
 
     v_new_req_status := CASE 
-      WHEN v_new_allocated_qty <= 0 THEN 'PENDING'::procurement_requirement_status_enum
+      WHEN v_new_allocated_qty = 0 THEN 'PENDING'::procurement_requirement_status_enum
       WHEN v_new_allocated_qty < v_req.required_quantity THEN 'PARTIALLY_ALLOCATED'::procurement_requirement_status_enum
       ELSE 'FULLY_ALLOCATED'::procurement_requirement_status_enum
     END;
@@ -1073,12 +1096,14 @@ BEGIN
     WHERE id = v_req.id;
   END LOOP;
 
+  -- 4. Record PO Status History
   INSERT INTO public.po_status_history (
     purchase_order_id, from_status, to_status, change_reason, performed_by
   ) VALUES (
     v_po.id, v_po.status, 'CANCELLED', p_cancellation_reason, v_actor_id
   );
 
+  -- 5. Canonical Audit Event
   PERFORM public.log_audit_event(
     'procurement.PO_CANCELLED',
     'purchase_order',
